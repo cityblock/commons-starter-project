@@ -1,5 +1,6 @@
-import { Model, Transaction } from 'objection';
+import { Model, Transaction, RelationMappings } from 'objection';
 import uuid from 'uuid/v4';
+import Item from './item';
 
 export interface IPokemonCreateInput {
   pokemonNumber: number;
@@ -94,8 +95,22 @@ export default class Pokemon extends Model {
     ]
   };
 
+  static get relationMappings(): RelationMappings {
+    return {
+      items: {
+        relation: Model.HasManyRelation,
+        modelClass: Item,
+        join: {
+          from: 'pokemon.id',
+          to: 'item.pokemonId'
+        },
+        modify: builder => builder.where({ 'item.deletedAt': null })
+      }
+    };
+  }
+
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
-    const pokemon = await this.query(txn).orderBy('pokemonNumber');
+    const pokemon = await this.query(txn).orderBy('pokemonNumber').eager('items');
 
     if (pokemon) {
       return pokemon;
@@ -105,7 +120,7 @@ export default class Pokemon extends Model {
   }
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const pokemon = await this.query(txn).findOne({ id: pokemonId, deletedAt: null });
+    const pokemon = await this.query(txn).eager('items').findOne({ id: pokemonId, deletedAt: null });
 
     if (pokemon) {
       return pokemon;
@@ -116,7 +131,7 @@ export default class Pokemon extends Model {
 
   static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {
     try {
-      const pokemon = await this.query(txn).insert(input).returning('*');
+      const pokemon = await this.query(txn).insert(input).returning('*').eager('items');
       return pokemon;
     } catch(error) {
       return Promise.reject(`Couldn't create pokemon: ${error}`);
@@ -145,6 +160,7 @@ export default class Pokemon extends Model {
   pokeType!: PokeType;
   moves!: string[];
   imageUrl!: string;
+  items!: Item[];
   createdAt!: string;
   updatedAt!: string;
   deletedAt!: string | null;

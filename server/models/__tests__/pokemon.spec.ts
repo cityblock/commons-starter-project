@@ -1,12 +1,18 @@
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import { setupDb } from '../../lib/test-utils';
 import Pokemon from '../pokemon';
+import random from 'lodash/random'
 
 describe('Pokemon', () => {
   let testDb = null as any;
   let txn = null as any;
   
   const nonexistentId = '0315cff6-9fc3-4882-ac0a-0835a211a843';
+
+  const getRandomPokemonId = async (txn: Transaction) => {
+    const allPokemon = await Pokemon.getAll(txn);
+    return allPokemon[random(allPokemon.length - 1)].id
+  };
 
   beforeAll(() => testDb = setupDb());
 
@@ -29,6 +35,11 @@ describe('Pokemon', () => {
       expect(allPokemon[0].pokemonNumber).toEqual(1);
       expect(allPokemon[1].pokemonNumber).toEqual(2);
     });
+
+    it("includes the pokemon's associated items", async () => {
+      const allPokemon = await Pokemon.getAll(txn);
+      expect(allPokemon[0].items[0].name).toEqual('Grassy Seed');
+    });
   });
 
   describe('#get', () => {
@@ -36,6 +47,12 @@ describe('Pokemon', () => {
       const allPokemon = await Pokemon.getAll(txn);
       const pokemon = await Pokemon.get(allPokemon[0].id, txn);
       expect(pokemon.name).toEqual('Bulbasaur');
+    });
+
+    it("includes the pokemon's associated items", async () => {
+      const allPokemon = await Pokemon.getAll(txn);
+      const pokemon = await Pokemon.get(allPokemon[0].id, txn);
+      expect(pokemon.items[0].name).toEqual('Grassy Seed');
     });
 
     it("returns an error when given an invalid id", async () => {
@@ -88,8 +105,7 @@ describe('Pokemon', () => {
 
   describe('#edit', () => {
     it('edits the specified pokemon record in the database', async () => {
-      const allPokemon = await Pokemon.getAll(txn);
-      const editedPokemonId = allPokemon[0].id;
+      const editedPokemonId = await getRandomPokemonId(txn);
       await Pokemon.edit(editedPokemonId, { attack: 100, defense: 200 }, txn);
 
       const editedPokemon = await Pokemon.get(editedPokemonId, txn);
@@ -108,8 +124,7 @@ describe('Pokemon', () => {
 
   describe('#delete', () => {
     it('destroys the specified pokemon record', async () => {
-      const allPokemon = await Pokemon.getAll(txn);
-      const pokemonId = allPokemon[0].id;
+      const pokemonId = await getRandomPokemonId(txn);
       await Pokemon.delete(pokemonId, txn);
 
       try {

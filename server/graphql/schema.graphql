@@ -1,10 +1,10 @@
 scalar DateTime
 
 # An object with a Globally Unique ID
-# interface uniqueId {
-#   # The ID of the object.
-#   id: ID!
-# }
+interface uniqueId {
+  # The ID of the object.
+  id: ID!
+}
 
 enum PokeType {
   normal
@@ -27,7 +27,7 @@ enum PokeType {
   poison
 }
 
-type Pokemon {
+type Pokemon implements uniqueId {
   id: ID!
   pokemonNumber: Int!
   name: String!
@@ -39,7 +39,7 @@ type Pokemon {
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
-  item: [Item!]!
+  item: [Item]!
 }
 
 type Item {

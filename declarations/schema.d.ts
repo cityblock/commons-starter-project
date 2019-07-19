@@ -33,7 +33,13 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
-    item: Array<IItem>;
+    item: Array<IItem | null>;
+  }
+
+  type uniqueId = IPokemon;
+
+  interface IUniqueId {
+    id: string;
   }
 
   const enum PokeType {

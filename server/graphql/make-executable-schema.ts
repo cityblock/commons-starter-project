@@ -11,9 +11,9 @@ export const resolveFunctions = {
   RootQueryType: { getAllPokemon },
   // RootMutationType: {},
   // From https://github.com/apollographql/graphql-tools/pull/698
-  // uniqueId: {
-  //   __resolveType: ({ type }: { type: string }) => type,
-  // },
+  uniqueId: {
+    __resolveType: ({ type }: { type: string }) => type,
+  },
 };
 
 const logger = {

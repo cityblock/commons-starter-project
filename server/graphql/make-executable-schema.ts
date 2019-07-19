@@ -1,10 +1,12 @@
 import fs from 'fs';
+import { GraphQLDateTime } from 'graphql-iso-date';
 import { makeExecutableSchema } from 'graphql-tools';
 import path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
 
 export const resolveFunctions = {
+  DateTime: GraphQLDateTime,
   RootQueryType: {},
   RootMutationType: {},
   // From https://github.com/apollographql/graphql-tools/pull/698

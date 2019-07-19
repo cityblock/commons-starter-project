@@ -1,12 +1,108 @@
-# An object with a Globally Unique ID
 interface uniqueId {
-  # The ID of the object.
   id: ID!
 }
 
-type RootMutationType {}
+scalar DateTime
 
-type RootQueryType {}
+enum PokeType {
+  normal
+  grass
+  fire
+  water
+  electric
+  psychic
+  ghost
+  dark
+  fairy
+  rock
+  ground
+  steel
+  flying
+  fighting
+  bug
+  ice
+  dragon
+  poison
+}
+
+type Pokemon implements uniqueId {
+  id: ID!
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: PokeType!
+  moves: [String]!
+  imageUrl: String!
+  items: [Item]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+input PokemonCreateInput {
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: PokeType!
+  moves: [String]!
+  imageUrl: String!
+}
+
+input PokemonEditInput {
+  pokemonNumber: Int
+  name: String
+  attack: Int
+  defense: Int
+  pokeType: PokeType
+  moves: [String]
+  imageUrl: String
+}
+
+type Item implements uniqueId {
+  id: ID!
+  name: String!
+  pokemonId: String!
+  price: Int!
+  happiness: Int!
+  imageUrl: String!
+  pokemon: Pokemon!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+input ItemCreateInput {
+  name: String!
+  pokemonId: ID!
+  price: Int!
+  happiness: Int!
+  imageUrl: Int!
+}
+
+input ItemEditInput {
+  name: String
+  pokemonId: ID
+  price: Int
+  happiness: Int
+  imageUrl: Int
+}
+
+type RootQueryType {
+  allPokemon: [Pokemon]!
+  pokemon(pokemonId: ID!): Pokemon!
+  item(itemId: ID!): Item!
+}
+
+type RootMutationType {
+  pokemonCreate(input: PokemonCreateInput!): Pokemon!
+  pokemonEdit(pokemonId: ID!, pokemon: PokemonEditInput!): Pokemon!
+  pokemonDelete(pokemonId: ID!): Pokemon!
+  itemCreate(input: ItemCreateInput!): Item!
+  itemEdit(itemId: ID!, item: ItemEditInput!): Item!
+  itemDelete(pokemonId: ID!): Item!
+}
 
 schema {
   query: RootQueryType

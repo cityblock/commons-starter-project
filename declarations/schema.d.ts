@@ -1,71 +1,69 @@
 declare module 'schema' {
-  interface IGraphQLResponseRoot {
-    data?: IRootQueryType | IRootMutationType;
-    errors?: Array<IGraphQLResponseError>;
-  }
-
-  interface IGraphQLResponseError {
-    /** Required for all errors */
-    message: string;
-    locations?: Array<IGraphQLResponseErrorLocation>;
-    /** 7.2.2 says 'GraphQL servers may provide additional entries to error' */
-    [propName: string]: any;
-  }
-
-  interface IGraphQLResponseErrorLocation {
-    line: number;
-    column: number;
-  }
-
-  interface IRootQueryType {
-
-    /**
-     * All puppies
-     */
-    puppies: Array<IPuppy>;
-  }
-
-  /**
-   * Puppy
-   */
-  interface IPuppy {
-    id: string;
-    name: string;
-    createdAt: string | null;
-    updatedAt: string | null;
-    deletedAt: string | null;
-  }
-
-  /**
-   * An object with a Globally Unique ID
-   */
-  type uniqueId = IPuppy;
-
-  /**
-   * An object with a Globally Unique ID
-   */
-  interface IUniqueId {
-
-    /**
-     * The ID of the object.
-     */
-    id: string;
-  }
-
-  interface IRootMutationType {
-
-    /**
-     * Create a puppy
-     */
-    puppyCreate: IPuppy;
-  }
-
-  interface IPuppyCreateOnRootMutationTypeArguments {
-    input?: IPuppyCreateInput | null;
-  }
-
-  interface IPuppyCreateInput {
-    name: string;
-  }
+      interface IGraphQLResponseRoot {
+data?: IRootQueryType;
+errors?: Array<IGraphQLResponseError>;
 }
 
+interface IGraphQLResponseError {
+/** Required for all errors */
+message: string;
+locations?: Array<IGraphQLResponseErrorLocation>;
+/** 7.2.2 says 'GraphQL servers may provide additional entries to error' */
+[propName: string]: any;
+}
+
+interface IGraphQLResponseErrorLocation {
+line: number;
+column: number;
+}
+
+interface IRootQueryType {
+pokemon: Array<IPokemon | null>;
+}
+
+interface IPokemon {
+id: string;
+pokemonNumber: number;
+name: string;
+attack: number;
+defense: number;
+moves: Array<string | null>;
+pokeType: PokeType;
+imageUrl: string;
+createdAt: string;
+updatedAt: string;
+deletedAt: string | null;
+item: Array<IItem | null>;
+}
+
+const enum PokeType {
+normal = 'normal',
+grass = 'grass',
+fire = 'fire',
+water = 'water',
+electric = 'electric',
+psychic = 'psychic',
+ghost = 'ghost',
+dark = 'dark',
+fairy = 'fairy',
+rock = 'rock',
+ground = 'ground',
+steel = 'steel',
+flying = 'flying',
+fighting = 'fighting',
+bug = 'bug',
+ice = 'ice',
+dragon = 'dragon',
+poison = 'poison'
+}
+
+interface IItem {
+id: string;
+}
+
+type uniqueId = ;
+
+interface IUniqueId {
+id: string;
+}
+    }

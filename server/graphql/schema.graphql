@@ -1,14 +1,58 @@
+scalar DateTime
+
 # An object with a Globally Unique ID
 interface uniqueId {
   # The ID of the object.
   id: ID!
 }
 
-type RootMutationType {}
+enum PokeType {
+  normal
+  grass
+  fire
+  water
+  electric
+  psychic
+  ghost
+  dark
+  fairy
+  rock
+  ground
+  steel
+  flying
+  fighting
+  bug
+  ice
+  dragon
+  poison
+}
 
-type RootQueryType {}
+type Pokemon {
+  id: ID!
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  moves: [String]!
+  pokeType: PokeType!
+  imageUrl: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  item: [Item]!
+}
+
+type Item {
+  id: ID!
+}
+
+# type RootMutationType {}
+
+type RootQueryType {
+  pokemon: [Pokemon]!
+}
 
 schema {
   query: RootQueryType
-  mutation: RootMutationType
+  # mutation: RootMutationType
 }

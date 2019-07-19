@@ -1,0 +1,11 @@
+#import "./core-item.graphql"
+
+fragment FullPokemon on Pokemon {
+  id
+  name
+  pokemonNumber
+  attack
+  defense
+  moves
+  imageUrl
+}

@@ -1,10 +1,10 @@
 scalar DateTime
 
 # An object with a Globally Unique ID
-interface uniqueId {
-  # The ID of the object.
-  id: ID!
-}
+# interface uniqueId {
+#   # The ID of the object.
+#   id: ID!
+# }
 
 enum PokeType {
   normal
@@ -39,17 +39,19 @@ type Pokemon {
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
-  item: [Item]!
+  item: [Item!]!
 }
 
 type Item {
   id: ID!
+  name: String!
+  happiness: Int!
 }
 
 # type RootMutationType {}
 
 type RootQueryType {
-  pokemon: [Pokemon]!
+  getAllPokemon: [Pokemon]!
 }
 
 schema {

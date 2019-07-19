@@ -14,7 +14,7 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "schema": ["@types/schema.d.ts"]
+      "schema": ["declarations/schema.d.ts"]
     }
   },
   "include": [
@@ -23,7 +23,7 @@
     "./server/**/*.tsx",
     "./app/**/*.ts",
     "./app/**/*.tsx",
-    "./declarations/*"
+    "declarations"
   ],
   "exclude": ["public", "server-compiled", "server/models/migrations", "server/models/seeds"]
 }

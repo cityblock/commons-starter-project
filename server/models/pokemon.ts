@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { PokeType } from 'schema';
 import BaseModel from './base-model';
 import Item from './item';
 
@@ -22,25 +23,46 @@ interface IPokemonEditInput {
   imageUrl?: string;
 }
 
-export type PokeType =
-  | 'normal'
-  | 'grass'
-  | 'fire'
-  | 'water'
-  | 'electric'
-  | 'psychic'
-  | 'ghost'
-  | 'dark'
-  | 'fairy'
-  | 'rock'
-  | 'ground'
-  | 'steel'
-  | 'flying'
-  | 'fighting'
-  | 'bug'
-  | 'ice'
-  | 'dragon'
-  | 'poison';
+// export const enum PokeType {
+//   normal = 'normal',
+//   grass = 'grass',
+//   fire = 'fire',
+//   water = 'water',
+//   electric = 'electric',
+//   psychic = 'psychic',
+//   ghost = 'ghost',
+//   dark = 'dark',
+//   fairy = 'fairy',
+//   rock = 'rock',
+//   ground = 'ground',
+//   steel = 'steel',
+//   flying = 'flying',
+//   fighting = 'fighting',
+//   bug = 'bug',
+//   ice = 'ice',
+//   dragon = 'dragon',
+//   poison = 'poison',
+// }
+
+// export type PokeType =
+//   | 'normal'
+//   | 'grass'
+//   | 'fire'
+//   | 'water'
+//   | 'electric'
+//   | 'psychic'
+//   | 'ghost'
+//   | 'dark'
+//   | 'fairy'
+//   | 'rock'
+//   | 'ground'
+//   | 'steel'
+//   | 'flying'
+//   | 'fighting'
+//   | 'bug'
+//   | 'ice'
+//   | 'dragon'
+//   | 'poison';
 
 export default class Pokemon extends BaseModel {
   static modelPaths = [__dirname];
@@ -152,7 +174,7 @@ export default class Pokemon extends BaseModel {
     const exists = await this.get(pokemonId, txn);
     if (exists) {
       return this.query(txn).patchAndFetchById(pokemonId, {
-        deletedAt: new Date().toISOString(),
+        deletedAt: new Date(Date.now()).toISOString(),
       });
     }
     return Promise.reject(`Error: couldn't delete Pokemon (ID): ${pokemonId}`);

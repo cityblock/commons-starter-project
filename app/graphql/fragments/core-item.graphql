@@ -1,5 +1,7 @@
 fragment CoreItem on Item {
   id
   name
+  price
   happiness
+  imageUrl
 }

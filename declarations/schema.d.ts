@@ -20,10 +20,15 @@ declare module 'schema' {
   interface IRootQueryType {
     allPokemon: Array<IPokemon>;
     singlePokemon: IPokemon;
+    singleItem: IItem;
   }
 
   interface ISinglePokemonOnRootQueryTypeArguments {
     pokemonId?: string | null;
+  }
+
+  interface ISingleItemOnRootQueryTypeArguments {
+    itemId?: string | null;
   }
 
   interface IPokemon {
@@ -84,11 +89,36 @@ declare module 'schema' {
   }
 
   interface IRootMutationType {
-    createPokemon: IPokemon | null;
+    createPokemon: IPokemon;
+    editPokemon: IPokemon;
+    deletePokemon: IPokemon;
+    createItem: IItem;
+    editItem: IItem;
+    deleteItem: IItem;
   }
 
   interface ICreatePokemonOnRootMutationTypeArguments {
-    input?: IPokemonCreateInput | null;
+    input: IPokemonCreateInput;
+  }
+
+  interface IEditPokemonOnRootMutationTypeArguments {
+    input: IPokemonEditInput;
+  }
+
+  interface IDeletePokemonOnRootMutationTypeArguments {
+    pokemonId: string;
+  }
+
+  interface ICreateItemOnRootMutationTypeArguments {
+    input: IItemCreateInput;
+  }
+
+  interface IEditItemOnRootMutationTypeArguments {
+    input: IItemEditInput;
+  }
+
+  interface IDeleteItemOnRootMutationTypeArguments {
+    itemId: string;
   }
 
   interface IPokemonCreateInput {
@@ -98,6 +128,34 @@ declare module 'schema' {
     defense: number;
     moves: Array<string>;
     pokeType: PokeType;
+    imageUrl: string;
+  }
+
+  interface IPokemonEditInput {
+    id: string;
+    pokemonNumber: number;
+    name: string;
+    attack: number;
+    defense: number;
+    moves: Array<string>;
+    pokeType: PokeType;
+    imageUrl: string;
+  }
+
+  interface IItemCreateInput {
+    name: string;
+    pokemonId: string;
+    happiness: number;
+    price: number;
+    imageUrl: string;
+  }
+
+  interface IItemEditInput {
+    id: string;
+    name: string;
+    pokemonId: string;
+    happiness: number;
+    price: number;
     imageUrl: string;
   }
 }

@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { PokeType } from 'schema';
 import { setupDb } from '../../lib/test-utils';
 import Item from '../item';
 import Pokemon from '../pokemon';
@@ -44,7 +45,7 @@ describe('item model', () => {
           pokemonNumber: 13,
           attack: 9001,
           defense: 100,
-          pokeType: 'dragon',
+          pokeType: 'dragon' as PokeType,
           moves: ['Electric Slide', 'Ali Shuffle'],
           imageUrl: mockResourceUrl,
         },

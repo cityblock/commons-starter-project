@@ -67,13 +67,47 @@ input PokemonCreateInput {
   imageUrl: String!
 }
 
+input PokemonEditInput {
+  id: ID!
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  moves: [String!]!
+  pokeType: PokeType!
+  imageUrl: String!
+}
+
+input ItemCreateInput {
+  name: String!
+  pokemonId: String!
+  happiness: Int!
+  price: Int!
+  imageUrl: String!
+}
+
+input ItemEditInput {
+  id: ID!
+  name: String!
+  pokemonId: String!
+  happiness: Int!
+  price: Int!
+  imageUrl: String!
+}
+
 type RootMutationType {
-  createPokemon(input: PokemonCreateInput): Pokemon
+  createPokemon(input: PokemonCreateInput!): Pokemon!
+  editPokemon(input: PokemonEditInput!): Pokemon!
+  deletePokemon(pokemonId: String!): Pokemon!
+  createItem(input: ItemCreateInput!): Item!
+  editItem(input: ItemEditInput!): Item!
+  deleteItem(itemId: String!): Item!
 }
 
 type RootQueryType {
   allPokemon: [Pokemon!]!
   singlePokemon(pokemonId: String): Pokemon!
+  singleItem(itemId: String): Item!
 }
 
 schema {

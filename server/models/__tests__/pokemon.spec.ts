@@ -114,6 +114,13 @@ describe('Pokemon', () => {
       expect(editedPokemon.defense).toEqual(200);
     });
 
+    it('returns the edited pokemon, including all its edits', async () => {
+      const editedPokemonId = await getRandomPokemonId(txn);
+      const editedPokemon = await Pokemon.edit(editedPokemonId, { attack: 100, defense: 200 }, txn);
+      const dbPokemon = await Pokemon.get(editedPokemonId, txn);
+      expect(editedPokemon).toEqual(dbPokemon);
+    });
+
     it('raises an error when trying to submit an edit that violates uniquness', async () => {
       try {
         const editedPokemonId = await getRandomPokemonId(txn);
@@ -142,6 +149,13 @@ describe('Pokemon', () => {
       } catch(error) {
         expect(error).toEqual('No pokemon with given ID');
       }
+    });
+
+    it('returns the deleted pokemon', async () => {
+      const pokemonId = await getRandomPokemonId(txn);
+      const deletedPokemon = await Pokemon.delete(pokemonId, txn);
+      const dbPokemon = await Pokemon.query(txn).findById(pokemonId);
+      expect(deletedPokemon).toEqual(dbPokemon);
     });
 
     it('returns an error when given an invalid id', async () => {

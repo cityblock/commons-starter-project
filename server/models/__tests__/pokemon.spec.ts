@@ -1,5 +1,6 @@
 import random from 'lodash/random'
 import { transaction, Transaction } from 'objection';
+import { PokeType } from 'schema';
 import { setupDb } from '../../lib/test-utils';
 import Item from '../item';
 import Pokemon from '../pokemon';
@@ -73,7 +74,7 @@ describe('Pokemon', () => {
           name: 'Aster',
           attack: 100,
           defense: 100,
-          pokeType: 'ghost',
+          pokeType: 'ghost' as PokeType,
           moves: ['sleep', 'dab'],
           imageUrl: 'https://aster.fyi'
         },
@@ -92,7 +93,7 @@ describe('Pokemon', () => {
             name: 'Aster',
             attack: 100,
             defense: 100,
-            pokeType: 'ghost',
+            pokeType: 'ghost' as PokeType,
             moves: ['sleep', 'dab'],
             imageUrl: 'https://aster.fyi'
           },

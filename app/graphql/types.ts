@@ -3,21 +3,79 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getAllPokemon
+// GraphQL mutation operation: pokemonCreate
 // ====================================================
 
-export interface getAllPokemon_getAllPokemon {
+export interface pokemonCreate_createPokemon {
   id: string;
   name: string;
   pokemonNumber: number;
   attack: number;
   defense: number;
-  moves: (string | null)[];
+  moves: string[];
+  imageUrl: string;
+}
+
+export interface pokemonCreate {
+  createPokemon: pokemonCreate_createPokemon | null;
+}
+
+export interface pokemonCreateVariables {
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  moves: string[];
+  pokeType: PokeType;
+  imageUrl: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: getAllPokemon
+// ====================================================
+
+export interface getAllPokemon_allPokemon {
+  id: string;
+  name: string;
+  pokemonNumber: number;
+  attack: number;
+  defense: number;
+  moves: string[];
   imageUrl: string;
 }
 
 export interface getAllPokemon {
-  getAllPokemon: (getAllPokemon_getAllPokemon | null)[];
+  allPokemon: getAllPokemon_allPokemon[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: getOnePokemon
+// ====================================================
+
+export interface getOnePokemon_singlePokemon {
+  id: string;
+  name: string;
+  pokemonNumber: number;
+  attack: number;
+  defense: number;
+  moves: string[];
+  imageUrl: string;
+}
+
+export interface getOnePokemon {
+  singlePokemon: getOnePokemon_singlePokemon;
+}
+
+export interface getOnePokemonVariables {
+  pokemonId?: string | null;
 }
 
 /* tslint:disable */
@@ -48,7 +106,7 @@ export interface FullPokemon {
   pokemonNumber: number;
   attack: number;
   defense: number;
-  moves: (string | null)[];
+  moves: string[];
   imageUrl: string;
 }
 
@@ -59,6 +117,27 @@ export interface FullPokemon {
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
+
+export enum PokeType {
+  bug = "bug",
+  dark = "dark",
+  dragon = "dragon",
+  electric = "electric",
+  fairy = "fairy",
+  fighting = "fighting",
+  fire = "fire",
+  flying = "flying",
+  ghost = "ghost",
+  grass = "grass",
+  ground = "ground",
+  ice = "ice",
+  normal = "normal",
+  poison = "poison",
+  psychic = "psychic",
+  rock = "rock",
+  steel = "steel",
+  water = "water",
+}
 
 //==============================================================
 // END Enums and Input Objects

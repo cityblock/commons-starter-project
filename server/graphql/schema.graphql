@@ -4,6 +4,9 @@ scalar DateTime
 interface uniqueId {
   # The ID of the object.
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
 }
 
 enum PokeType {
@@ -33,7 +36,7 @@ type Pokemon implements uniqueId {
   name: String!
   attack: Int!
   defense: Int!
-  moves: [String]!
+  moves: [String!]!
   pokeType: PokeType!
   imageUrl: String!
   createdAt: DateTime!
@@ -42,19 +45,38 @@ type Pokemon implements uniqueId {
   item: [Item]!
 }
 
-type Item {
+type Item implements uniqueId {
   id: ID!
   name: String!
+  pokemonId: String!
+  price: Int!
   happiness: Int!
+  imageUrl: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
 }
 
-# type RootMutationType {}
+input PokemonCreateInput {
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  moves: [String!]!
+  pokeType: PokeType!
+  imageUrl: String!
+}
+
+type RootMutationType {
+  createPokemon(input: PokemonCreateInput): Pokemon
+}
 
 type RootQueryType {
-  getAllPokemon: [Pokemon]!
+  allPokemon: [Pokemon!]!
+  singlePokemon(pokemonId: String): Pokemon!
 }
 
 schema {
   query: RootQueryType
-  # mutation: RootMutationType
+  mutation: RootMutationType
 }

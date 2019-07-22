@@ -1,0 +1,25 @@
+#import "../fragments/full-pokemon.graphql"
+
+mutation pokemonCreate(
+  $pokemonNumber: Int!
+  $name: String!
+  $attack: Int!
+  $defense: Int!
+  $moves: [String!]!
+  $pokeType: PokeType!
+  $imageUrl: String!
+) {
+  createPokemon(
+    input: {
+      pokemonNumber: $pokemonNumber
+      name: $name
+      attack: $attack
+      defense: $defense
+      moves: $moves
+      pokeType: $pokeType
+      imageUrl: $imageUrl
+    }
+  ) {
+    ...FullPokemon
+  }
+}

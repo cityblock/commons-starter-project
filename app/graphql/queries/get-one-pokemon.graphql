@@ -1,0 +1,7 @@
+#import "../fragments/full-pokemon.graphql"
+
+query getOnePokemon($pokemonId: String) {
+  singlePokemon(pokemonId: $pokemonId) {
+    ...FullPokemon
+  }
+}

@@ -1,6 +1,6 @@
 declare module 'schema' {
   interface IGraphQLResponseRoot {
-    data?: IRootQueryType;
+    data?: IRootQueryType | IRootMutationType;
     errors?: Array<IGraphQLResponseError>;
   }
 
@@ -18,7 +18,12 @@ declare module 'schema' {
   }
 
   interface IRootQueryType {
-    getAllPokemon: Array<IPokemon | null>;
+    allPokemon: Array<IPokemon>;
+    singlePokemon: IPokemon;
+  }
+
+  interface ISinglePokemonOnRootQueryTypeArguments {
+    pokemonId?: string | null;
   }
 
   interface IPokemon {
@@ -27,7 +32,7 @@ declare module 'schema' {
     name: string;
     attack: number;
     defense: number;
-    moves: Array<string | null>;
+    moves: Array<string>;
     pokeType: PokeType;
     imageUrl: string;
     createdAt: string;
@@ -36,10 +41,13 @@ declare module 'schema' {
     item: Array<IItem | null>;
   }
 
-  type uniqueId = IPokemon;
+  type uniqueId = IPokemon | IItem;
 
   interface IUniqueId {
     id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
   }
 
   const enum PokeType {
@@ -66,7 +74,31 @@ declare module 'schema' {
   interface IItem {
     id: string;
     name: string;
+    pokemonId: string;
+    price: number;
     happiness: number;
+    imageUrl: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  interface IRootMutationType {
+    createPokemon: IPokemon | null;
+  }
+
+  interface ICreatePokemonOnRootMutationTypeArguments {
+    input?: IPokemonCreateInput | null;
+  }
+
+  interface IPokemonCreateInput {
+    pokemonNumber: number;
+    name: string;
+    attack: number;
+    defense: number;
+    moves: Array<string>;
+    pokeType: PokeType;
+    imageUrl: string;
   }
 }
 

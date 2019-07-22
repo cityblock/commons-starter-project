@@ -100,12 +100,11 @@ declare module 'schema' {
   }
 
   interface IPokemonEditOnRootMutationTypeArguments {
-    pokemonId: string;
-    pokemon: IPokemonEditInput;
+    input: IPokemonEditInput;
   }
 
   interface IPokemonDeleteOnRootMutationTypeArguments {
-    pokemonId: string;
+    input: IPokemonDeleteInput;
   }
 
   interface IItemCreateOnRootMutationTypeArguments {
@@ -113,12 +112,11 @@ declare module 'schema' {
   }
 
   interface IItemEditOnRootMutationTypeArguments {
-    itemId: string;
-    item: IItemEditInput;
+    input: IItemEditInput;
   }
 
   interface IItemDeleteOnRootMutationTypeArguments {
-    pokemonId: string;
+    input: IItemDeleteInput;
   }
 
   interface IPokemonCreateInput {
@@ -132,6 +130,7 @@ declare module 'schema' {
   }
 
   interface IPokemonEditInput {
+    pokemonId: string;
     pokemonNumber?: number | null;
     name?: string | null;
     attack?: number | null;
@@ -139,6 +138,10 @@ declare module 'schema' {
     pokeType?: PokeType | null;
     moves?: Array<string | null> | null;
     imageUrl?: string | null;
+  }
+
+  interface IPokemonDeleteInput {
+    pokemonId: string;
   }
 
   interface IItemCreateInput {
@@ -150,11 +153,16 @@ declare module 'schema' {
   }
 
   interface IItemEditInput {
+    itemId: string;
     name?: string | null;
     pokemonId?: string | null;
     price?: number | null;
     happiness?: number | null;
     imageUrl?: number | null;
+  }
+
+  interface IItemDeleteInput {
+    itemId: string;
   }
 }
 

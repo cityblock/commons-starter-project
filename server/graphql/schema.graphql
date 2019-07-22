@@ -51,6 +51,7 @@ input PokemonCreateInput {
 }
 
 input PokemonEditInput {
+  pokemonId: ID!
   pokemonNumber: Int
   name: String
   attack: Int
@@ -58,6 +59,10 @@ input PokemonEditInput {
   pokeType: PokeType
   moves: [String]
   imageUrl: String
+}
+
+input PokemonDeleteInput {
+  pokemonId: ID!
 }
 
 type Item implements uniqueId {
@@ -82,11 +87,16 @@ input ItemCreateInput {
 }
 
 input ItemEditInput {
+  itemId: ID!
   name: String
   pokemonId: ID
   price: Int
   happiness: Int
   imageUrl: Int
+}
+
+input ItemDeleteInput {
+  itemId: ID!
 }
 
 type RootQueryType {
@@ -97,11 +107,11 @@ type RootQueryType {
 
 type RootMutationType {
   pokemonCreate(input: PokemonCreateInput!): Pokemon!
-  pokemonEdit(pokemonId: ID!, pokemon: PokemonEditInput!): Pokemon!
-  pokemonDelete(pokemonId: ID!): Pokemon!
+  pokemonEdit(input: PokemonEditInput!): Pokemon!
+  pokemonDelete(input: PokemonDeleteInput!): Pokemon!
   itemCreate(input: ItemCreateInput!): Item!
-  itemEdit(itemId: ID!, item: ItemEditInput!): Item!
-  itemDelete(pokemonId: ID!): Item!
+  itemEdit(input: ItemEditInput!): Item!
+  itemDelete(input: ItemDeleteInput!): Item!
 }
 
 schema {

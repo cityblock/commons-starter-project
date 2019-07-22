@@ -31,8 +31,8 @@ export async function editItem(
   { testTransaction }: IContext,
 ): Promise<IRootMutationType['editItem']> {
   return transaction(testTransaction || Item.knex(), async txn => {
-    const editedPokemon = await Item.edit(input.id, { ...input }, txn);
-    return editedPokemon;
+    const editedItem = await Item.edit(input.id, { ...input }, txn);
+    return editedItem;
   });
 }
 

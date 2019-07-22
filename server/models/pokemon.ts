@@ -103,6 +103,7 @@ export default class Pokemon extends BaseModel {
 
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
     return this.query(txn)
+      .where({ deletedAt: null })
       .eager('item')
       .orderBy('pokemonNumber');
   }
@@ -151,7 +152,7 @@ export default class Pokemon extends BaseModel {
     const exists = await this.get(pokemonId, txn);
     if (exists) {
       return this.query(txn).patchAndFetchById(pokemonId, {
-        deletedAt: new Date(Date.now()).toISOString(),
+        deletedAt: new Date().toISOString(),
       });
     }
     return Promise.reject(`Error: couldn't delete Pokemon (ID): ${pokemonId}`);

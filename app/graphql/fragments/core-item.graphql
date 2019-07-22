@@ -1,0 +1,5 @@
+fragment CoreItem on Item {
+  id
+  name
+  happiness
+}

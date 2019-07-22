@@ -3,4 +3,5 @@ module.exports = {
     `declare module '${name}' {
       ${contents}
     }`,
+  typeMap: { DateTime: 'string' },
 };

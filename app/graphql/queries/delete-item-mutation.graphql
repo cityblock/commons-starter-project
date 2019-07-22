@@ -1,4 +1,4 @@
-#import "../fragments/core-item.graphql.graphql"
+#import "../fragments/core-item.graphql"
 
 mutation deleteItem($itemId: String!) {
   deleteItem(itemId: $itemId) {

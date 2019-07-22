@@ -1,9 +1,9 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction } from 'objection';
-import createItem from '../../../app/graphql/queries/create-item-mutation.graphql';
-import deleteItem from '../../../app/graphql/queries/delete-item-mutation.graphql';
-import editItem from '../../../app/graphql/queries/edit-item-mutation.graphql';
+// import createItem from '../../../app/graphql/queries/create-item-mutation.graphql';
+// import deleteItem from '../../../app/graphql/queries/delete-item-mutation.graphql';
+// import editItem from '../../../app/graphql/queries/edit-item-mutation.graphql';
 import getItem from '../../../app/graphql/queries/get-item-query.graphql';
 import { setupDb } from '../../lib/test-utils';
 import Item from '../../models/item';
@@ -11,9 +11,9 @@ import schema from '../make-executable-schema';
 
 describe('item resolvers', () => {
   const getItemQuery = print(getItem);
-  const createItemMutation = print(createItem);
-  const editItemMutation = print(editItem);
-  const deleteItemMutation = print(deleteItem);
+  // const createItemMutation = print(createItem);
+  // const editItemMutation = print(editItem);
+  // const deleteItemMutation = print(deleteItem);
 
   let testDb = null as any;
   let txn = null as any;
@@ -34,40 +34,31 @@ describe('item resolvers', () => {
     await txn.rollback();
   });
 
-  // describe('#getAll', () => {
-  //   it('should return an array of pokemon', async () => {
-  //     const result = await graphql(schema, getAllPokemonQuery, null, {
-  //       testTransaction: txn,
-  //     });
-  //     expect(cloneDeep(result.data!.allPokemon)).toHaveLength(52);
-  //   });
-  // });
-  // describe('#getOne', () => {
-  //   it('should return a pokemon', async () => {
-  //     const testingPokemonArr = await Pokemon.getAll(txn);
-  //     const randomNumberGen = Math.floor(Math.random() * testingPokemonArr.length);
-  //     const randomPokemon = await testingPokemonArr[randomNumberGen];
-  //     const result = await graphql(
-  //       schema,
-  //       getOnePokemonQuery,
-  //       null,
-  //       {
-  //         testTransaction: txn,
-  //       },
-  //       { pokemonId: randomPokemon.id },
-  //     );
-  //     const randomPokemonToMatchGQLQuery = {
-  //       id: randomPokemon.id,
-  //       name: randomPokemon.name,
-  //       pokemonNumber: randomPokemon.pokemonNumber,
-  //       attack: randomPokemon.attack,
-  //       defense: randomPokemon.defense,
-  //       moves: randomPokemon.moves,
-  //       imageUrl: randomPokemon.imageUrl,
-  //     };
-  //     expect(cloneDeep(result.data!.singlePokemon)).toMatchObject(randomPokemonToMatchGQLQuery);
-  //   });
-  // });
+  describe('#getOne', () => {
+    it('should return an item', async () => {
+      const allItems = await Item.query(txn).where({ deletedAt: null });
+      const randomNumberGen = Math.floor(Math.random() * allItems.length);
+      const randomItem = allItems[randomNumberGen];
+
+      const result = await graphql(
+        schema,
+        getItemQuery,
+        null,
+        {
+          testTransaction: txn,
+        },
+        { itemId: randomItem.id },
+      );
+      const randomItemToMatchGQLQuery = {
+        id: randomItem.id,
+        name: randomItem.name,
+        price: randomItem.price,
+        happiness: randomItem.happiness,
+        imageUrl: randomItem.imageUrl,
+      };
+      expect(cloneDeep(result.data!.singleItem)).toMatchObject(randomItemToMatchGQLQuery);
+    });
+  });
   // describe('#create', () => {
   //   it('should create a pokemon', async () => {
   //     const jaimon = {

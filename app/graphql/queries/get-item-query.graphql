@@ -1,4 +1,4 @@
-#import "../fragments/core-item.graphql.graphql"
+#import "../fragments/core-item.graphql"
 
 query getItem($itemId: String!) {
   singleItem(itemId: $itemId) {

@@ -1,0 +1,25 @@
+#import '../fragments/full-pokemon-with-items.graphql'
+
+mutation pokemonEdit(
+  $pokemonId: ID!
+  $pokemonNumber: Int
+  $name: String
+  $attack: Int
+  $defense: Int
+  $pokeType: PokeType
+  $moves: [String]
+  $imageUrl: String
+) {
+  pokemonEdit(input {
+    pokemonId: $pokemonId
+    pokemonNumber: $pokemonNumber
+    name: $name
+    attack: $attack
+    defense: $defense
+    pokeType: $pokeType
+    moves: $moves
+    imageUrl: $imageUrl
+  }) {
+    ...FullPokemonWithItems
+  }
+}

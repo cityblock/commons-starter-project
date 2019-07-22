@@ -1,0 +1,19 @@
+#import '../fragments/full-item-with-pokemon.graphql'
+
+mutation itemCreate(
+  $name: String!
+  $pokemonId: ID!
+  $price: Int!
+  $happiness: Int!
+  $imageUrl: Int!
+) {
+  itemCreate(input: {
+    name: $name
+    pokemonId: $pokemonId
+    price: $price
+    happiness: $happiness
+    imageUrl: $imageUrl
+  }) {
+    ...FullItemWithPokemon
+  }
+}

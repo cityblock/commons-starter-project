@@ -1,0 +1,7 @@
+#import '../fragments/full-item-with-pokemon.graphql'
+
+query getItem($itemId: ID!) {
+  item(itemId: $itemId) {
+    ...FullItemWithPokemon
+  }
+}

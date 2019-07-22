@@ -18,7 +18,7 @@ declare module 'schema' {
   }
 
   interface IRootQueryType {
-    allPokemon: Array<IPokemon | null>;
+    allPokemon: Array<IPokemon>;
     pokemon: IPokemon;
     item: IItem;
   }
@@ -38,9 +38,9 @@ declare module 'schema' {
     attack: number;
     defense: number;
     pokeType: PokeType;
-    moves: Array<string | null>;
+    moves: Array<string>;
     imageUrl: string;
-    items: Array<IItem | null>;
+    items: Array<IItem>;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -125,7 +125,7 @@ declare module 'schema' {
     attack: number;
     defense: number;
     pokeType: PokeType;
-    moves: Array<string | null>;
+    moves: Array<string>;
     imageUrl: string;
   }
 
@@ -136,7 +136,7 @@ declare module 'schema' {
     attack?: number | null;
     defense?: number | null;
     pokeType?: PokeType | null;
-    moves?: Array<string | null> | null;
+    moves?: Array<string> | null;
     imageUrl?: string | null;
   }
 

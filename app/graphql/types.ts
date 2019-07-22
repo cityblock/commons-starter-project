@@ -25,16 +25,16 @@ export interface getAllPokemon_allPokemon {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: (string | null)[];
+  moves: string[];
   imageUrl: string;
   createdAt: any;
   updatedAt: any;
   deletedAt: any | null;
-  items: (getAllPokemon_allPokemon_items | null)[];
+  items: getAllPokemon_allPokemon_items[];
 }
 
 export interface getAllPokemon {
-  allPokemon: (getAllPokemon_allPokemon | null)[];
+  allPokemon: getAllPokemon_allPokemon[];
 }
 
 /* tslint:disable */
@@ -52,7 +52,7 @@ export interface getItem_item_pokemon {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: (string | null)[];
+  moves: string[];
   imageUrl: string;
   createdAt: any;
   updatedAt: any;
@@ -107,12 +107,12 @@ export interface getPokemon_pokemon {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: (string | null)[];
+  moves: string[];
   imageUrl: string;
   createdAt: any;
   updatedAt: any;
   deletedAt: any | null;
-  items: (getPokemon_pokemon_items | null)[];
+  items: getPokemon_pokemon_items[];
 }
 
 export interface getPokemon {
@@ -138,7 +138,7 @@ export interface itemCreate_itemCreate_pokemon {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: (string | null)[];
+  moves: string[];
   imageUrl: string;
   createdAt: any;
   updatedAt: any;
@@ -213,7 +213,7 @@ export interface itemEdit_itemEdit_pokemon {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: (string | null)[];
+  moves: string[];
   imageUrl: string;
   createdAt: any;
   updatedAt: any;
@@ -273,12 +273,12 @@ export interface pokemonDelete_pokemonDelete {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: (string | null)[];
+  moves: string[];
   imageUrl: string;
   createdAt: any;
   updatedAt: any;
   deletedAt: any | null;
-  items: (pokemonDelete_pokemonDelete_items | null)[];
+  items: pokemonDelete_pokemonDelete_items[];
 }
 
 export interface pokemonDelete {
@@ -304,7 +304,7 @@ export interface FullItemWithPokemon_pokemon {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: (string | null)[];
+  moves: string[];
   imageUrl: string;
   createdAt: any;
   updatedAt: any;
@@ -371,12 +371,12 @@ export interface FullPokemonWithItems {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: (string | null)[];
+  moves: string[];
   imageUrl: string;
   createdAt: any;
   updatedAt: any;
   deletedAt: any | null;
-  items: (FullPokemonWithItems_items | null)[];
+  items: FullPokemonWithItems_items[];
 }
 
 /* tslint:disable */
@@ -394,7 +394,7 @@ export interface FullPokemon {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: (string | null)[];
+  moves: string[];
   imageUrl: string;
   createdAt: any;
   updatedAt: any;

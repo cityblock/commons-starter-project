@@ -32,9 +32,9 @@ type Pokemon implements uniqueId {
   attack: Int!
   defense: Int!
   pokeType: PokeType!
-  moves: [String]!
+  moves: [String!]!
   imageUrl: String!
-  items: [Item]!
+  items: [Item!]!
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
@@ -46,7 +46,7 @@ input PokemonCreateInput {
   attack: Int!
   defense: Int!
   pokeType: PokeType!
-  moves: [String]!
+  moves: [String!]!
   imageUrl: String!
 }
 
@@ -57,7 +57,7 @@ input PokemonEditInput {
   attack: Int
   defense: Int
   pokeType: PokeType
-  moves: [String]
+  moves: [String!]
   imageUrl: String
 }
 
@@ -100,7 +100,7 @@ input ItemDeleteInput {
 }
 
 type RootQueryType {
-  allPokemon: [Pokemon]!
+  allPokemon: [Pokemon!]!
   pokemon(pokemonId: ID!): Pokemon!
   item(itemId: ID!): Item!
 }

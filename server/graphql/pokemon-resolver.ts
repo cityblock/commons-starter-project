@@ -1,5 +1,5 @@
 import { transaction } from 'objection';
-import { IPokemonCreateInput, IRootMutationType } from 'schema';
+import { IPokemonCreateInput } from 'schema';
 import Pokemon from '../models/pokemon';
 import { IContext } from './shared/utils';
 

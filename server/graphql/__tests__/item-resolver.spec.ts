@@ -91,8 +91,7 @@ describe('item resolvers', () => {
         },
         { ...itemForJaimon },
       );
-      expect(cloneDeep(result.data!.createItem.pokemonId)).toEqual(itemForJaimon.pokemonId);
-      expect(cloneDeep(result.data!.createItem.name)).toEqual(itemForJaimon.name);
+      expect(cloneDeep(result.data!.createItem)).toMatchObject(itemForJaimon);
     });
   });
   describe('#edit', () => {
@@ -109,9 +108,15 @@ describe('item resolvers', () => {
         },
         { ...randomItem, name: 'Kanyemon', imageUrl: 'kan.ye' },
       );
-      expect(cloneDeep(result.data!.editItem.name)).toEqual('Kanyemon');
-      expect(cloneDeep(result.data!.editItem.imageUrl)).toEqual('kan.ye');
-      expect(cloneDeep(result.data!.editItem.name)).not.toEqual(randomItem.name);
+      const { pokemonId, price, happiness } = randomItem;
+      const matchObjectForTesting = {
+        name: 'Kanyemon',
+        imageUrl: 'kan.ye',
+        pokemonId,
+        price,
+        happiness,
+      };
+      expect(cloneDeep(result.data!.editItem)).toMatchObject(matchObjectForTesting);
     });
   });
   describe('#delete', () => {
@@ -128,7 +133,12 @@ describe('item resolvers', () => {
         },
         { itemId: randomItem.id },
       );
-      expect(cloneDeep(result.data!.deleteItem.name)).toEqual(randomItem.name);
+      const getRandomItem = await Item.query(txn).where({ id: randomItem.id });
+      let { deletedAt } = getRandomItem[0];
+      const { id, name, pokemonId, price, happiness, imageUrl } = getRandomItem[0];
+      deletedAt = new Date(deletedAt!).toISOString();
+      const matchObjectForTesting = { id, name, pokemonId, price, happiness, imageUrl, deletedAt };
+      expect(cloneDeep(result.data!.deleteItem)).toMatchObject(matchObjectForTesting);
     });
   });
 });

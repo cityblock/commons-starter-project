@@ -9,6 +9,7 @@
 export interface createItem_createItem {
   id: string;
   name: string;
+  pokemonId: string;
   price: number;
   happiness: number;
   imageUrl: string;
@@ -69,6 +70,7 @@ export interface pokemonCreateVariables {
 export interface deleteItem_deleteItem {
   id: string;
   name: string;
+  pokemonId: string;
   price: number;
   happiness: number;
   imageUrl: string;
@@ -119,6 +121,7 @@ export interface pokemonDeleteVariables {
 export interface editItem_editItem {
   id: string;
   name: string;
+  pokemonId: string;
   price: number;
   happiness: number;
   imageUrl: string;
@@ -203,6 +206,7 @@ export interface getAllPokemon {
 export interface getItem_singleItem {
   id: string;
   name: string;
+  pokemonId: string;
   price: number;
   happiness: number;
   imageUrl: string;
@@ -253,6 +257,7 @@ export interface getOnePokemonVariables {
 export interface CoreItem {
   id: string;
   name: string;
+  pokemonId: string;
   price: number;
   happiness: number;
   imageUrl: string;

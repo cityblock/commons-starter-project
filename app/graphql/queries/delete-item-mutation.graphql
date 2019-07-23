@@ -3,5 +3,6 @@
 mutation deleteItem($itemId: String!) {
   deleteItem(itemId: $itemId) {
     ...CoreItem
+    deletedAt
   }
 }

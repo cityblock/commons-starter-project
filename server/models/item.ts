@@ -87,7 +87,7 @@ export default class Item extends BaseModel {
       return this.query(txn)
         .eager('pokemon')
         .patchAndFetchById(itemId, {
-          deletedAt: new Date(Date.now()).toISOString(),
+          deletedAt: new Date().toISOString(),
         });
     }
     return Promise.reject(`Error: couldn't delete Item (ID): ${itemId}`);

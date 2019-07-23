@@ -131,7 +131,7 @@ describe('pokemon resolvers', () => {
       const randomPokemon = await testingPokemonArr[randomNumberGen];
       // console.log('before delete', randomPokemon);
       expect(randomPokemon.deletedAt).toBe(null);
-      const result = await graphql(
+      await graphql(
         schema,
         deleteAPokemonMutation,
         null,

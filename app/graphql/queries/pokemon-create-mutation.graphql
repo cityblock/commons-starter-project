@@ -9,7 +9,7 @@ mutation pokemonCreate(
   $moves: [String]!
   $imageUrl: String!
 ) {
-  pokemonCreate(input {
+  pokemonCreate(input: {
     pokemonNumber: $pokemonNumber
     name: $name
     attack: $attack

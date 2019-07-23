@@ -4,7 +4,7 @@ import { transaction } from 'objection';
 import { PokeType } from 'schema';
 import createItem from '../../../app/graphql/queries/create-item-mutation.graphql';
 // import deleteItem from '../../../app/graphql/queries/delete-item-mutation.graphql';
-// import editItem from '../../../app/graphql/queries/edit-item-mutation.graphql';
+import editItem from '../../../app/graphql/queries/edit-item-mutation.graphql';
 import getItem from '../../../app/graphql/queries/get-item-query.graphql';
 import { setupDb } from '../../lib/test-utils';
 import Item from '../../models/item';
@@ -14,7 +14,7 @@ import schema from '../make-executable-schema';
 describe('item resolvers', () => {
   const getItemQuery = print(getItem);
   const createItemMutation = print(createItem);
-  // const editItemMutation = print(editItem);
+  const editItemMutation = print(editItem);
   // const deleteItemMutation = print(deleteItem);
 
   let testDb = null as any;
@@ -95,25 +95,25 @@ describe('item resolvers', () => {
       expect(cloneDeep(result.data!.createItem.name)).toEqual(itemForJaimon.name);
     });
   });
-  // describe('#edit', () => {
-  //   it('should edit a pokemon', async () => {
-  //     const testingPokemonArr = await Pokemon.getAll(txn);
-  //     const randomNumberGen = Math.floor(Math.random() * testingPokemonArr.length);
-  //     const randomPokemon = await testingPokemonArr[randomNumberGen];
-  //     const result = await graphql(
-  //       schema,
-  //       editAPokemonMutation,
-  //       null,
-  //       {
-  //         testTransaction: txn,
-  //       },
-  //       { ...randomPokemon, name: 'Kanyemon', imageUrl: 'kan.ye' },
-  //     );
-  //     expect(cloneDeep(result.data!.editPokemon.name)).toEqual('Kanyemon');
-  //     expect(cloneDeep(result.data!.editPokemon.imageUrl)).toEqual('kan.ye');
-  //     expect(cloneDeep(result.data!.editPokemon.name)).not.toEqual(randomPokemon.name);
-  //   });
-  // });
+  describe('#edit', () => {
+    it('should edit an item', async () => {
+      const allItems = await Item.query(txn).where({ deletedAt: null });
+      const randomNumberGen = Math.floor(Math.random() * allItems.length);
+      const randomItem = allItems[randomNumberGen];
+      const result = await graphql(
+        schema,
+        editItemMutation,
+        null,
+        {
+          testTransaction: txn,
+        },
+        { ...randomItem, name: 'Kanyemon', imageUrl: 'kan.ye' },
+      );
+      expect(cloneDeep(result.data!.editItem.name)).toEqual('Kanyemon');
+      expect(cloneDeep(result.data!.editItem.imageUrl)).toEqual('kan.ye');
+      expect(cloneDeep(result.data!.editItem.name)).not.toEqual(randomItem.name);
+    });
+  });
   // describe('#delete', () => {
   //   it('should soft delete a pokemon', async () => {
   //     const testingPokemonArr = await Pokemon.getAll(txn);

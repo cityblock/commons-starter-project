@@ -7,10 +7,10 @@ mutation pokemonEdit(
   $attack: Int
   $defense: Int
   $pokeType: PokeType
-  $moves: [String]
+  $moves: [String!]
   $imageUrl: String
 ) {
-  pokemonEdit(input {
+  pokemonEdit(input: {
     pokemonId: $pokemonId
     pokemonNumber: $pokemonNumber
     name: $name

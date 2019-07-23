@@ -34,7 +34,7 @@ type Pokemon implements uniqueId {
   pokeType: PokeType!
   moves: [String!]!
   imageUrl: String!
-  items: [Item!]!
+  items: [Item!]
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime

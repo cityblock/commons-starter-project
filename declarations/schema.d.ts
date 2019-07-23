@@ -40,7 +40,7 @@ declare module 'schema' {
     pokeType: PokeType;
     moves: Array<string>;
     imageUrl: string;
-    items: Array<IItem>;
+    items: Array<IItem> | null;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;

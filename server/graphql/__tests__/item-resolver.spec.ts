@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 import { transaction } from 'objection';
 import { PokeType } from 'schema';
 import createItem from '../../../app/graphql/queries/create-item-mutation.graphql';
-// import deleteItem from '../../../app/graphql/queries/delete-item-mutation.graphql';
+import deleteItem from '../../../app/graphql/queries/delete-item-mutation.graphql';
 import editItem from '../../../app/graphql/queries/edit-item-mutation.graphql';
 import getItem from '../../../app/graphql/queries/get-item-query.graphql';
 import { setupDb } from '../../lib/test-utils';
@@ -15,7 +15,7 @@ describe('item resolvers', () => {
   const getItemQuery = print(getItem);
   const createItemMutation = print(createItem);
   const editItemMutation = print(editItem);
-  // const deleteItemMutation = print(deleteItem);
+  const deleteItemMutation = print(deleteItem);
 
   let testDb = null as any;
   let txn = null as any;
@@ -114,21 +114,21 @@ describe('item resolvers', () => {
       expect(cloneDeep(result.data!.editItem.name)).not.toEqual(randomItem.name);
     });
   });
-  // describe('#delete', () => {
-  //   it('should soft delete a pokemon', async () => {
-  //     const testingPokemonArr = await Pokemon.getAll(txn);
-  //     const randomNumberGen = Math.floor(Math.random() * testingPokemonArr.length);
-  //     const randomPokemon = await testingPokemonArr[randomNumberGen];
-  //     const result = await graphql(
-  //       schema,
-  //       deleteAPokemonMutation,
-  //       null,
-  //       {
-  //         testTransaction: txn,
-  //       },
-  //       { pokemonId: randomPokemon.id },
-  //     );
-  //     expect(cloneDeep(result.data!.deletePokemon.name)).toEqual(randomPokemon.name);
-  //   });
-  // });
+  describe('#delete', () => {
+    it('should soft delete an item', async () => {
+      const allItems = await Item.query(txn).where({ deletedAt: null });
+      const randomNumberGen = Math.floor(Math.random() * allItems.length);
+      const randomItem = allItems[randomNumberGen];
+      const result = await graphql(
+        schema,
+        deleteItemMutation,
+        null,
+        {
+          testTransaction: txn,
+        },
+        { itemId: randomItem.id },
+      );
+      expect(cloneDeep(result.data!.deleteItem.name)).toEqual(randomItem.name);
+    });
+  });
 });

@@ -12,8 +12,8 @@ import Pokemon from '../models/pokemon';
 import { IContext } from './shared/utils';
 
 export async function getAllPokemon(
-  {}: {},
-  []: {},
+  _root: {},
+  _args: {},
   { testTransaction, getOrCreateTransaction }: IContext
 ): Promise<IRootQueryType['allPokemon']> {
   return getOrCreateTransaction(
@@ -23,7 +23,7 @@ export async function getAllPokemon(
 }
 
 export async function getPokemon(
-  {}: {},
+  _root: {},
   { pokemonId }: { pokemonId: string },
   { testTransaction, getOrCreateTransaction }: IContext
 ): Promise<IRootQueryType['pokemon']> {
@@ -34,7 +34,7 @@ export async function getPokemon(
 }
 
 export async function pokemonCreate(
-  {}: {},
+  _root: {},
   { input }: IPokemonCreateOnRootMutationTypeArguments,
   { testTransaction, getOrCreateTransaction }: IContext
 ): Promise<IRootMutationType['pokemonCreate']> {
@@ -45,7 +45,7 @@ export async function pokemonCreate(
 }
 
 export async function pokemonEdit(
-  {}: {},
+  _root: {},
   { input: { pokemonId, ...args } }: IPokemonEditOnRootMutationTypeArguments,
   { testTransaction, getOrCreateTransaction }: IContext
 ): Promise<IRootMutationType['pokemonEdit']> {
@@ -56,7 +56,7 @@ export async function pokemonEdit(
 }
 
 export async function pokemonDelete(
-  {}: {},
+  _root: {},
   { input: { pokemonId } }: IPokemonDeleteOnRootMutationTypeArguments,
   { testTransaction, getOrCreateTransaction }: IContext
 ): Promise<IRootMutationType['pokemonDelete']> {

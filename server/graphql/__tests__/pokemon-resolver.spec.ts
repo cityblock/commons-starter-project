@@ -79,7 +79,6 @@ describe('pokemon resolvers', () => {
       expect(cloneDeep(result.data!.singlePokemon)).toMatchObject(randomPokemonToMatchGQLQuery);
     });
   });
-  // pick back up here
   describe('#create', () => {
     it('should create a pokemon', async () => {
       const jaimon = {
@@ -100,7 +99,7 @@ describe('pokemon resolvers', () => {
         },
         { ...jaimon },
       );
-      expect(cloneDeep(result.data!.createPokemon.name)).toEqual(jaimon.name);
+      expect(cloneDeep(result.data!.createPokemon)).toMatchObject(jaimon);
     });
   });
   describe('#edit', () => {
@@ -117,6 +116,7 @@ describe('pokemon resolvers', () => {
         },
         { ...randomPokemon, name: 'Kanyemon', imageUrl: 'kan.ye' },
       );
+      // I think this should suffice because I'm checking against edited items and that old items were changed
       expect(cloneDeep(result.data!.editPokemon.name)).toEqual('Kanyemon');
       expect(cloneDeep(result.data!.editPokemon.imageUrl)).toEqual('kan.ye');
       expect(cloneDeep(result.data!.editPokemon.name)).not.toEqual(randomPokemon.name);
@@ -124,9 +124,13 @@ describe('pokemon resolvers', () => {
   });
   describe('#delete', () => {
     it('should soft delete a pokemon', async () => {
+      // different way to test, wondering your thoughts on how I'm stacking these expect statements for before v after
+      // leaving console.logs in to make testing easier
       const testingPokemonArr = await Pokemon.getAll(txn);
       const randomNumberGen = Math.floor(Math.random() * testingPokemonArr.length);
       const randomPokemon = await testingPokemonArr[randomNumberGen];
+      // console.log('before delete', randomPokemon);
+      expect(randomPokemon.deletedAt).toBe(null);
       const result = await graphql(
         schema,
         deleteAPokemonMutation,
@@ -136,7 +140,9 @@ describe('pokemon resolvers', () => {
         },
         { pokemonId: randomPokemon.id },
       );
-      expect(cloneDeep(result.data!.deletePokemon.name)).toEqual(randomPokemon.name);
+      const getRandomPokemonAfterDelete = await Pokemon.query(txn).where({ id: randomPokemon.id });
+      // console.log('after delete', getRandomPokemonAfterDelete);
+      expect(cloneDeep(getRandomPokemonAfterDelete[0].deletedAt)).not.toEqual(null);
     });
   });
 });

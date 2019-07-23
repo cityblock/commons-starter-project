@@ -133,6 +133,7 @@ describe('item resolvers', () => {
         },
         { itemId: randomItem.id },
       );
+      // Wondering your thoughts on testing this? This seems kind of forceful, no? Wanted to show this example against how I test other objects using omit
       const getRandomItem = await Item.query(txn).where({ id: randomItem.id });
       let { deletedAt } = getRandomItem[0];
       const { id, name, pokemonId, price, happiness, imageUrl } = getRandomItem[0];

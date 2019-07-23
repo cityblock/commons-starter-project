@@ -1,5 +1,5 @@
 import { graphql, print } from 'graphql';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, omit } from 'lodash';
 import { transaction } from 'objection';
 import pokemonCreate from '../../../app/graphql/queries/create-pokemon-mutation.graphql';
 import pokemonDelete from '../../../app/graphql/queries/delete-pokemon-mutation.graphql';
@@ -16,6 +16,7 @@ describe('pokemon resolvers', () => {
   const createAPokemonMutation = print(pokemonCreate);
   const editAPokemonMutation = print(pokemonEdit);
   const deleteAPokemonMutation = print(pokemonDelete);
+  const fieldsToOmit = ['createdAt', 'updatedAt', 'deletedAt'];
 
   let testDb = null as any;
   let txn = null as any;
@@ -38,10 +39,18 @@ describe('pokemon resolvers', () => {
 
   describe('#getAll', () => {
     it('should return an array of pokemon', async () => {
+      const testingPokemonArr = await Pokemon.getAll(txn);
+      const randomNumberGen = Math.floor(Math.random() * testingPokemonArr.length);
+      const randomPokemon = await testingPokemonArr[randomNumberGen];
       const result = await graphql(schema, getAllPokemonQuery, null, {
         testTransaction: txn,
       });
-      expect(cloneDeep(result.data!.allPokemon)).toHaveLength(52);
+      const matchingObjToCompare = omit(randomPokemon, [...fieldsToOmit, 'item']);
+      const gqlRandomPokemon = result.data!.allPokemon[randomNumberGen];
+      const gqlResultMinusItem = omit(gqlRandomPokemon, 'item');
+      expect(cloneDeep(gqlRandomPokemon.item)).toBeTruthy();
+      expect(cloneDeep(result.data!.allPokemon)).toHaveLength(testingPokemonArr.length);
+      expect(cloneDeep(gqlResultMinusItem)).toMatchObject(matchingObjToCompare);
     });
   });
   describe('#getOne', () => {
@@ -70,6 +79,7 @@ describe('pokemon resolvers', () => {
       expect(cloneDeep(result.data!.singlePokemon)).toMatchObject(randomPokemonToMatchGQLQuery);
     });
   });
+  // pick back up here
   describe('#create', () => {
     it('should create a pokemon', async () => {
       const jaimon = {

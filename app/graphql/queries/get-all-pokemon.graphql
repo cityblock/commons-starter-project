@@ -1,7 +1,11 @@
 #import "../fragments/full-pokemon.graphql"
+#import "../fragments/core-item.graphql"
 
 query getAllPokemon {
   allPokemon {
     ...FullPokemon
+    item {
+      ...CoreItem
+    }
   }
 }

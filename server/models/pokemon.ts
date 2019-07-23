@@ -23,47 +23,6 @@ interface IPokemonEditInput {
   imageUrl?: string;
 }
 
-// export const enum PokeType {
-//   normal = 'normal',
-//   grass = 'grass',
-//   fire = 'fire',
-//   water = 'water',
-//   electric = 'electric',
-//   psychic = 'psychic',
-//   ghost = 'ghost',
-//   dark = 'dark',
-//   fairy = 'fairy',
-//   rock = 'rock',
-//   ground = 'ground',
-//   steel = 'steel',
-//   flying = 'flying',
-//   fighting = 'fighting',
-//   bug = 'bug',
-//   ice = 'ice',
-//   dragon = 'dragon',
-//   poison = 'poison',
-// }
-
-// export type PokeType =
-//   | 'normal'
-//   | 'grass'
-//   | 'fire'
-//   | 'water'
-//   | 'electric'
-//   | 'psychic'
-//   | 'ghost'
-//   | 'dark'
-//   | 'fairy'
-//   | 'rock'
-//   | 'ground'
-//   | 'steel'
-//   | 'flying'
-//   | 'fighting'
-//   | 'bug'
-//   | 'ice'
-//   | 'dragon'
-//   | 'poison';
-
 export default class Pokemon extends BaseModel {
   static modelPaths = [__dirname];
   static tableName = 'pokemon';

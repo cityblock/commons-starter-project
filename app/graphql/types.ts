@@ -39,6 +39,7 @@ export interface pokemonCreate_createPokemon {
   id: string;
   name: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   attack: number;
   defense: number;
   moves: string[];
@@ -74,6 +75,7 @@ export interface deleteItem_deleteItem {
   price: number;
   happiness: number;
   imageUrl: string;
+  deletedAt: any | null;
 }
 
 export interface deleteItem {
@@ -96,6 +98,7 @@ export interface pokemonDelete_deletePokemon {
   id: string;
   name: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   attack: number;
   defense: number;
   moves: string[];
@@ -152,6 +155,7 @@ export interface pokemonEdit_editPokemon {
   id: string;
   name: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   attack: number;
   defense: number;
   moves: string[];
@@ -181,14 +185,25 @@ export interface pokemonEditVariables {
 // GraphQL query operation: getAllPokemon
 // ====================================================
 
+export interface getAllPokemon_allPokemon_item {
+  id: string;
+  name: string;
+  pokemonId: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+}
+
 export interface getAllPokemon_allPokemon {
   id: string;
   name: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   attack: number;
   defense: number;
   moves: string[];
   imageUrl: string;
+  item: (getAllPokemon_allPokemon_item | null)[];
 }
 
 export interface getAllPokemon {
@@ -232,6 +247,7 @@ export interface getOnePokemon_singlePokemon {
   id: string;
   name: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   attack: number;
   defense: number;
   moves: string[];
@@ -275,6 +291,7 @@ export interface FullPokemon {
   id: string;
   name: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   attack: number;
   defense: number;
   moves: string[];

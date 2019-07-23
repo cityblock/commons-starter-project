@@ -1,4 +1,5 @@
 import Knex from 'knex';
+import omit from 'lodash/omit';
 import Objection from 'objection';
 import * as knexConfig from '../models/knexfile';
 
@@ -20,3 +21,6 @@ export const testGraphqlContext = (ctx: any) => ({
   ) => cb(testTransaction),
   ...ctx,
 });
+
+export const filterTimestamps = (object: { createdAt?: any, updatedAt?: any, deletedAt: any }) => 
+  omit(object, 'createdAt', 'updatedAt', 'deletedAt');

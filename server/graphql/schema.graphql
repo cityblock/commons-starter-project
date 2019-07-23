@@ -78,40 +78,15 @@ type Item implements uniqueId {
   deletedAt: DateTime
 }
 
-input ItemCreateInput {
-  name: String!
-  pokemonId: ID!
-  price: Int!
-  happiness: Int!
-  imageUrl: Int!
-}
-
-input ItemEditInput {
-  itemId: ID!
-  name: String
-  pokemonId: ID
-  price: Int
-  happiness: Int
-  imageUrl: Int
-}
-
-input ItemDeleteInput {
-  itemId: ID!
-}
-
 type RootQueryType {
   allPokemon: [Pokemon!]!
   pokemon(pokemonId: ID!): Pokemon!
-  item(itemId: ID!): Item!
 }
 
 type RootMutationType {
   pokemonCreate(input: PokemonCreateInput!): Pokemon!
   pokemonEdit(input: PokemonEditInput!): Pokemon!
   pokemonDelete(input: PokemonDeleteInput!): Pokemon!
-  itemCreate(input: ItemCreateInput!): Item!
-  itemEdit(input: ItemEditInput!): Item!
-  itemDelete(input: ItemDeleteInput!): Item!
 }
 
 schema {

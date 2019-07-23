@@ -1,7 +1,0 @@
-#import '../fragments/full-item.graphql'
-
-mutation itemDelete($itemId: ID!) {
-  itemDelete(input: {itemId: $itemId}) {
-    ...FullItem
-  }
-}

@@ -1,13 +1,12 @@
 import { graphql, print } from 'graphql';
-import random from 'lodash/random'
-import { transaction, Transaction } from 'objection';
+import { transaction } from 'objection';
 import { PokeType } from 'schema';
 import getAllPokemon from '../../../app/graphql/queries/get-all-pokemon.graphql';
 import getPokemon from '../../../app/graphql/queries/get-pokemon.graphql';
 import pokemonCreate from '../../../app/graphql/queries/pokemon-create-mutation.graphql';
 import pokemonDelete from '../../../app/graphql/queries/pokemon-delete-mutation.graphql';
 import pokemonEdit from '../../../app/graphql/queries/pokemon-edit-mutation.graphql';
-import { filterTimestamps, setupDb, testGraphqlContext } from '../../lib/test-utils';
+import { filterTimestamps, getRandomPokemonId, setupDb, testGraphqlContext } from '../../lib/test-utils';
 import Pokemon from '../../models/pokemon';
 import schema from '../make-executable-schema';
 
@@ -25,11 +24,6 @@ describe('Pokemon Resolver', () => {
     ...filterTimestamps(pokemon),
     items: items.map(filterTimestamps)
   });
-
-  const getRandomPokemonId = async (txxn: Transaction) => {
-    const allPokemon = await Pokemon.getAll(txxn);
-    return allPokemon[random(allPokemon.length - 1)].id
-  };
 
   beforeAll(() => testDb = setupDb());
 

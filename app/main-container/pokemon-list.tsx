@@ -10,7 +10,6 @@ interface IGraphqlProps {
   error: ApolloError | null | undefined;
 }
 export const PokemonContainer: React.StatelessComponent<IGraphqlProps> = (props: IGraphqlProps) => {
-  console.log(props);
   const { allPokemon, loading, error } = props;
   return (
     <>

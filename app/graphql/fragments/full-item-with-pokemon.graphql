@@ -1,0 +1,9 @@
+#import './full-pokemon.graphql'
+#import './full-item.graphql'
+
+fragment FullItemWithPokemon on Item {
+  ...FullItem
+  pokemon {
+    ...FullPokemon
+  }
+}

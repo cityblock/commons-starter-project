@@ -5,6 +5,7 @@ import {
   IPokemonDeleteOnRootMutationTypeArguments,
   IPokemonEditInput,
   IPokemonEditOnRootMutationTypeArguments,
+  IPokemonOnRootQueryTypeArguments,
   IRootMutationType,
   IRootQueryType 
 } from 'schema';
@@ -24,7 +25,7 @@ export async function getAllPokemon(
 
 export async function getPokemon(
   _root: {},
-  { pokemonId }: { pokemonId: string },
+  { pokemonId }: IPokemonOnRootQueryTypeArguments,
   { testTransaction, getOrCreateTransaction }: IContext
 ): Promise<IRootQueryType['pokemon']> {
   return getOrCreateTransaction(

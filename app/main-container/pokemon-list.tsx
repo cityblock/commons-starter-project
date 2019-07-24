@@ -1,57 +1,45 @@
-import gql from 'graphql-tag';
+import { ApolloError } from 'apollo-client';
+import { getAllPokemon_allPokemon } from 'app/graphql/types';
 import React from 'react';
-import { Query } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import getAllPokemon from '../graphql/queries/get-all-pokemon.graphql';
 
-const POKEMON_LIST = gql`
-  {
-    allPokemon {
-      id
-      name
-      imageUrl
-      pokemonNumber
-    }
-  }
-`;
-
-interface IGraphQL {
+interface IGraphqlProps {
+  allPokemon: getAllPokemon_allPokemon[];
   loading: boolean;
-  error: string | null;
+  error: ApolloError | null | undefined;
 }
-
-interface IPokemonData {
-  allPokemon: IPokemon[];
-}
-
-type allQueryTypes = IGraphQL & IPokemonData;
-
-interface IPokemon {
-  id: string;
-  name: string;
-  imageUrl: string;
-  pokemonNumber: number;
-}
-
-export const PokemonContainer = () => {
+export const PokemonContainer: React.StatelessComponent<IGraphqlProps> = (props: IGraphqlProps) => {
+  console.log(props);
+  const { allPokemon, loading, error } = props;
   return (
-    <Query query={POKEMON_LIST}>
-      {({ loading, error, data }) => {
-        if (loading) return <div>Fetching</div>;
-        if (error) return <div>Error</div>;
-
-        const pokemonToRender = data.allPokemon;
-
-        return (
-          <table>
-            {pokemonToRender.map((pokemon: IPokemon) => (
-              <tr key={pokemon.id}>
-                <a href={`/pokemon/${pokemon.pokemonNumber}`}>
-                  <img src={pokemon.imageUrl} /> {pokemon.name}
-                </a>
-              </tr>
-            ))}
-          </table>
-        );
-      }}
-    </Query>
+    <>
+      {loading && <p>Loading up!</p>}
+      {error && (
+        <React.Fragment>
+          <img src="../test-container/desus-mero.jpg" />
+          <h1>Fix ya face, kehd</h1>
+        </React.Fragment>
+      )}
+      {!loading && (
+        <table>
+          {allPokemon.map(pokemon => (
+            <tr key={pokemon.id}>
+              <a href={`/pokemon/${pokemon.pokemonNumber}`}>
+                <img src={pokemon.imageUrl} /> {pokemon.name}
+              </a>
+            </tr>
+          ))}
+        </table>
+      )}
+    </>
   );
 };
+
+export default graphql(getAllPokemon, {
+  props: ({ data }) => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    allPokemon: data ? (data as any).allPokemon : null,
+  }),
+})(PokemonContainer);

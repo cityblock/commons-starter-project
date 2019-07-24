@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import MainContainer from './main-container/main-container';
-import { PokemonContainer } from './main-container/pokemon-list';
+import PokemonContainer from './main-container/pokemon-list';
 import NoPathContainer from './test-container/no-path-container';
 import TestContainer from './test-container/test-container';
 

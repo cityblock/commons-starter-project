@@ -1,0 +1,7 @@
+#import '../fragments/full-pokemon-with-items.graphql'
+
+mutation pokemonDelete($pokemonId: ID!) {
+  pokemonDelete(input: {pokemonId: $pokemonId}) {
+    ...FullPokemonWithItems
+  }
+}

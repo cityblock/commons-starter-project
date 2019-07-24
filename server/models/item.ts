@@ -69,17 +69,19 @@ export default class Item extends Model {
     return this.query(txn).insert(input).returning('*').eager('pokemon');
   }
 
-  static async edit(itemId: string, item: IItemEditInput, txn: Transaction): Promise<void> {
-    const updatedItem = await this.query(txn).patchAndFetchById(itemId, item);
+  static async edit(itemId: string, item: IItemEditInput, txn: Transaction): Promise<Item> {
+    const updatedItem = await this.query(txn).patchAndFetchById(itemId, item).eager('pokemon');
     if(!updatedItem) return Promise.reject('No item with given ID');
+    return updatedItem;
   }
 
-  static async delete(itemId: string, txn: Transaction): Promise<void> {
-    const item = await this.query(txn).patchAndFetchById(itemId, {
+  static async delete(itemId: string, txn: Transaction): Promise<Item> {
+    const deletedItem = await this.query(txn).patchAndFetchById(itemId, {
       deletedAt: new Date().toISOString() 
     });
 
-    if (!item) return Promise.reject('No item with given ID');
+    if (!deletedItem) return Promise.reject('No item with given ID');
+    return deletedItem;
   }
 
   id!: string;

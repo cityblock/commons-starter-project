@@ -70,6 +70,13 @@ describe('Item', () => {
       expect(editedItem.happiness).toEqual(3000);
     });
 
+    it('returns the edited item, including all its edits', async () => {
+      const item = await Item.query(txn).findOne({ deletedAt: null });
+      const editedItem = await Item.edit(item!.id, { happiness: 3000 }, txn);
+      const dbItem = await Item.get(item!.id, txn);
+      expect(editedItem).toEqual(dbItem);
+    });
+
     it('returns an error when given an invalid id', async () => {
       try {
         await Item.edit(nonexistentId, { happiness: 3000 }, txn);
@@ -89,6 +96,13 @@ describe('Item', () => {
       } catch(error) {
         expect(error).toEqual('No item with given ID');
       }
+    });
+
+    it('returns the deleted item', async () => {
+      const item = await Item.query(txn).findOne({ deletedAt: null });
+      const deletedItem = await Item.delete(item!.id, txn);
+      const dbItem = await Item.query(txn).findById(item!.id);
+      expect(deletedItem).toEqual(dbItem);
     });
 
     it('returns an error when given an invalid id', async () => {

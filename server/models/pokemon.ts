@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { PokeType } from 'schema'
 import uuid from 'uuid/v4';
 import Item from './item';
 
@@ -21,26 +22,6 @@ export interface IPokemonEditInput {
   moves?: string[];
   imageUrl?: string;
 }
-
-export type PokeType = 
-  | 'normal'
-  | 'grass'
-  | 'fire'
-  | 'water'
-  | 'electric'
-  | 'psychic'
-  | 'ghost'
-  | 'dark'
-  | 'fairy'
-  | 'rock'
-  | 'ground'
-  | 'steel'
-  | 'flying'
-  | 'fighting'
-  | 'bug'
-  | 'ice'
-  | 'dragon'
-  | 'poison';
 
 export default class Pokemon extends Model {
   static tableName = 'pokemon';
@@ -123,19 +104,21 @@ export default class Pokemon extends Model {
     return this.query(txn).insert(input).returning('*').eager('items');
   }
 
-  static async edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction): Promise<void> {
-    const updatedPokemon = await this.query(txn).patchAndFetchById(pokemonId, pokemon);
+  static async edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction): Promise<Pokemon> {
+    const updatedPokemon = await this.query(txn).patchAndFetchById(pokemonId, pokemon).eager('items');
     if (!updatedPokemon) return Promise.reject('No pokemon with given ID');
+    return updatedPokemon;
   }
 
-  static async delete(pokemonId: string, txn: Transaction): Promise<void> {
-    const pokemon = await this.query(txn).patchAndFetchById(pokemonId, {
+  static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {
+    const deletedPokemon = await this.query(txn).patchAndFetchById(pokemonId, {
       deletedAt: new Date().toISOString() 
     });
 
-    if (!pokemon) return Promise.reject('No pokemon with given ID');
+    if (!deletedPokemon) return Promise.reject('No pokemon with given ID');
 
     await Item.query(txn).patch({ deletedAt: new Date().toISOString() }).where({ pokemonId });
+    return deletedPokemon;
   }
 
   id!: string;

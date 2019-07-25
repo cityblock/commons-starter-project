@@ -8,7 +8,7 @@ module.exports = [
     22,
     'grass',
     ['Tackle', 'Growl', 'Leech Seed'],
-    'https://cdn.bulbagarden.net/upload/thumb/2/21/001Bulbasaur.png/1200px-001Bulbasaur.png',
+    'https://cdn.bulbagarden.net/media/upload/2/21/001Bulbasaur.png',
   ),
   buildPokemon(
     'Ivysaur',
@@ -134,7 +134,7 @@ module.exports = [
     14,
     'psychic',
     ['Teleport'],
-    'hhttps://cdn.bulbagarden.net/upload/6/62/063Abra.png',
+    'https://cdn.bulbagarden.net/upload/6/62/063Abra.png',
   ),
   buildPokemon(
     'Kadabra',

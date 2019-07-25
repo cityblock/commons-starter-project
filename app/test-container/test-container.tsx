@@ -8,13 +8,13 @@ interface IRouteProps {
   match: { params: { pokemonId: string } };
 }
 
-interface IGraphqlProps {
-  singlePokemon: getOnePokemon_singlePokemon;
-  loading: boolean;
-  error: ApolloError | null | undefined;
-}
+// interface IGraphqlProps {
+//   singlePokemon: getOnePokemon_singlePokemon;
+//   loading: boolean;
+//   error: ApolloError | null | undefined;
+// }
 
-export const TestContainer: React.StatelessComponent<IGraphqlProps> = (props: IGraphqlProps) => {
+export const TestContainer: React.StatelessComponent = (props: any) => {
   const { singlePokemon, loading, error } = props;
   return (
     <>

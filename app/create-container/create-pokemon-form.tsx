@@ -46,7 +46,7 @@ interface IGraphqlProps {
 const initialPokemon: IPokemon = {
   id: '',
   name: '',
-  pokemonNumber: 0,
+  pokemonNumber: 13,
   pokeType: PokeType.grass,
   attack: 100,
   defense: 100,
@@ -54,9 +54,7 @@ const initialPokemon: IPokemon = {
   imageUrl: 'cityblo.ck',
 };
 
-export const CreatePokemonForm: React.StatelessComponent<IGraphqlProps> = (
-  props: IGraphqlProps,
-) => {
+export const CreatePokemonForm: React.FC = (props: any) => {
   const { createPokemonMutation } = props;
   const [pokemon, setPokemon] = useState<IPokemon>(initialPokemon);
   const onChange = (
@@ -67,25 +65,37 @@ export const CreatePokemonForm: React.StatelessComponent<IGraphqlProps> = (
     const newPokemon = { ...pokemon, [fieldToChange]: valueToSet };
     setPokemon(newPokemon);
   };
-  const submit = async e => {
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await createPokemonMutation({ variables: pokemon });
+    try {
+      const result = await createPokemonMutation({ variables: pokemon });
+      console.log('mutation went through');
+      console.log('result\n', result);
+    } catch (err) {
+      console.log('Error:', err.message);
+    }
   };
   return (
     <>
       <form
         onSubmit={e => {
-          e.preventDefault();
           submit(e);
         }}
       >
         <h1>Create a pokemon</h1>
         <br />
+        <label>ID:</label>
+        <input type="text" name="id" value={pokemon.id} onChange={onChange} />
         <label>Name:</label>
         <input type="text" name="name" value={pokemon.name} onChange={onChange} />
         <br />
         <label>Pokemon Number:</label>
-        <input type="text" name="pokemonNumber" value={pokemon.pokemonNumber} onChange={onChange} />
+        <input
+          type="text"
+          name="pokemonNumber"
+          value={Number(pokemon.pokemonNumber)}
+          onChange={onChange}
+        />
         <br />
         <label>Pokemon Type:</label>
         <select name="pokeType" value={PokeType.grass} onChange={onChange}>
@@ -95,10 +105,10 @@ export const CreatePokemonForm: React.StatelessComponent<IGraphqlProps> = (
         </select>
         <br />
         <label>Attack:</label>
-        <input type="text" name="attack" value={pokemon.attack} onChange={onChange} />
+        <input type="text" name="attack" value={Number(pokemon.attack)} onChange={onChange} />
         <br />
         <label>Defense:</label>
-        <input type="text" name="defense" value={pokemon.defense} onChange={onChange} />
+        <input type="text" name="defense" value={Number(pokemon.defense)} onChange={onChange} />
         <br />
         <label>Moves:</label>
         <textarea rows={4} cols={50} name="moves" value={pokemon.moves} onChange={onChange} />
@@ -114,18 +124,18 @@ export const CreatePokemonForm: React.StatelessComponent<IGraphqlProps> = (
 
 export default graphql(pokemonCreate, {
   name: 'createPokemonMutation',
-  options: (props: pokemonCreate_createPokemon) => {
-    return {
-      variables: {
-        id: '',
-        name: '',
-        pokemonNumber: 0,
-        pokeType: 'grass',
-        attack: 100,
-        defense: 100,
-        moves: ['Cha Cha'],
-        imageUrl: 'cityblo.ck',
-      },
-    };
-  },
+  // options: (props: pokemonCreate_createPokemon) => {
+  //   return {
+  //     variables: {
+  //       id: '',
+  //       name: '',
+  //       pokemonNumber: 0,
+  //       pokeType: 'grass',
+  //       attack: 100,
+  //       defense: 100,
+  //       moves: ['Cha Cha'],
+  //       imageUrl: 'cityblo.ck',
+  //     },
+  //   };
+  // },
 })(CreatePokemonForm);

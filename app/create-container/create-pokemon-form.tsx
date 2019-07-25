@@ -37,12 +37,6 @@ interface IPokemon {
   imageUrl: string;
 }
 
-interface IGraphqlProps {
-  createPokemonMutation: (options: {
-    variables: pokemonCreate_createPokemon;
-  }) => { data: pokemonCreate_createPokemon; errors: ApolloError[] };
-}
-
 const initialPokemon: IPokemon = {
   id: '',
   name: '',
@@ -61,18 +55,16 @@ export const CreatePokemonForm: React.FC = (props: any) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const fieldToChange = e.target.name;
-    const valueToSet = e.target.value;
+    const valueToSet = Number(e.target.value) ? Number(e.target.value) : e.target.value;
     const newPokemon = { ...pokemon, [fieldToChange]: valueToSet };
     setPokemon(newPokemon);
   };
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const result = await createPokemonMutation({ variables: pokemon });
-      console.log('mutation went through');
-      console.log('result\n', result);
+      await createPokemonMutation({ variables: pokemon });
     } catch (err) {
-      console.log('Error:', err.message);
+      console.error(`Error: ${err.message}`);
     }
   };
   return (
@@ -124,18 +116,4 @@ export const CreatePokemonForm: React.FC = (props: any) => {
 
 export default graphql(pokemonCreate, {
   name: 'createPokemonMutation',
-  // options: (props: pokemonCreate_createPokemon) => {
-  //   return {
-  //     variables: {
-  //       id: '',
-  //       name: '',
-  //       pokemonNumber: 0,
-  //       pokeType: 'grass',
-  //       attack: 100,
-  //       defense: 100,
-  //       moves: ['Cha Cha'],
-  //       imageUrl: 'cityblo.ck',
-  //     },
-  //   };
-  // },
 })(CreatePokemonForm);

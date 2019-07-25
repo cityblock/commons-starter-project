@@ -4,6 +4,10 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import getOnePokemon from '../graphql/queries/get-one-pokemon.graphql';
 
+interface IRouteProps {
+  match: { params: { pokemonId: string } };
+}
+
 interface IGraphqlProps {
   singlePokemon: getOnePokemon_singlePokemon;
   loading: boolean;
@@ -35,6 +39,11 @@ export const TestContainer: React.StatelessComponent<IGraphqlProps> = (props: IG
 };
 
 export default graphql(getOnePokemon, {
+  options: (props: IRouteProps) => {
+    return {
+      variables: { pokemonId: props.match.params.pokemonId },
+    };
+  },
   props: ({ data }) => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

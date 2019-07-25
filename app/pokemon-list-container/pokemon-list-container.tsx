@@ -14,13 +14,46 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
+const listContainerStyles = {
+  top: 0,
+  bottom: 0,
+  margin: 0,
+  width: '40vw',
+  position: 'fixed' as 'fixed',
+  'overflow-y': 'scroll',
+  'list-style': 'none'
+};
+
+const listItemStyles = {
+};
+
+const itemImageContainerStyles = {
+  width: '40px',
+  height: '40px',
+  display: 'inline-block',
+  'text-align': 'center'
+};
+
+const itemImageStyles = {
+  display: 'inline-block',
+  'max-height': '40px',
+  'max-width': '40px'
+};
+
+const itemTextStyles = {
+  display: 'inline-block',
+  'font-size': '19px'
+};
+
 const PokemonListContainer:React.StatelessComponent<allProps> = ({ allPokemon }: allProps) => (
-  <ul>
+  <ul style={listContainerStyles}>
     {allPokemon.map((pokemon: getAllPokemon_allPokemon) => (
-      <li key={pokemon.id}>
+      <li key={pokemon.id} style={listItemStyles}>
         <Link to={`/pokemon/${pokemon.id}`}>
-          <img src={pokemon.imageUrl} />
-          {pokemon.name}
+          <span style={itemImageContainerStyles}>
+            <img src={pokemon.imageUrl} style={itemImageStyles} />
+          </span>
+          <span style={itemTextStyles}>{pokemon.name}</span>
         </Link>
       </li>
     ))}

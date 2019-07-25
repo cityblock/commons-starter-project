@@ -1,5 +1,5 @@
-import { ApolloError } from 'apollo-client';
-import { pokemonCreate_createPokemon } from 'app/graphql/types';
+// import { ApolloError } from 'apollo-client';
+// import { pokemonCreate_createPokemon } from 'app/graphql/types';
 import React, { useState } from 'react';
 import { graphql } from 'react-apollo';
 import pokemonCreate from '../graphql/queries/create-pokemon-mutation.graphql';

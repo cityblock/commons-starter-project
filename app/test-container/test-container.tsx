@@ -1,5 +1,4 @@
-import { ApolloError } from 'apollo-client';
-import { getOnePokemon_singlePokemon } from 'app/graphql/types';
+// import { getOnePokemon_singlePokemon } from 'app/graphql/types';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import getOnePokemon from '../graphql/queries/get-one-pokemon.graphql';

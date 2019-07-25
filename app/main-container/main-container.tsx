@@ -1,12 +1,11 @@
 import React from 'react';
 import styles from './css/main.css';
+import PokemonListContainer from '../pokemon-list-container/pokemon-list-container';
 
-export const MainContainer: React.StatelessComponent = () => {
-  return (
-    <div className={styles.body}>
-      <h1>Your Project here!</h1>
-    </div>
-  );
-};
+const MainContainer: React.StatelessComponent = ({ children }) =>
+  <div className={styles.body}>
+    <PokemonListContainer />
+    {children}
+  </div>;
 
 export default MainContainer;

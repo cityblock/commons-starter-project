@@ -24,7 +24,7 @@ export const PokemonContainer: React.StatelessComponent<IGraphqlProps> = (props:
         <table>
           {allPokemon.map(pokemon => (
             <tr key={pokemon.id}>
-              <a href={`/pokemon/${pokemon.pokemonNumber}`}>
+              <a href={`/pokemon/${pokemon.id}`}>
                 <img src={pokemon.imageUrl} /> {pokemon.name}
               </a>
             </tr>

@@ -202,7 +202,7 @@ Next, write the rest of resolvers for Pokemon, and make another PR. Make sure yo
 
 Run `npm run dev` and then go to `localhost:3000` to see a basic app render!
 
-NOTE: you may have to `run npm install` again if packages are not up to date.
+NOTE: you may have to run `npm install` again if packages are not up to date.
 
 NOTE: The purpose of this is to stretch in new areas like using TypeScript with React and [GraphQL/Apollo](https://www.apollographql.com/docs/react/api/react-apollo/#graphql). Do not stress or spend too much time on “bells and whistles” like pixel perfect CSS, loading spinners, etc. Also make sure to make a Pull Request after each chunk of work (left rail, Pokemon detail, create Pokemon form).
 

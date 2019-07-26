@@ -20,8 +20,8 @@ const listContainerStyles = {
   margin: 0,
   width: '40vw',
   position: 'fixed' as 'fixed',
-  'overflow-y': 'scroll',
-  'list-style': 'none'
+  overflowY: 'scroll' as 'scroll',
+  listStyle: 'none'
 };
 
 const listItemStyles = {
@@ -31,22 +31,25 @@ const itemImageContainerStyles = {
   width: '40px',
   height: '40px',
   display: 'inline-block',
-  'text-align': 'center'
+  textAlign: 'center' as 'center'
 };
 
 const itemImageStyles = {
-  display: 'inline-block',
-  'max-height': '40px',
-  'max-width': '40px'
+  maxHeight: '40px',
+  maxWidth: '40px'
 };
 
 const itemTextStyles = {
-  display: 'inline-block',
-  'font-size': '19px'
+  fontSize: '19px'
 };
 
 const PokemonListContainer:React.StatelessComponent<allProps> = ({ allPokemon }: allProps) => (
   <ul style={listContainerStyles}>
+    <li key="create-pokemon" style={listItemStyles}>
+      <Link to="/">
+        <span style={itemTextStyles}>Create Pokemon</span>
+      </Link>
+    </li>
     {allPokemon.map((pokemon: getAllPokemon_allPokemon) => (
       <li key={pokemon.id} style={listItemStyles}>
         <Link to={`/pokemon/${pokemon.id}`}>

@@ -19,49 +19,38 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
-const detailContainerStyles = {
-  top: 0,
-  bottom: 0,
-  right: 0,
-  margin: 0,
-  width: '60vw',
-  position: 'fixed' as 'fixed',
-  'overflow-y': 'scroll',
-};
-
 const detailImageStyles = {
-  display: 'block',
-  'max-width': '400px',
-  'max-height': '400px'
+  maxWidth: '400px',
+  maxHeight: '400px'
 };
 
 const PokemonDetailContainer: React.StatelessComponent<allProps> = ({ pokemon }: allProps) => {
-  if (!pokemon) return null;
+  if (!pokemon) return <div/>;
 
   const items = pokemon.items || [];
 
   return (
-    <div style={detailContainerStyles}>
+    <React.Fragment>
       <h1>{pokemon.name}</h1>
       <p>Type: {pokemon.pokeType}</p>
       <p>Attack: {pokemon.attack}</p>
       <p>Defense: {pokemon.defense}</p>
 
       {!isEmpty(pokemon.moves) &&
-        <p>
+        <div>
           Moves:
           <ul>
             {pokemon.moves.map(move => (
               <li key={move}>{move}</li>
             ))}
           </ul>
-        </p>
+        </div>
       }
 
       <img src={pokemon.imageUrl} style={detailImageStyles} />
 
       {!isEmpty(items) &&
-        <p>
+        <div>
           Items:
           <ul>
             {items.map(({ id, name, price, happiness, imageUrl }) => (
@@ -73,9 +62,9 @@ const PokemonDetailContainer: React.StatelessComponent<allProps> = ({ pokemon }:
               </li>
             ))}
           </ul>
-        </p>
+        </div>
       }
-    </div>
+    </React.Fragment>
   );
 };
 

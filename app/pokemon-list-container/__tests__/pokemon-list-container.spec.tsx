@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { PokemonListContainer } from '../pokemon-list-container';
 import { PokeType } from '../../graphql/types';
+import { PokemonListContainer } from '../pokemon-list-container';
  
 describe('pokemon list component', () => {
   const pokemon = {

@@ -55,7 +55,7 @@ export const FormLogic: React.StatelessComponent = () => {
       <label>Image URL:</label>
       <input type="text" name="imageUrl" />
       <br />
-      <input type="submit" value="Pib" />
+      <input type="submit" value="Create a Pokemon!" />
     </>
   );
 };

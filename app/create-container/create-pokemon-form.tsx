@@ -5,7 +5,7 @@ import { graphql } from 'react-apollo';
 import pokemonCreate from '../graphql/queries/create-pokemon-mutation.graphql';
 import { pokeType } from './form-logic';
 
-enum PokeType {
+export enum PokeType {
   bug = 'bug',
   dark = 'dark',
   dragon = 'dragon',
@@ -68,7 +68,7 @@ export const CreatePokemonForm: React.FC = (props: any) => {
     }
   };
   return (
-    <>
+    <div>
       <form
         onSubmit={e => {
           submit(e);
@@ -108,9 +108,9 @@ export const CreatePokemonForm: React.FC = (props: any) => {
         <label>Image URL:</label>
         <input type="text" name="imageUrl" value={pokemon.imageUrl} onChange={onChange} />
         <br />
-        <input type="submit" value="Pib" />
+        <input type="submit" value="Create a Pokemon!" />
       </form>
-    </>
+    </div>
   );
 };
 

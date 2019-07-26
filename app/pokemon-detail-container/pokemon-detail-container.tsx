@@ -24,7 +24,7 @@ const detailImageStyles = {
   maxHeight: '400px'
 };
 
-const PokemonDetailContainer: React.StatelessComponent<allProps> = ({ pokemon }: allProps) => {
+export const PokemonDetailContainer: React.StatelessComponent<allProps> = ({ pokemon }: allProps) => {
   if (!pokemon) return <div/>;
 
   const items = pokemon.items || [];

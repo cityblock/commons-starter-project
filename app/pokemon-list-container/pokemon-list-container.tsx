@@ -43,7 +43,7 @@ const itemTextStyles = {
   fontSize: '19px'
 };
 
-const PokemonListContainer:React.StatelessComponent<allProps> = ({ allPokemon }: allProps) => (
+export const PokemonListContainer:React.StatelessComponent<allProps> = ({ allPokemon }: allProps) => (
   <ul style={listContainerStyles}>
     <li key="create-pokemon" style={listItemStyles}>
       <Link to="/">

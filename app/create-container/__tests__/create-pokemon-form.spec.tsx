@@ -2,7 +2,7 @@ import { render, shallow } from 'enzyme';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-test-renderer';
-import { CreatePokemonForm, PokeType } from '../create-pokemon-form';
+import { CreatePokemonForm } from '../create-pokemon-form';
 
 describe('create pokemon component', () => {
   let container;

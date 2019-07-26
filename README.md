@@ -128,8 +128,8 @@ The methods your model should include are:
 - get(pokemonId: string, txn: Transaction) - returns a single Pokemon, and associated
   items
 - create(input: IPokemonCreateInput, txn: Transaction) - creates and returns a Pokemon
-- edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) - edits an existing Pokemon
-- delete(pokemonId: string, txn: Transaction) - marks a Pokemon as deleted, but does not actually delete it from the database
+- edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) - edits and returns an existing Pokemon
+- delete(pokemonId: string, txn: Transaction) - marks a Pokemon as deleted and returns it, but does not actually delete it from the database
 
 _Note: All model methods need to take a transaction (as you see above)._ In order to be able to eager load the items (the the pokemon get() method) you will need to generate the skeleton of the items file in tandem.
 
@@ -137,8 +137,8 @@ After that is all set, write the model for items in `item.ts`:
 
 - get(itemId: string, txn: Transaction) - returns a single item
 - create(input: IItemCreateInput, txn: Transaction) - creates and returns an item
-- edit(itemId: string, item: IItemEditInput, txn: Transaction) - edits an existing item
-- delete(itemId: string, txn: Transaction) - marks an item as deleted, but does not actually delete it from the database
+- edit(itemId: string, item: IItemEditInput, txn: Transaction) - edits and returns an existing item
+- delete(itemId: string, txn: Transaction) - marks an item as deleted and returns it, but does not actually delete it from the database
 
 Again, be sure to include at least one test per method. Finally, make another pull request! For your Model data model to be properly typed, you will want to define and import the item interface.
 
@@ -202,7 +202,7 @@ Next, write the rest of resolvers for Pokemon, and make another PR. Make sure yo
 
 Run `npm run dev` and then go to `localhost:3000` to see a basic app render!
 
-NOTE: you may have to `run npm install` again if packages are not up to date.
+NOTE: you may have to run `npm install` again if packages are not up to date.
 
 NOTE: The purpose of this is to stretch in new areas like using TypeScript with React and [GraphQL/Apollo](https://www.apollographql.com/docs/react/api/react-apollo/#graphql). Do not stress or spend too much time on “bells and whistles” like pixel perfect CSS, loading spinners, etc. Also make sure to make a Pull Request after each chunk of work (left rail, Pokemon detail, create Pokemon form).
 
@@ -217,7 +217,7 @@ We will start with building out the left rail component that lists all `Pokemon`
 
 Quick note to make: when you're rendering your first component and trying to use Apollo to make a GraphQL query on the frontend, keep in mind that we use Apollo HOC's. You'll be using the compose method available in React-Apollo to do this and this compose method will fetch data from our queries on componentDidMount so you'll access the data from these queries in the props your component has. If you're having trouble learning how to use the graphql function alongside your compose function, this [guide](https://www.apollographql.com/docs/react/api/react-apollo/#graphqlquery-configcomponent) can help you.
 
-We will want to wrap our `<Switch>` component in routes with a component that will be present on all pages - see the [<Main> container](https://github.com/cityblock/commons/blob/master/app/main-container/main-container.tsx) and how it wraps all routes in the [Commons routes file](https://github.com/cityblock/commons/blob/master/app/routes.tsx). Here, we will want to run our GraphQL query to get all Pokemon and render the results. [Here](https://github.com/cityblock/commons/blob/fc32cc1c7e3e7d61c387c83eaae97588a1da5534/app/settings-container/settings-container.tsx) is an example of running a query.
+We will want to wrap our `<Switch>` component in routes with a component that will be present on all pages - see the [`Main` container](https://github.com/cityblock/commons/blob/master/app/main-container/main-container.tsx) and how it wraps all routes in the [Commons routes file](https://github.com/cityblock/commons/blob/master/app/routes.tsx). Here, we will want to run our GraphQL query to get all Pokemon and render the results. [Here](https://github.com/cityblock/commons/blob/fc32cc1c7e3e7d61c387c83eaae97588a1da5534/app/settings-container/settings-container.tsx) is an example of running a query.
 
 Next, inside your `<Main>` component, create a new route for `/pokemon/:pokemonId` that will render a new component you create (something along the lines of PokemonDetail). This route should be hit when clicking on your Pokemon on the sidebar (using React Router's `Link` may be helpful). This should run a query, but in this case it will be to get a specific Pokemon. [Here](https://github.com/cityblock/commons/blob/master/app/patient-profile-container/patient-profile-container.tsx) is an example of passing a variable to a query in Commons.
 

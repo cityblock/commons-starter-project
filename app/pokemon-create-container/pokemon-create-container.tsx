@@ -19,67 +19,55 @@ interface IGraphqlProps {
 
 interface IState {
   error: string;
-  loading: boolean;
   pokemon: pokemonCreateVariables;
 }
 
 type allProps = IGraphqlProps & IRouterProps;
 
 class PokemonCreateContainer extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.onChange = this.onChange.bind(this);
-    this.onFieldUpdate = this.onFieldUpdate.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-
-    this.state = {
-      loading: false,
-      error: '',
-      pokemon: {
-        name: '',
-        pokemonNumber: 0,
-        attack: 0,
-        defense: 0,
-        pokeType: 'normal' as PokeType,
-        moves: [],
-        imageUrl: ''
-      }
-    };
+  state = {
+    error: '',
+    pokemon: {
+      name: '',
+      pokemonNumber: 0,
+      attack: 0,
+      defense: 0,
+      pokeType: 'normal' as PokeType,
+      moves: [],
+      imageUrl: ''
+    }
   }
 
-  onChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+  onChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     if (['pokemonNumber', 'attack', 'defense'].includes(name))
       value = toInteger(value) as any;
 
     this.onFieldUpdate({ name, value });
   }
 
-  onFieldUpdate({ name, value }: { name: string, value: string | undefined }) {
+  onFieldUpdate = ({ name, value }: { name: string, value: string | undefined }) => {
     const{ pokemon } = this.state;
     (pokemon as any)[name] = value;
     this.setState({ pokemon });
   }
 
-  async onSubmit() {
+  onSubmit = async () => {
     const { history, pokemonCreateGraphQL } = this.props;
 
     if (pokemonCreateGraphQL) {
       try {
         this.setState({ error: '' });
-        this.setState({ loading: true });
         const { data: { pokemonCreate: pokemon }, errors }: any = await pokemonCreateGraphQL({
           variables: this.state.pokemon
         });
 
-        this.setState({ loading: false });
         if (pokemon) {
           history.push(`/pokemon/${pokemon.id}`);
         } else {
           this.setState({ error: errors[0].message});
         }
       } catch (error) {
-        this.setState({ error: `${error}`, loading: false });
+        this.setState({ error: `${error}` });
       }
     }
   }

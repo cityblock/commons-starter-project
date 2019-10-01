@@ -43,14 +43,8 @@ exports.up = function(knex, Promise) {
                     .notNullable()
                     .defaultTo('[]');
                 table.string('imageUrl').notNullable();
-                table
-                    .timestamp('createdAt')
-                    .notNullable()
-                    .defaultTo(knex.raw('now()'));
-                table
-                    .timestamp('updatedAt')
-                    .notNullable()
-                    .defaultTo(knex.raw('now()'));
+                table.timestamp('createdAt').defaultTo(knex.raw('now()'));
+                table.timestamp('updatedAt').defaultTo(knex.raw('now()'));
                 table.timestamp('deletedAt').nullable();
             });
         }

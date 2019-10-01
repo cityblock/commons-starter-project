@@ -26,6 +26,7 @@ exports.up = function(knex, Promise) {
                         'electric',
                         'psychic',
                         'ghost',
+                        'dark',
                         'fairy',
                         'rock',
                         'ground',

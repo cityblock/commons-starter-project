@@ -51,7 +51,7 @@ exports.up = function(knex, Promise) {
                     .timestamp('updatedAt')
                     .notNullable()
                     .defaultTo(knex.raw('now()'));
-                table.timestamp('deletedAt').notNullable();
+                table.timestamp('deletedAt').nullable();
             });
         }
     });

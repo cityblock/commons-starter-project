@@ -1,6 +1,6 @@
 const { Model } = require('objection');
+import Pokemon from './pokemon';
 import { Transaction } from 'objection';
-// import Pokemon from './pokemon';
 
 interface IItemCreateInput {
   id: string;
@@ -53,7 +53,6 @@ export class Item extends Model {
   };
 
   static get relationshipMappings() {
-    const Pokemon = require('./pokemon');
     return {
       pokemon: {
         relation: Model.BelongsToOneRelation,

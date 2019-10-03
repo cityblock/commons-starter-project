@@ -1,5 +1,5 @@
 const { Model } = require('objection');
-import Pokemon from './pokemon';
+import { Pokemon } from './pokemon';
 import { Transaction } from 'objection';
 
 interface IItemCreateInput {

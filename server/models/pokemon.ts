@@ -1,4 +1,4 @@
-import Item from './item';
+import { Item } from './item';
 const { Model } = require('objection');
 import { Transaction } from 'objection';
 

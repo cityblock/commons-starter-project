@@ -1,5 +1,5 @@
-import { Transaction } from 'objection';
 import { Item } from '../item';
+import { Transaction } from 'objection';
 import uuid from 'uuid/v4';
 
 describe('get item for specific item id', () => {

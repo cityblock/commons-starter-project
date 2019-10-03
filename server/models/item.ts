@@ -2,6 +2,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import Pokemon from './pokemon';
 
 export interface IItemCreateInput {
+  name: string;
   pokemonId: string;
   price: number;
   happiness: number;
@@ -11,6 +12,7 @@ export interface IItemCreateInput {
 }
 
 export interface IItemEditInput {
+  name?: string;
   pokemonId?: string;
   price?: number;
   happiness?: number;
@@ -39,6 +41,7 @@ export default class Item extends Model {
     type: 'object',
     properties: {
       id: { type: 'string' },
+      name: { type: 'string' },
       pokemonId: { type: 'string' },
       price: { type: 'number' },
       happiness: { type: 'number' },
@@ -49,6 +52,7 @@ export default class Item extends Model {
     },
     required: [
       'id',
+      'name',
       'pokemonId',
       'price',
       'happiness',
@@ -92,6 +96,7 @@ export default class Item extends Model {
   }
 
   id!: string;
+  name!: string;
   pokemonId!: string;
   price!: number;
   happiness!: number;

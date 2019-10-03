@@ -64,7 +64,7 @@ describe('create new pokemon', () => {
 });
 
 describe('get items for one pokemon', () => {
-  let txn = null as any;
+  const txn = null as any;
   it('should get all items for a pokemon', async () => {
     const allPokemonAndItems = await Pokemon.get('04ccdadd-e156-42d8-9dd9-0a0e4fd760b0', txn);
     expect(allPokemonAndItems[1].length).toEqual(3);
@@ -72,7 +72,7 @@ describe('get items for one pokemon', () => {
 });
 
 describe('edit a pokemon', () => {
-  let txn = null as any;
+  const txn = null as any;
   it('should edit a pokemon', async () => {
     const allPokemon = await Pokemon.getAll(txn);
     const randomInt = Math.floor(Math.random() * allPokemon.length);
@@ -104,7 +104,7 @@ describe('edit a pokemon', () => {
 });
 
 describe('test soft delete', () => {
-  let txn = null as any;
+  const txn = null as any;
   it('should soft delete a specific pokemon', async () => {
     const itemToDeleteList = await Pokemon.getNonDeletedPokemon(txn);
     const itemToDelete = itemToDeleteList[0];
@@ -115,7 +115,7 @@ describe('test soft delete', () => {
 });
 
 describe('get pokemon and items for specific pokemon id', () => {
-  let txn = null as any;
+  const txn = null as any;
   it('should get a pokemon and all of its items', async () => {
     const testPokemon = await Pokemon.get('04ccdadd-e156-42d8-9dd9-0a0e4fd760b0', txn);
     expect(testPokemon).toMatchObject({

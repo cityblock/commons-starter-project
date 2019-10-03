@@ -3,7 +3,7 @@ import { Item } from '../item';
 import uuid from 'uuid/v4';
 
 describe('get item for specific item id', () => {
-  let txn = null as any;
+  const txn = null as any;
   it('should create get an item with a specific id', async () => {
     const testItem = await Item.get('33fed58b-875d-40ed-a0cb-6aac515bee8c', txn);
     expect(testItem).toMatchObject({
@@ -21,7 +21,7 @@ describe('get item for specific item id', () => {
 });
 
 describe('get non existent item for non existent item id', () => {
-  let txn = null as any;
+  const txn = null as any;
   it('should not work', async () => {
     const testItem = await Item.get(uuid(), txn);
     expect(testItem).toBe(undefined);
@@ -93,7 +93,7 @@ describe('edit an item', () => {
 });
 
 describe('test soft delete', () => {
-  let txn = null as any;
+  const txn = null as any;
   it('should soft delete a specific item', async () => {
     const itemToDeleteList = await Item.getNonDeletedItem(txn);
     const itemToDelete = itemToDeleteList[0];

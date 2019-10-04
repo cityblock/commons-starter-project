@@ -1,6 +1,5 @@
-import { Pokemon } from '../pokemon';
-import { Transaction } from 'objection';
 import uuid from 'uuid/v4';
+import { Pokemon } from '../pokemon';
 
 describe('get all pokemon', () => {
   const txn = null as any;

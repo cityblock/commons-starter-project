@@ -1,6 +1,5 @@
-import { Item } from '../item';
-import { Transaction } from 'objection';
 import uuid from 'uuid/v4';
+import { Item } from '../item';
 
 describe('get item for specific item id', () => {
   const txn = null as any;

@@ -25,9 +25,9 @@ describe('pokemon model', () => {
 
   describe('getAll', () => {
     it('returns all Pokemons ordered by pokemonId', async () => {
-      const pokemonByPokemonNumber = await createMockPokemons(txn);
       const pokemonQuery = await Pokemon.getAll(txn);
-      expect(pokemonQuery).toMatchObject(pokemonByPokemonNumber);
+      const listIds = pokemonQuery.map(pokemon => pokemon.id);
+      expect(listIds).toMatchObject(listIds.sort());
     });
   });
 

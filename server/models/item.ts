@@ -1,5 +1,5 @@
 const { Model } = require('objection');
-import { Transaction } from 'objection';
+import { RelationMappings, Transaction } from 'objection';
 import { Pokemon } from './pokemon';
 
 interface IItemCreateInput {
@@ -52,7 +52,11 @@ export class Item extends Model {
     ],
   };
 
-  static get relationshipMappings() {
+  static get idColumn() {
+    return 'id';
+  }
+
+  static get relationMappings() {
     return {
       pokemon: {
         relation: Model.BelongsToOneRelation,

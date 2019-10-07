@@ -26,6 +26,8 @@ interface IPokemonEditInput {
   deletedAt?: Date | null;
 }
 
+type Tuple = [Pokemon, Item[]];
+
 export class Pokemon extends Model {
   static get tableName() {
     return 'pokemon';
@@ -81,11 +83,15 @@ export class Pokemon extends Model {
     return this.query(txn).orderBy('pokemonNumber');
   }
 
-  static async get(pokemonId: string, txn: Transaction): Promise<Item[]> {
-    const items = this.query(txn)
+  static async get(pokemonId: string, txn: Transaction): Promise<[Pokemon, Item[]]> {
+    const pokemon = await this.query(txn).findById(pokemonId);
+    const items = await this.query(txn)
       .where('pokemon.id', pokemonId)
       .leftJoinRelation('item');
-    return items;
+
+    let pokemonAndItems: Tuple;
+    pokemonAndItems = [pokemon, items];
+    return pokemonAndItems;
   }
 
   static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {

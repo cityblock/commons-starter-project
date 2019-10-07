@@ -142,6 +142,7 @@ export default class Pokemon extends Model {
   createdAt!: string;
   updatedAt!: string;
   deletedAt!: string | null;
+  items!: Item[] | [];
 
   $beforeInsert() {
     this.createdAt = new Date().toISOString();

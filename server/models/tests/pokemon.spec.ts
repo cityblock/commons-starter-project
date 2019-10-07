@@ -65,7 +65,11 @@ describe('get items for one pokemon', () => {
   const txn = null as any;
   it('should get all items for a pokemon', async () => {
     const allPokemonAndItems = await Pokemon.get('04ccdadd-e156-42d8-9dd9-0a0e4fd760b0', txn);
+<<<<<<< HEAD
     const items = allPokemonAndItems[1];
+=======
+    const items = allPokemonAndItems;
+>>>>>>> e7dfd909cc5a26e0b2138653312bd7a9570d5ef1
     expect(items.length).toEqual(3);
   });
 });

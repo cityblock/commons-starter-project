@@ -54,6 +54,7 @@ export default class Pokemon extends Model {
       createdAt: { type: ['string', 'null'] },
       updatedAt: { type: ['string', 'null'] },
       deletedAt: { type: ['string', 'null'] },
+      items: { type: ['Item[]', '[]'] },
     },
     required: ['pokemonNumber', 'name', 'attack', 'defense', 'pokeType', 'moves', 'imageUrl'],
   };
@@ -63,14 +64,20 @@ export default class Pokemon extends Model {
   }
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const pokemon = await this.query(txn)
-      .eager('items')
-      .findById(pokemonId)
-      .leftJoinRelation('items');
-    if (pokemon) {
-      return pokemon;
+    const pokemonExists = await this.query(txn)
+      .where({ id: pokemonId })
+      .where({ deletedAt: null });
+    if (pokemonExists.length > 0) {
+      const pokemon = await this.query(txn)
+        .eager('items')
+        .findById(pokemonId)
+        .leftJoinRelation('items');
+      return pokemon instanceof Pokemon ? pokemon : new Pokemon();
+    } else {
+      return Promise.reject(
+        `Could not finish query and join relation with pokemon id: ${pokemonId}`,
+      );
     }
-    return Promise.reject(`Could not finish query and join relation with pokemon id: ${pokemonId}`);
   }
 
   static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {
@@ -82,8 +89,9 @@ export default class Pokemon extends Model {
       return Promise.reject(
         `Found an existing pokemon with pokemon number: ${input.pokemonNumber}`,
       );
+    } else {
+      return this.query(txn).insertAndFetch(input);
     }
-    return this.query(txn).insertAndFetch(input);
   }
 
   static async edit(

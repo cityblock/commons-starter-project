@@ -3,7 +3,6 @@ import uuid from 'uuid/v4';
 import Pokemon from './pokemon';
 
 export interface IItemCreateInput {
-  id?: string;
   name: string;
   pokemonId: string;
   price: number;
@@ -40,7 +39,7 @@ export default class Item extends Model {
   static jsonSchema = {
     type: 'object',
     properties: {
-      id: { type: 'string' },
+      id: { type: ['string', 'null'] },
       name: { type: 'string' },
       pokemonId: { type: 'string' },
       price: { type: 'number' },
@@ -50,23 +49,19 @@ export default class Item extends Model {
       updatedAt: { type: ['string', 'null'] },
       deletedAt: { type: ['string', 'null'] },
     },
-    required: ['id', 'name', 'pokemonId', 'price', 'happiness', 'imageUrl', 'imageUrl'],
+    required: ['name', 'pokemonId', 'price', 'happiness', 'imageUrl'],
   };
 
   static async get(itemId: string, txn: Transaction): Promise<Item> {
-    const pokemon = await this.query(txn).findById(itemId);
-    if (pokemon) {
-      return pokemon as any;
+    const item = await this.query(txn).findById(itemId);
+    if (item) {
+      return item;
     }
     return Promise.reject(`Could not find an item with id: ${itemId}`);
   }
 
   static async create(input: IItemCreateInput, txn: Transaction): Promise<Item> {
-    const dbReadyInput = {
-      id: uuid(),
-      ...input,
-    };
-    return this.query(txn).insertAndFetch(dbReadyInput);
+    return this.query(txn).insertAndFetch(input);
   }
 
   static async edit(itemId: string, item: IItemEditInput, txn: Transaction): Promise<Item> {
@@ -100,6 +95,7 @@ export default class Item extends Model {
   deletedAt!: string | null;
 
   $beforeInsert() {
+    this.id = uuid();
     this.createdAt = new Date().toISOString();
     this.updatedAt = new Date().toISOString();
   }

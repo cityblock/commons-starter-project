@@ -3,7 +3,6 @@ import uuid from 'uuid/v4';
 import Item from './item';
 
 export interface IPokemonCreateInput {
-  id?: string;
   pokemonNumber: number;
   name: string;
   attack: number;
@@ -44,7 +43,7 @@ export default class Pokemon extends Model {
   static jsonSchema = {
     type: 'object',
     properties: {
-      id: { type: 'string' },
+      id: { type: ['string', 'null'] },
       pokemonNumber: { type: 'number' },
       name: { type: 'string' },
       attack: { type: 'number' },
@@ -56,7 +55,7 @@ export default class Pokemon extends Model {
       updatedAt: { type: ['string', 'null'] },
       deletedAt: { type: ['string', 'null'] },
     },
-    required: ['id', 'pokemonNumber', 'name', 'attack', 'defense', 'pokeType', 'moves', 'imageUrl'],
+    required: ['pokemonNumber', 'name', 'attack', 'defense', 'pokeType', 'moves', 'imageUrl'],
   };
 
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
@@ -69,26 +68,22 @@ export default class Pokemon extends Model {
       .findById(pokemonId)
       .leftJoinRelation('items');
     if (pokemon) {
-      return pokemon as any;
+      return pokemon;
     }
     return Promise.reject(`Could not finish query and join relation with pokemon id: ${pokemonId}`);
   }
 
   static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {
-    const dbReadyInput = {
-      id: uuid(),
-      ...input,
-    };
     const pokemonExists = await this.query(txn)
-      .where({ pokemonNumber: dbReadyInput.pokemonNumber })
+      .where({ pokemonNumber: input.pokemonNumber })
       .where({ deletedAt: null })
       .count();
     if (Number(pokemonExists) > 0) {
       return Promise.reject(
-        `Found an existing pokemon with pokemon number: ${dbReadyInput.pokemonNumber}`,
+        `Found an existing pokemon with pokemon number: ${input.pokemonNumber}`,
       );
     }
-    return this.query(txn).insertAndFetch(dbReadyInput);
+    return this.query(txn).insertAndFetch(input);
   }
 
   static async edit(
@@ -130,6 +125,7 @@ export default class Pokemon extends Model {
   items!: Item[] | [];
 
   $beforeInsert() {
+    this.id = uuid();
     this.createdAt = new Date().toISOString();
     this.updatedAt = new Date().toISOString();
   }

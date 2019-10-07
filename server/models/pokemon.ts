@@ -1,6 +1,6 @@
 import { Item } from './item';
 const { Model } = require('objection');
-import { Transaction } from 'objection';
+import { RelationMappings, Transaction } from 'objection';
 
 interface IPokemonCreateInput {
   id: string;
@@ -25,6 +25,8 @@ interface IPokemonEditInput {
   updatedAt?: Date;
   deletedAt?: Date | null;
 }
+
+type Tuple = [Pokemon, Item[]];
 
 export class Pokemon extends Model {
   static get tableName() {
@@ -60,7 +62,11 @@ export class Pokemon extends Model {
     ],
   };
 
-  static get relationshipMappings() {
+  static get idColumn() {
+    return 'id';
+  }
+
+  static get relationMappings() {
     return {
       item: {
         relation: Model.HasManyRelation,
@@ -77,16 +83,11 @@ export class Pokemon extends Model {
     return this.query(txn).orderBy('pokemonNumber');
   }
 
-  static async get(pokemonId: string, txn: Transaction): Promise<[Pokemon, Item[]]> {
-    const pokemonAndItems = this.query(txn)
-      .eager('pokemon.item')
-      .joinRelation('item')
-      .where({ id: pokemonId });
-
-    if (!pokemonAndItems) {
-      return Promise.reject(`Error fetching Pokemon ${pokemonId} or associated items.`);
-    }
-    return pokemonAndItems;
+  static async get(pokemonId: string, txn: Transaction): Promise<Item[]> {
+    const items = this.query(txn)
+      .where('pokemon.id', pokemonId)
+      .leftJoinRelation('item');
+    return items;
   }
 
   static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {

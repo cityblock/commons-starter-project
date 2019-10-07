@@ -72,13 +72,29 @@ describe('get items for one pokemon', () => {
 describe('edit a pokemon', () => {
   const txn = null as any;
   it('should edit a pokemon', async () => {
-    const allPokemon = await Pokemon.getAll(txn);
-    const randomInt = Math.floor(Math.random() * allPokemon.length);
-    const randomPokemon = allPokemon[randomInt];
     const currentTime = new Date(Date.now());
-    const fieldToEditValue = randomPokemon.attack + 1;
+    const pokemonUUID = uuid();
+    const pokeNumber = Math.floor(Math.random() * 10000);
+    const pokemonName = 'Test' + pokeNumber.toString();
+    const newPokemon = await Pokemon.create(
+      {
+        id: pokemonUUID,
+        pokemonNumber: pokeNumber,
+        name: pokemonName,
+        attack: 33,
+        defense: 15,
+        pokeType: 'psychic',
+        moves: ['Growl'],
+        imageUrl: 'https://www.cityblock.com/',
+        createdAt: currentTime,
+        updatedAt: currentTime,
+        deletedAt: null,
+      },
+      txn,
+    );
+    const fieldToEditValue = newPokemon.attack + 1;
     const editedPokemon = await Pokemon.edit(
-      randomPokemon.id,
+      newPokemon.id,
       {
         attack: fieldToEditValue,
         updatedAt: currentTime,
@@ -86,17 +102,17 @@ describe('edit a pokemon', () => {
       txn,
     );
     expect(editedPokemon).toMatchObject({
-      id: randomPokemon.id,
-      pokemonNumber: randomPokemon.pokemonNumber,
-      name: randomPokemon.name,
+      id: newPokemon.id,
+      pokemonNumber: newPokemon.pokemonNumber,
+      name: newPokemon.name,
       attack: fieldToEditValue,
-      defense: randomPokemon.defense,
-      pokeType: randomPokemon.pokeType,
-      moves: randomPokemon.moves,
-      imageUrl: randomPokemon.imageUrl,
-      createdAt: randomPokemon.createdAt,
+      defense: newPokemon.defense,
+      pokeType: newPokemon.pokeType,
+      moves: newPokemon.moves,
+      imageUrl: newPokemon.imageUrl,
+      createdAt: newPokemon.createdAt,
       updatedAt: currentTime,
-      deletedAt: randomPokemon.deletedAt,
+      deletedAt: newPokemon.deletedAt,
     });
   });
 });
@@ -104,11 +120,29 @@ describe('edit a pokemon', () => {
 describe('test soft delete', () => {
   const txn = null as any;
   it('should soft delete a specific pokemon', async () => {
-    const itemToDeleteList = await Pokemon.getNonDeletedPokemon(txn);
-    const itemToDelete = itemToDeleteList[0];
-    expect(itemToDelete.deletedAt).toBeNull();
-    const deletedItem = await Pokemon.delete(itemToDelete.id, txn);
-    expect(deletedItem.deletedAt).toBeTruthy();
+    const currentTime = new Date(Date.now());
+    const pokemonUUID = uuid();
+    const pokeNumber = Math.floor(Math.random() * 10000);
+    const pokemonName = 'Test' + pokeNumber.toString();
+    const pokemonToDelete = await Pokemon.create(
+      {
+        id: pokemonUUID,
+        pokemonNumber: pokeNumber,
+        name: pokemonName,
+        attack: 33,
+        defense: 15,
+        pokeType: 'psychic',
+        moves: ['Growl'],
+        imageUrl: 'https://www.cityblock.com/',
+        createdAt: currentTime,
+        updatedAt: currentTime,
+        deletedAt: null,
+      },
+      txn,
+    );
+    expect(pokemonToDelete.deletedAt).toBeNull();
+    const deletedPokemon = await Pokemon.delete(pokemonToDelete.id, txn);
+    expect(deletedPokemon.deletedAt).toBeTruthy();
   });
 });
 

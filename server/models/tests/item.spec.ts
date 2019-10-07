@@ -64,13 +64,26 @@ describe('create new item', () => {
 describe('edit an item', () => {
   const txn = null as any;
   it('should edit an item', async () => {
-    const allItems = await Item.getAll(txn);
-    const randomInt = Math.floor(Math.random() * allItems.length);
-    const randomItem = allItems[randomInt];
     const currentTime = new Date(Date.now());
-    const fieldToEditValue = randomItem.price + 1;
+    const itemUUID = uuid();
+    const pokemonUUID = 'ed972b83-8e6c-4857-8bfd-c5f83c43843c';
+    const newItem = await Item.create(
+      {
+        id: itemUUID,
+        name: 'DianaTestItem',
+        pokemonId: pokemonUUID,
+        price: 30,
+        happiness: 14,
+        imageUrl: 'https://www.cityblock.com/',
+        createdAt: currentTime,
+        updatedAt: currentTime,
+        deletedAt: null,
+      },
+      txn,
+    );
+    const fieldToEditValue = newItem.price + 1;
     const editedItem = await Item.edit(
-      randomItem.id,
+      newItem.id,
       {
         price: fieldToEditValue,
         updatedAt: currentTime,
@@ -78,13 +91,13 @@ describe('edit an item', () => {
       txn,
     );
     expect(editedItem).toMatchObject({
-      id: randomItem.id,
-      name: randomItem.name,
-      pokemonId: randomItem.pokemonId,
+      id: newItem.id,
+      name: newItem.name,
+      pokemonId: newItem.pokemonId,
       price: fieldToEditValue,
-      happiness: randomItem.happiness,
-      imageUrl: randomItem.imageUrl,
-      createdAt: randomItem.createdAt,
+      happiness: newItem.happiness,
+      imageUrl: newItem.imageUrl,
+      createdAt: newItem.createdAt,
       updatedAt: currentTime,
       deletedAt: null,
     });
@@ -94,8 +107,23 @@ describe('edit an item', () => {
 describe('test soft delete', () => {
   const txn = null as any;
   it('should soft delete a specific item', async () => {
-    const itemToDeleteList = await Item.getNonDeletedItem(txn);
-    const itemToDelete = itemToDeleteList[0];
+    const currentTime = new Date(Date.now());
+    const itemUUID = uuid();
+    const pokemonUUID = 'ed972b83-8e6c-4857-8bfd-c5f83c43843c';
+    const itemToDelete = await Item.create(
+      {
+        id: itemUUID,
+        name: 'DianaTestItem',
+        pokemonId: pokemonUUID,
+        price: 30,
+        happiness: 14,
+        imageUrl: 'https://www.cityblock.com/',
+        createdAt: currentTime,
+        updatedAt: currentTime,
+        deletedAt: null,
+      },
+      txn,
+    );
     expect(itemToDelete.deletedAt).toBeNull();
     const deletedItem = await Item.delete(itemToDelete.id, txn);
     expect(deletedItem.deletedAt).toBeTruthy();

@@ -26,8 +26,6 @@ interface IPokemonEditInput {
   deletedAt?: Date | null;
 }
 
-type Tuple = [Pokemon, Item[]];
-
 export class Pokemon extends Model {
   static get tableName() {
     return 'pokemon';

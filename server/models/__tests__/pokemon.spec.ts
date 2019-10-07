@@ -35,7 +35,8 @@ describe('pokemon model', () => {
     it('returns a Pokemon with all of its related items', async () => {
       const pokemonItems = await createMockPokemonAndItems(txn);
       const pokemonQuery = await Pokemon.get(pokemonItems.id, txn);
-      expect(pokemonQuery).toMatchObject(pokemonItems);
+      expect(Object.keys(pokemonItems).sort()).toEqual(Object.keys(pokemonQuery).sort());
+      expect(pokemonQuery.items.length).toEqual(pokemonItems.items.length);
     });
   });
 

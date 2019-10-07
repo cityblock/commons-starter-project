@@ -6,7 +6,7 @@ export async function createMockPokemons(txn: Transaction) {
   const pokemon1 = await Pokemon.create(
     {
       name: 'Bulbasaur',
-      pokemonNumber: 1,
+      pokemonNumber: 98,
       attack: 11,
       defense: 22,
       pokeType: 'grass',
@@ -20,7 +20,7 @@ export async function createMockPokemons(txn: Transaction) {
   const pokemon2 = await Pokemon.create(
     {
       name: 'Ivysaur',
-      pokemonNumber: 2,
+      pokemonNumber: 99,
       attack: 33,
       defense: 44,
       pokeType: 'grass',
@@ -33,7 +33,7 @@ export async function createMockPokemons(txn: Transaction) {
   const pokemon3 = await Pokemon.create(
     {
       name: 'Venusaur',
-      pokemonNumber: 3,
+      pokemonNumber: 100,
       attack: 45,
       defense: 54,
       pokeType: 'grass',
@@ -50,7 +50,7 @@ export async function createMockPokemonAndItems(txn: Transaction) {
   const pokemon1 = await Pokemon.create(
     {
       name: 'Bulbasaur',
-      pokemonNumber: 4,
+      pokemonNumber: 98,
       attack: 11,
       defense: 22,
       pokeType: 'grass',

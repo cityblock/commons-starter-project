@@ -93,6 +93,7 @@ export default class Pokemon extends Model {
   ): Promise<Pokemon> {
     const pokemonExists = await this.query(txn)
       .findById(pokemonId)
+      .where({ deletedAt: null })
       .count();
     if (Number(pokemonExists) === 0) {
       return Promise.reject(`Can't find an existing pokemon with id: ${pokemonId}`);

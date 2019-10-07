@@ -65,7 +65,9 @@ export default class Item extends Model {
   }
 
   static async edit(itemId: string, item: IItemEditInput, txn: Transaction): Promise<Item> {
-    const itemExists = await this.query(txn).findById(itemId);
+    const itemExists = await this.query(txn)
+      .where({ deletedAt: null })
+      .findById(itemId);
     if (!itemExists) {
       return Promise.reject(`Can't find an existing item to edit with id: ${itemId}`);
     }

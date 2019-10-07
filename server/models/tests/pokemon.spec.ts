@@ -1,5 +1,4 @@
 import uuid from 'uuid/v4';
-import { Item } from '../item';
 import { Pokemon } from '../pokemon';
 
 describe('get all pokemon', () => {

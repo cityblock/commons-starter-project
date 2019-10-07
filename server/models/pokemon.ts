@@ -1,6 +1,6 @@
 import { Item } from './item';
 const { Model } = require('objection');
-import { RelationMappings, Transaction } from 'objection';
+import { Transaction } from 'objection';
 
 interface IPokemonCreateInput {
   id: string;

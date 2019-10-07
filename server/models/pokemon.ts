@@ -3,16 +3,16 @@ import uuid from 'uuid/v4';
 import Item from './item';
 
 export interface IPokemonCreateInput {
-  id: string;
+  id?: string;
   pokemonNumber: number;
   name: string;
   attack: number;
   defense: number;
   pokeType: string;
-  moves: JSON;
+  moves: JSON | string;
   imageUrl: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface IPokemonEditInput {
@@ -21,7 +21,7 @@ export interface IPokemonEditInput {
   attack?: number;
   defense?: number;
   pokeType?: string;
-  moves?: JSON;
+  moves?: JSON | string;
   imageUrl?: string;
 }
 
@@ -52,7 +52,7 @@ export default class Pokemon extends Model {
       attack: { type: 'number' },
       defense: { type: 'number' },
       pokeType: { type: 'string' },
-      moves: { type: 'JSON' },
+      moves: { type: ['JSON', 'string'] },
       imageUrl: { type: 'string' },
       createdAt: { type: 'string' },
       updatedAt: { type: 'string' },
@@ -137,7 +137,7 @@ export default class Pokemon extends Model {
   attack!: number;
   defense!: number;
   pokeType!: string;
-  moves!: JSON;
+  moves!: JSON | string;
   imageUrl!: string;
   createdAt!: string;
   updatedAt!: string;

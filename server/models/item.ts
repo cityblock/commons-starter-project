@@ -3,14 +3,14 @@ import uuid from 'uuid/v4';
 import Pokemon from './pokemon';
 
 export interface IItemCreateInput {
-  id: string;
+  id?: string;
   name: string;
   pokemonId: string;
   price: number;
   happiness: number;
   imageUrl: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface IItemEditInput {

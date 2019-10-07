@@ -10,7 +10,7 @@ export async function createMockPokemons(txn: Transaction) {
       attack: 11,
       defense: 22,
       pokeType: 'grass',
-      moves: ['Tackle', 'Growl', 'Leech Seed'],
+      moves: JSON.stringify(['Tackle', 'Growl', 'Leech Seed']),
       imageUrl:
         'https://cdn.bulbagarden.net/upload/thumb/2/21/001Bulbasaur.png/1200px-001Bulbasaur.png',
     },
@@ -24,7 +24,7 @@ export async function createMockPokemons(txn: Transaction) {
       attack: 33,
       defense: 44,
       pokeType: 'grass',
-      moves: ['Poisonpower', 'Vine Whip'],
+      moves: JSON.stringify(['Poisonpower', 'Vine Whip']),
       imageUrl: 'https://cdn.bulbagarden.net/upload/7/73/002Ivysaur.png',
     },
     txn,
@@ -37,7 +37,7 @@ export async function createMockPokemons(txn: Transaction) {
       attack: 45,
       defense: 54,
       pokeType: 'grass',
-      moves: ['Venoshock', 'Solar Beam'],
+      moves: JSON.stringify(['Venoshock', 'Solar Beam']),
       imageUrl:
         'https://cdn.bulbagarden.net/upload/thumb/a/ae/003Venusaur.png/500px-003Venusaur.png',
     },
@@ -54,7 +54,7 @@ export async function createMockPokemonAndItems(txn: Transaction) {
       attack: 11,
       defense: 22,
       pokeType: 'grass',
-      moves: ['Tackle', 'Growl', 'Leech Seed'],
+      moves: JSON.stringify(['Tackle', 'Growl', 'Leech Seed']),
       imageUrl:
         'https://cdn.bulbagarden.net/upload/thumb/2/21/001Bulbasaur.png/1200px-001Bulbasaur.png',
     },
@@ -68,8 +68,6 @@ export async function createMockPokemonAndItems(txn: Transaction) {
       price: 34,
       happiness: 3,
       imageUrl: 'http://www.stickpng.com/assets/images/580b57fbd9996e24bc43bed6.png',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     },
     txn,
   );
@@ -82,8 +80,6 @@ export async function createMockPokemonAndItems(txn: Transaction) {
       happiness: 56,
       imageUrl:
         'https://thumbs.dreamstime.com/b/red-green-blue-helium-balloons-set-isolated-transparent-background-balloon-birthday-baloon-flying-party-celebrations-98446709.jpg',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     },
     txn,
   );

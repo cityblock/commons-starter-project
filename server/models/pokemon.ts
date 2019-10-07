@@ -1,7 +1,9 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import uuid from 'uuid/v4';
 import Item from './item';
 
 export interface IPokemonCreateInput {
+  id: string;
   pokemonNumber: number;
   name: string;
   attack: number;
@@ -76,24 +78,32 @@ export default class Pokemon extends Model {
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
     const pokemon = await this.query(txn)
+      .eager('items')
       .findById(pokemonId)
-      .joinRelation('items');
+      .leftJoinRelation('items');
     if (pokemon) {
       return pokemon as any;
     }
-    return Promise.reject(`Could not find a pokemon with id: ${pokemonId}`);
+    return Promise.reject(`Could not finish query and join relation with pokemon id: ${pokemonId}`);
   }
 
   static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {
-    const pokemonExists = this.query(txn)
-      .where({ pokemonNumber: input.pokemonNumber })
-      .where({ deletedAt: null });
-    if (pokemonExists) {
+    const dbReadyInput = {
+      id: uuid(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      ...input,
+    };
+    const pokemonExists = await this.query(txn)
+      .where({ pokemonNumber: dbReadyInput.pokemonNumber })
+      .where({ deletedAt: null })
+      .count();
+    if (Number(pokemonExists) > 0) {
       return Promise.reject(
-        `Found an existing pokemon with pokemon number: ${input.pokemonNumber}`,
+        `Found an existing pokemon with pokemon number: ${dbReadyInput.pokemonNumber}`,
       );
     }
-    return this.query(txn).insertAndFetch(input);
+    return this.query(txn).insertAndFetch(dbReadyInput);
   }
 
   static async edit(
@@ -101,8 +111,10 @@ export default class Pokemon extends Model {
     pokemon: IPokemonEditInput,
     txn: Transaction,
   ): Promise<Pokemon> {
-    const pokemonExists = await this.query(txn).findById(pokemonId);
-    if (!pokemonExists) {
+    const pokemonExists = await this.query(txn)
+      .findById(pokemonId)
+      .count();
+    if (Number(pokemonExists) === 0) {
       return Promise.reject(`Can't find an existing pokemon with id: ${pokemonId}`);
     }
     return this.query(txn).patchAndFetchById(pokemonId, pokemon);
@@ -111,8 +123,9 @@ export default class Pokemon extends Model {
   static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {
     const pokemonExists = await this.query(txn)
       .findById(pokemonId)
-      .where({ deletedAt: null });
-    if (!pokemonExists) {
+      .where({ deletedAt: null })
+      .count();
+    if (Number(pokemonExists) === 0) {
       return Promise.reject(`Can't find an existing pokemon with id: ${pokemonId}`);
     }
     return this.query(txn).patchAndFetchById(pokemonId, { deletedAt: new Date().toISOString() });

@@ -58,6 +58,7 @@ describe('pokemon model', () => {
       );
       const expectedPokemon = { ...newPokemons[0] };
       expectedPokemon.name = 'Lauren the Fire-Breathing Dragon';
+      expectedPokemon.updatedAt = editedPokemon.updatedAt;
       expect(editedPokemon).toMatchObject(expectedPokemon);
     });
   });
@@ -66,8 +67,8 @@ describe('pokemon model', () => {
     it('adds a deletion timestamp to a Pokemon in the table', async () => {
       const newPokemons = await createMockPokemons(txn);
       const deletedPokemon = await Pokemon.delete(newPokemons[0].id, txn);
-      expect(newPokemons[0]).not.toHaveProperty('deletedAt');
-      expect(deletedPokemon).toHaveProperty('deletedAt');
+      expect(newPokemons[0].deletedAt).toBeNull();
+      expect(deletedPokemon.deletedAt).toBeTruthy();
     });
   });
 });

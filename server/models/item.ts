@@ -1,7 +1,9 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import uuid from 'uuid/v4';
 import Pokemon from './pokemon';
 
 export interface IItemCreateInput {
+  id: string;
   name: string;
   pokemonId: string;
   price: number;
@@ -72,7 +74,13 @@ export default class Item extends Model {
   }
 
   static async create(input: IItemCreateInput, txn: Transaction): Promise<Item> {
-    return this.query(txn).insertAndFetch(input);
+    const dbReadyInput = {
+      id: uuid(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      ...input,
+    };
+    return this.query(txn).insertAndFetch(dbReadyInput);
   }
 
   static async edit(itemId: string, item: IItemEditInput, txn: Transaction): Promise<Item> {

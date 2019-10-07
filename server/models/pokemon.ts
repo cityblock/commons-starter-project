@@ -67,7 +67,7 @@ export class Pokemon extends Model {
         modelClass: Item,
         join: {
           from: 'pokemon.id',
-          to: 'item.pokemonid',
+          to: 'item.pokemonId',
         },
       },
     };
@@ -79,8 +79,9 @@ export class Pokemon extends Model {
 
   static async get(pokemonId: string, txn: Transaction): Promise<[Pokemon, Item[]]> {
     const pokemonAndItems = this.query(txn)
-      .where({ id: pokemonId })
-      .joinRelation('item');
+      .eager('pokemon.item')
+      .joinRelation('item')
+      .where({ id: pokemonId });
 
     if (!pokemonAndItems) {
       return Promise.reject(`Error fetching Pokemon ${pokemonId} or associated items.`);

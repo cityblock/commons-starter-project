@@ -5,7 +5,7 @@ import Pokemon from './models/pokemon';
 export async function createMockPokemons(txn: Transaction) {
   const pokemon1 = await Pokemon.create(
     {
-      name: 'Bulbasaur',
+      name: 'Harry Potter',
       pokemonNumber: 101,
       attack: 11,
       defense: 22,
@@ -19,7 +19,7 @@ export async function createMockPokemons(txn: Transaction) {
 
   const pokemon2 = await Pokemon.create(
     {
-      name: 'Ivysaur',
+      name: 'Ron Weasley',
       pokemonNumber: 102,
       attack: 33,
       defense: 44,
@@ -32,7 +32,7 @@ export async function createMockPokemons(txn: Transaction) {
 
   const pokemon3 = await Pokemon.create(
     {
-      name: 'Venusaur',
+      name: 'Hermione Granger',
       pokemonNumber: 103,
       attack: 45,
       defense: 54,
@@ -49,7 +49,7 @@ export async function createMockPokemons(txn: Transaction) {
 export async function createMockPokemonAndItems(txn: Transaction) {
   const pokemon1 = await Pokemon.create(
     {
-      name: 'Bulbasaur',
+      name: 'Harry Potter',
       pokemonNumber: 101,
       attack: 11,
       defense: 22,

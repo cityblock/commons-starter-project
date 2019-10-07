@@ -9,8 +9,6 @@ export interface IItemCreateInput {
   price: number;
   happiness: number;
   imageUrl: string;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export interface IItemEditInput {
@@ -48,21 +46,11 @@ export default class Item extends Model {
       price: { type: 'number' },
       happiness: { type: 'number' },
       imageUrl: { type: 'string' },
-      createdAt: { type: 'string' },
-      updatedAt: { type: 'string' },
+      createdAt: { type: ['string', 'null'] },
+      updatedAt: { type: ['string', 'null'] },
       deletedAt: { type: ['string', 'null'] },
     },
-    required: [
-      'id',
-      'name',
-      'pokemonId',
-      'price',
-      'happiness',
-      'imageUrl',
-      'imageUrl',
-      'createdAt',
-      'updatedAt',
-    ],
+    required: ['id', 'name', 'pokemonId', 'price', 'happiness', 'imageUrl', 'imageUrl'],
   };
 
   static async get(itemId: string, txn: Transaction): Promise<Item> {
@@ -76,8 +64,6 @@ export default class Item extends Model {
   static async create(input: IItemCreateInput, txn: Transaction): Promise<Item> {
     const dbReadyInput = {
       id: uuid(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       ...input,
     };
     return this.query(txn).insertAndFetch(dbReadyInput);

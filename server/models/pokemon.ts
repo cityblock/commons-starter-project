@@ -11,8 +11,6 @@ export interface IPokemonCreateInput {
   pokeType: string;
   moves: JSON | string;
   imageUrl: string;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export interface IPokemonEditInput {
@@ -54,22 +52,11 @@ export default class Pokemon extends Model {
       pokeType: { type: 'string' },
       moves: { type: ['JSON', 'string'] },
       imageUrl: { type: 'string' },
-      createdAt: { type: 'string' },
-      updatedAt: { type: 'string' },
+      createdAt: { type: ['string', 'null'] },
+      updatedAt: { type: ['string', 'null'] },
       deletedAt: { type: ['string', 'null'] },
     },
-    required: [
-      'id',
-      'pokemonNumber',
-      'name',
-      'attack',
-      'defense',
-      'pokeType',
-      'moves',
-      'imageUrl',
-      'createdAt',
-      'updatedAt',
-    ],
+    required: ['id', 'pokemonNumber', 'name', 'attack', 'defense', 'pokeType', 'moves', 'imageUrl'],
   };
 
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
@@ -90,8 +77,6 @@ export default class Pokemon extends Model {
   static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {
     const dbReadyInput = {
       id: uuid(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       ...input,
     };
     const pokemonExists = await this.query(txn)

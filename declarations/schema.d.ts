@@ -18,54 +18,63 @@ declare module 'schema' {
   }
 
   interface IRootQueryType {
-
-    /**
-     * All puppies
-     */
-    puppies: Array<IPuppy>;
+    getAllPokemon: Array<IPokemon | null>;
+    pokemonItems: IPokemon | null;
   }
 
-  /**
-   * Puppy
-   */
-  interface IPuppy {
+  interface IPokemonItemsOnRootQueryTypeArguments {
+    pokemonId: string;
+  }
+
+  interface IPokemon {
+    id: string;
+    pokemonNumber: number;
+    name: string;
+    attack: number;
+    defense: number;
+    pokeType: string;
+    moves: any;
+    imageUrl: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    items: Array<IItem | null> | null;
+  }
+
+  type uniqueId = IPokemon | IItem;
+
+  interface IUniqueId {
+    id: string;
+  }
+
+  interface IItem {
     id: string;
     name: string;
-    createdAt: string | null;
-    updatedAt: string | null;
+    pokemonId: string;
+    price: number;
+    happiness: number;
+    imageUrl: string;
+    createdAt: string;
+    updatedAt: string;
     deletedAt: string | null;
   }
 
-  /**
-   * An object with a Globally Unique ID
-   */
-  type uniqueId = IPuppy;
-
-  /**
-   * An object with a Globally Unique ID
-   */
-  interface IUniqueId {
-
-    /**
-     * The ID of the object.
-     */
-    id: string;
-  }
-
   interface IRootMutationType {
-
-    /**
-     * Create a puppy
-     */
-    puppyCreate: IPuppy;
+    pokemonCreate: IPokemon | null;
   }
 
-  interface IPuppyCreateOnRootMutationTypeArguments {
-    input?: IPuppyCreateInput | null;
+  interface IPokemonCreateOnRootMutationTypeArguments {
+    input: IPokemonCreateInput;
   }
 
-  interface IPuppyCreateInput {
+  interface IPokemonCreateInput {
+    pokemonNumber: number;
     name: string;
+    attack: number;
+    defense: number;
+    pokeType: string;
+    moves: any;
+    imageUrl: string;
   }
 }
 

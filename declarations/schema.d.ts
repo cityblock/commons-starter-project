@@ -1,6 +1,6 @@
 declare module 'schema' {
   interface IGraphQLResponseRoot {
-    data?: IRootQueryType | IRootMutationType;
+    data?: IRootQueryType;
     errors?: Array<IGraphQLResponseError>;
   }
 
@@ -18,54 +18,91 @@ declare module 'schema' {
   }
 
   interface IRootQueryType {
-
-    /**
-     * All puppies
-     */
-    puppies: Array<IPuppy>;
+    getAllPokemon: Array<IPokemon | null> | null;
   }
 
-  /**
-   * Puppy
-   */
-  interface IPuppy {
+  interface IPokemon {
     id: string;
+    pokemonNumber: number;
     name: string;
-    createdAt: string | null;
-    updatedAt: string | null;
-    deletedAt: string | null;
+    attack: number;
+    defense: number;
+    pokeType: string;
+    moves: Array<string | null>;
+    imageUrl: string;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt: any | null;
   }
 
-  /**
-   * An object with a Globally Unique ID
-   */
-  type uniqueId = IPuppy;
+  type uniqueId = IPokemon | IItem;
 
-  /**
-   * An object with a Globally Unique ID
-   */
   interface IUniqueId {
-
-    /**
-     * The ID of the object.
-     */
     id: string;
   }
 
-  interface IRootMutationType {
-
-    /**
-     * Create a puppy
-     */
-    puppyCreate: IPuppy;
-  }
-
-  interface IPuppyCreateOnRootMutationTypeArguments {
-    input?: IPuppyCreateInput | null;
-  }
-
-  interface IPuppyCreateInput {
+  interface IItem {
+    id: string;
     name: string;
+    pokemonId: string;
+    price: number;
+    happiness: number;
+    imageUrl: string;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt: any | null;
+  }
+
+  interface IPokemonCreateInput {
+    id: string;
+    pokemonNumber: number;
+    name: string;
+    attack: number;
+    defense: number;
+    pokeType: string;
+    moves: Array<string | null>;
+    imageUrl: string;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt?: any | null;
+  }
+
+  interface IPokemonEditInput {
+    attack?: number | null;
+    defense?: number | null;
+    pokeType?: string | null;
+    moves?: Array<string | null> | null;
+    imageUrl?: string | null;
+    updatedAt?: any | null;
+    deletedAt?: any | null;
+  }
+
+  interface IPokemonDeleteInput {
+    id: string;
+  }
+
+  interface IItemCreateInput {
+    id: string;
+    name: string;
+    pokemonId: string;
+    price: number;
+    happiness: number;
+    imageUrl: string;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt?: any | null;
+  }
+
+  interface IItemEditInput {
+    price?: number | null;
+    happiness?: number | null;
+    imageUrl?: string | null;
+    updatedAt?: any | null;
+    deletedAt?: any | null;
+  }
+
+  interface IItemDeleteInput {
+    id: string;
   }
 }
 

@@ -1,14 +1,92 @@
-# An object with a Globally Unique ID
+scalar DateTime
 interface uniqueId {
-  # The ID of the object.
   id: ID!
 }
-
-type RootMutationType {}
-
-type RootQueryType {}
-
+type Pokemon implements uniqueId {
+  id: ID!
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: String!
+  moves: [String]!
+  imageUrl: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+type Item implements uniqueId {
+  id: ID!
+  name: String!
+  pokemonId: ID!
+  price: Int!
+  happiness: Int!
+  imageUrl: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+input PokemonCreateInput {
+  id: ID!
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: String!
+  moves: [String]!
+  imageUrl: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+input PokemonEditInput {
+  attack: Int
+  defense: Int
+  pokeType: String
+  moves: [String]
+  imageUrl: String
+  updatedAt: DateTime
+  deletedAt: DateTime
+}
+input PokemonDeleteInput {
+  id: ID!
+}
+input ItemCreateInput {
+  id: ID!
+  name: String!
+  pokemonId: ID!
+  price: Int!
+  happiness: Int!
+  imageUrl: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+input ItemEditInput {
+  price: Int
+  happiness: Int
+  imageUrl: String
+  updatedAt: DateTime
+  deletedAt: DateTime
+}
+input ItemDeleteInput {
+  id: ID!
+}
+# type RootMutationType {
+#   pokemonCreate(input: PokemonCreateInput!): Pokemon
+#   pokemonEdit(input: PokemonEditInput!): Pokemon
+#   pokemonDelete(input: PokemonDeleteInput!): Pokemon
+#   itemCreate(input: ItemCreateInput!): Item
+#   itemEdit(input: ItemEditInput!): Item
+#   itemDelete(input: ItemDeleteInput!): Item
+# }
+type RootQueryType {
+  getAllPokemon: [Pokemon]
+  # pokemon(id: ID!): Pokemon
+  # allItem: [Item]
+  # item(id: ID!): Item
+}
 schema {
   query: RootQueryType
-  mutation: RootMutationType
+  # mutation: RootMutationType
 }

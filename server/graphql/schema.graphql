@@ -1,4 +1,5 @@
 scalar JSON
+scalar Date
 
 # An object with a Globally Unique ID
 interface uniqueId {
@@ -23,9 +24,9 @@ type Item implements uniqueId {
   price: Int!
   happiness: Int!
   imageUrl: String!
-  createdAt: String!
-  updatedAt: String!
-  deletedAt: String
+  createdAt: Date!
+  updatedAt: Date!
+  deletedAt: Date
 }
 
 type Pokemon implements uniqueId {
@@ -37,9 +38,9 @@ type Pokemon implements uniqueId {
   pokeType: String!
   moves: JSON!
   imageUrl: String!
-  createdAt: String!
-  updatedAt: String!
-  deletedAt: String
+  createdAt: Date!
+  updatedAt: Date!
+  deletedAt: Date
   items: [Item]
 }
 

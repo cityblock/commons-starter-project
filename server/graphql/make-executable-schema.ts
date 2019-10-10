@@ -3,9 +3,10 @@ import { makeExecutableSchema } from 'graphql-tools';
 import path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
+import { resolveAllPokemon, resolvePokemonItems } from './pokemon-resolver';
 
 export const resolveFunctions = {
-  RootQueryType: {},
+  RootQueryType: { getAllPokemon: resolveAllPokemon, pokemonItems: resolvePokemonItems },
   RootMutationType: {},
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {

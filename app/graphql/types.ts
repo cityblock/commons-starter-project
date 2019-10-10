@@ -15,13 +15,56 @@ export interface allPokemon_getAllPokemon {
   pokeType: string;
   moves: any;
   imageUrl: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
 }
 
 export interface allPokemon {
   getAllPokemon: (allPokemon_getAllPokemon | null)[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: getPokemon
+// ====================================================
+
+export interface getPokemon_pokemonItems_items {
+  id: string;
+  name: string;
+  pokemonId: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
+}
+
+export interface getPokemon_pokemonItems {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: any;
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
+  items: (getPokemon_pokemonItems_items | null)[] | null;
+}
+
+export interface getPokemon {
+  pokemonItems: getPokemon_pokemonItems | null;
+}
+
+export interface getPokemonVariables {
+  pokemonId: string;
 }
 
 /* tslint:disable */

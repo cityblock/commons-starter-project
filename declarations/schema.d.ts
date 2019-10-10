@@ -35,9 +35,9 @@ declare module 'schema' {
     pokeType: string;
     moves: any;
     imageUrl: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt: any | null;
     items: Array<IItem | null> | null;
   }
 
@@ -54,9 +54,9 @@ declare module 'schema' {
     price: number;
     happiness: number;
     imageUrl: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt: any | null;
   }
 
   interface IRootMutationType {

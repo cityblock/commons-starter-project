@@ -45,7 +45,7 @@ type Pokemon implements uniqueId {
 }
 
 type RootMutationType {
-  pokemonCreate(input: PokemonCreateInput!): Pokemon
+  newPokemon(input: PokemonCreateInput!): Pokemon
   # Create new Pokemon
 }
 

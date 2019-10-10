@@ -60,10 +60,10 @@ declare module 'schema' {
   }
 
   interface IRootMutationType {
-    pokemonCreate: IPokemon | null;
+    newPokemon: IPokemon | null;
   }
 
-  interface IPokemonCreateOnRootMutationTypeArguments {
+  interface INewPokemonOnRootMutationTypeArguments {
     input: IPokemonCreateInput;
   }
 

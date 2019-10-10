@@ -1,5 +1,5 @@
 import { transaction } from 'objection';
-import { uniqueId, IRootQueryType } from 'schema';
+import { IRootMutationType, IRootQueryType } from 'schema';
 import Pokemon from '../models/pokemon';
 import { IContext } from './shared/utils';
 
@@ -15,10 +15,20 @@ export async function resolveAllPokemon(
 
 export async function resolvePokemonItems(
   root: any,
-  { id }: uniqueId,
+  args: any,
   { testTransaction }: IContext,
 ): Promise<IRootQueryType['pokemonItems']> {
   return transaction(testTransaction || Pokemon.knex(), async txn => {
-    return Pokemon.get(id, txn);
+    return Pokemon.get(args.pokemonId, txn);
+  });
+}
+
+export async function resolveNewPokemon(
+  root: any,
+  args: any,
+  { testTransaction }: IContext,
+): Promise<IRootMutationType['newPokemon']> {
+  return transaction(testTransaction || Pokemon.knex(), async txn => {
+    return Pokemon.create(args.input, txn);
   });
 }

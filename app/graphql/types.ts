@@ -29,6 +29,36 @@ export interface allPokemon {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: createPokemon
+// ====================================================
+
+export interface createPokemon_newPokemon {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: any;
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
+}
+
+export interface createPokemon {
+  newPokemon: createPokemon_newPokemon | null;
+}
+
+export interface createPokemonVariables {
+  input: PokemonCreateInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: getPokemon
 // ====================================================
 
@@ -74,6 +104,16 @@ export interface getPokemonVariables {
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
+
+export interface PokemonCreateInput {
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: any;
+  imageUrl: string;
+}
 
 //==============================================================
 // END Enums and Input Objects

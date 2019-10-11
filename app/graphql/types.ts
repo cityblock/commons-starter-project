@@ -1,27 +1,190 @@
-
-
 /* tslint:disable */
+/* eslint-disable */
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getPuppies
+// GraphQL query operation: allPokemon
 // ====================================================
 
-export interface getPuppies_puppies {
+export interface allPokemon_getAllPokemon {
   id: string;
+  pokemonNumber: number;
   name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: any;
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
 }
 
-export interface getPuppies {
-  puppies: getPuppies_puppies[];  // All puppies
+export interface allPokemon {
+  getAllPokemon: (allPokemon_getAllPokemon | null)[];
 }
 
 /* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: createPokemon
+// ====================================================
+
+export interface createPokemon_newPokemon {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: any;
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
+}
+
+export interface createPokemon {
+  newPokemon: createPokemon_newPokemon | null;
+}
+
+export interface createPokemonVariables {
+  input: PokemonCreateInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: deletePokemon
+// ====================================================
+
+export interface deletePokemon_deletedPokemon {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: any;
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
+}
+
+export interface deletePokemon {
+  deletedPokemon: deletePokemon_deletedPokemon | null;
+}
+
+export interface deletePokemonVariables {
+  id: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: editPokemon
+// ====================================================
+
+export interface editPokemon_editedPokemon {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: any;
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
+}
+
+export interface editPokemon {
+  editedPokemon: editPokemon_editedPokemon | null;
+}
+
+export interface editPokemonVariables {
+  id: string;
+  input: PokemonEditInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: getPokemon
+// ====================================================
+
+export interface getPokemon_pokemonItems_items {
+  id: string;
+  name: string;
+  pokemonId: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
+}
+
+export interface getPokemon_pokemonItems {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: any;
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
+  items: (getPokemon_pokemonItems_items | null)[] | null;
+}
+
+export interface getPokemon {
+  pokemonItems: getPokemon_pokemonItems | null;
+}
+
+export interface getPokemonVariables {
+  pokemonId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
 // This file was automatically generated and should not be edited.
 
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
+
+export interface PokemonCreateInput {
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: any;
+  imageUrl: string;
+}
+
+export interface PokemonEditInput {
+  pokemonNumber?: number | null;
+  name?: string | null;
+  attack?: number | null;
+  defense?: number | null;
+  pokeType?: string | null;
+  moves?: any | null;
+  imageUrl?: string | null;
+}
 
 //==============================================================
 // END Enums and Input Objects

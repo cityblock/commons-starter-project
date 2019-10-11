@@ -18,54 +18,84 @@ declare module 'schema' {
   }
 
   interface IRootQueryType {
-
-    /**
-     * All puppies
-     */
-    puppies: Array<IPuppy>;
+    getAllPokemon: Array<IPokemon | null>;
+    pokemonItems: IPokemon | null;
   }
 
-  /**
-   * Puppy
-   */
-  interface IPuppy {
+  interface IPokemonItemsOnRootQueryTypeArguments {
+    pokemonId: string;
+  }
+
+  interface IPokemon {
+    id: string;
+    pokemonNumber: number;
+    name: string;
+    attack: number;
+    defense: number;
+    pokeType: string;
+    moves: any;
+    imageUrl: string;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt: any | null;
+    items: Array<IItem | null> | null;
+  }
+
+  type uniqueId = IPokemon | IItem;
+
+  interface IUniqueId {
+    id: string;
+  }
+
+  interface IItem {
     id: string;
     name: string;
-    createdAt: string | null;
-    updatedAt: string | null;
-    deletedAt: string | null;
-  }
-
-  /**
-   * An object with a Globally Unique ID
-   */
-  type uniqueId = IPuppy;
-
-  /**
-   * An object with a Globally Unique ID
-   */
-  interface IUniqueId {
-
-    /**
-     * The ID of the object.
-     */
-    id: string;
+    pokemonId: string;
+    price: number;
+    happiness: number;
+    imageUrl: string;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt: any | null;
   }
 
   interface IRootMutationType {
-
-    /**
-     * Create a puppy
-     */
-    puppyCreate: IPuppy;
+    newPokemon: IPokemon | null;
+    editedPokemon: IPokemon | null;
+    deletedPokemon: IPokemon | null;
   }
 
-  interface IPuppyCreateOnRootMutationTypeArguments {
-    input?: IPuppyCreateInput | null;
+  interface INewPokemonOnRootMutationTypeArguments {
+    input: IPokemonCreateInput;
   }
 
-  interface IPuppyCreateInput {
+  interface IEditedPokemonOnRootMutationTypeArguments {
+    id: string;
+    input: IPokemonEditInput;
+  }
+
+  interface IDeletedPokemonOnRootMutationTypeArguments {
+    id: string;
+  }
+
+  interface IPokemonCreateInput {
+    pokemonNumber: number;
     name: string;
+    attack: number;
+    defense: number;
+    pokeType: string;
+    moves: any;
+    imageUrl: string;
+  }
+
+  interface IPokemonEditInput {
+    pokemonNumber?: number | null;
+    name?: string | null;
+    attack?: number | null;
+    defense?: number | null;
+    pokeType?: string | null;
+    moves?: any | null;
+    imageUrl?: string | null;
   }
 }
 

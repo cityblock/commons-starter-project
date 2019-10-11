@@ -1,12 +1,74 @@
+scalar JSON
+scalar Date
+
 # An object with a Globally Unique ID
 interface uniqueId {
   # The ID of the object.
   id: ID!
 }
 
-type RootMutationType {}
+input PokemonCreateInput {
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: String!
+  moves: JSON!
+  imageUrl: String!
+}
 
-type RootQueryType {}
+input PokemonEditInput {
+  pokemonNumber: Int
+  name: String
+  attack: Int
+  defense: Int
+  pokeType: String
+  moves: JSON
+  imageUrl: String
+}
+
+type Item implements uniqueId {
+  id: ID!
+  name: String!
+  pokemonId: String!
+  price: Int!
+  happiness: Int!
+  imageUrl: String!
+  createdAt: Date!
+  updatedAt: Date!
+  deletedAt: Date
+}
+
+type Pokemon implements uniqueId {
+  id: ID!
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: String!
+  moves: JSON!
+  imageUrl: String!
+  createdAt: Date!
+  updatedAt: Date!
+  deletedAt: Date
+  items: [Item]
+}
+
+type RootMutationType {
+  newPokemon(input: PokemonCreateInput!): Pokemon
+  # Create new Pokemon
+  editedPokemon(id: ID!, input: PokemonEditInput!): Pokemon
+  # Edits existing Pokemon
+  deletedPokemon(id: ID!): Pokemon
+  # Deletes existing Pokemon
+}
+
+type RootQueryType {
+  getAllPokemon: [Pokemon]!
+  # get all Pokemons
+  pokemonItems(pokemonId: ID!): Pokemon
+  # get Pokemon with Items
+}
 
 schema {
   query: RootQueryType

@@ -3,11 +3,16 @@ import { makeExecutableSchema } from 'graphql-tools';
 import path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
-import { resolveAllPokemon, resolveNewPokemon, resolvePokemonItems } from './pokemon-resolver';
+import {
+  resolveAllPokemon,
+  resolveEditPokemon,
+  resolveNewPokemon,
+  resolvePokemonItems,
+} from './pokemon-resolver';
 
 export const resolveFunctions = {
   RootQueryType: { getAllPokemon: resolveAllPokemon, pokemonItems: resolvePokemonItems },
-  RootMutationType: { newPokemon: resolveNewPokemon },
+  RootMutationType: { newPokemon: resolveNewPokemon, editedPokemon: resolveEditPokemon },
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {
     __resolveType: ({ type }: { type: string }) => type,

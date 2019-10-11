@@ -32,3 +32,13 @@ export async function resolveNewPokemon(
     return Pokemon.create(args.input, txn);
   });
 }
+
+export async function resolveEditPokemon(
+  root: any,
+  args: any,
+  { testTransaction }: IContext,
+): Promise<IRootMutationType['editedPokemon']> {
+  return transaction(testTransaction || Pokemon.knex(), async txn => {
+    return Pokemon.edit(args.id, args.input, txn);
+  });
+}

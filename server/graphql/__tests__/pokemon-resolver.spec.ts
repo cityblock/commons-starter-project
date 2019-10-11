@@ -2,6 +2,7 @@ import { graphql, print } from 'graphql';
 import { transaction } from 'objection';
 import allPokemon from '../../../app/graphql/get-all-pokemon.graphql';
 import newPokemon from '../../../app/graphql/pokemon-create-mutation.graphql';
+import editPokemon from '../../../app/graphql/pokemon-edit-mutation.graphql';
 import getPokemon from '../../../app/graphql/pokemon-items.graphql';
 import { setupDb } from '../../lib/test-utils';
 import Pokemon from '../../models/pokemon';
@@ -12,6 +13,7 @@ describe('pokemon resolver', () => {
   const pokemonQuery = print(allPokemon);
   const pokemonItemQuery = print(getPokemon);
   const newPokemonMutation = print(newPokemon);
+  const editPokemonMutation = print(editPokemon);
 
   let testDb = null as any;
   let txn = null as any;
@@ -86,6 +88,24 @@ describe('pokemon resolver', () => {
         { input: mockPokemon },
       );
       expect(result.data!.newPokemon.pokemonNumber).toEqual(mockPokemon.pokemonNumber);
+    });
+  });
+
+  describe('editPokemon', () => {
+    it('edits existing Pokemon and returns it', async () => {
+      const newPokemons = await createMockPokemons(txn);
+      const editPayload = { name: 'Lauren the Fire-Breathing Dragon' };
+      const result = await graphql(
+        schema,
+        editPokemonMutation,
+        null,
+        { testTransaction: txn },
+        { id: newPokemons[0].id, input: editPayload },
+      );
+      const expectedPokemon = { ...newPokemons[0] };
+      expectedPokemon.name = 'Lauren the Fire-Breathing Dragon';
+      expectedPokemon.updatedAt = result.data!.editedPokemon.updatedAt;
+      expect(result.data!.editedPokemon).toMatchObject(expectedPokemon);
     });
   });
 });

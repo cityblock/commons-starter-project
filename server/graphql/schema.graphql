@@ -17,6 +17,16 @@ input PokemonCreateInput {
   imageUrl: String!
 }
 
+input PokemonEditInput {
+  pokemonNumber: Int
+  name: String
+  attack: Int
+  defense: Int
+  pokeType: String
+  moves: JSON
+  imageUrl: String
+}
+
 type Item implements uniqueId {
   id: ID!
   name: String!
@@ -47,6 +57,8 @@ type Pokemon implements uniqueId {
 type RootMutationType {
   newPokemon(input: PokemonCreateInput!): Pokemon
   # Create new Pokemon
+  editedPokemon(id: ID!, input: PokemonEditInput!): Pokemon
+  # Edits existing Pokemon
 }
 
 type RootQueryType {

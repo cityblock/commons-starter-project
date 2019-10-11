@@ -1,0 +1,15 @@
+mutation editPokemon($id: ID!, $input: PokemonEditInput!) {
+  editedPokemon(id: $id, input: $input) {
+    id
+    pokemonNumber
+    name
+    attack
+    defense
+    pokeType
+    moves
+    imageUrl
+    createdAt
+    updatedAt
+    deletedAt
+  }
+}

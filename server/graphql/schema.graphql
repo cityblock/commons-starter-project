@@ -59,6 +59,8 @@ type RootMutationType {
   # Create new Pokemon
   editedPokemon(id: ID!, input: PokemonEditInput!): Pokemon
   # Edits existing Pokemon
+  deletedPokemon(id: ID!): Pokemon
+  # Deletes existing Pokemon
 }
 
 type RootQueryType {

@@ -1,0 +1,15 @@
+mutation deletePokemon($id: ID!) {
+  deletedPokemon(id: $id) {
+    id
+    pokemonNumber
+    name
+    attack
+    defense
+    pokeType
+    moves
+    imageUrl
+    createdAt
+    updatedAt
+    deletedAt
+  }
+}

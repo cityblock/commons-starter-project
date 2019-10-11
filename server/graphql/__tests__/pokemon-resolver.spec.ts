@@ -2,6 +2,7 @@ import { graphql, print } from 'graphql';
 import { transaction } from 'objection';
 import allPokemon from '../../../app/graphql/get-all-pokemon.graphql';
 import newPokemon from '../../../app/graphql/pokemon-create-mutation.graphql';
+import deletePokemon from '../../../app/graphql/pokemon-delete-mutation.graphql';
 import editPokemon from '../../../app/graphql/pokemon-edit-mutation.graphql';
 import getPokemon from '../../../app/graphql/pokemon-items.graphql';
 import { setupDb } from '../../lib/test-utils';
@@ -14,6 +15,7 @@ describe('pokemon resolver', () => {
   const pokemonItemQuery = print(getPokemon);
   const newPokemonMutation = print(newPokemon);
   const editPokemonMutation = print(editPokemon);
+  const deletePokemonMutation = print(deletePokemon);
 
   let testDb = null as any;
   let txn = null as any;
@@ -106,6 +108,21 @@ describe('pokemon resolver', () => {
       expectedPokemon.name = 'Lauren the Fire-Breathing Dragon';
       expectedPokemon.updatedAt = result.data!.editedPokemon.updatedAt;
       expect(result.data!.editedPokemon).toMatchObject(expectedPokemon);
+    });
+  });
+
+  describe('deletePokemon', () => {
+    it('deletes existing Pokemon and returns it', async () => {
+      const newPokemons = await createMockPokemons(txn);
+      const deletedPokemon = await graphql(
+        schema,
+        deletePokemonMutation,
+        null,
+        { testTransaction: txn },
+        { id: newPokemons[0].id },
+      );
+      expect(newPokemons[0].deletedAt).toBeNull();
+      expect(deletedPokemon.data!.deletedPokemon.deletedAt).toBeTruthy();
     });
   });
 });

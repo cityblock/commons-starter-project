@@ -59,6 +59,36 @@ export interface createPokemonVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: deletePokemon
+// ====================================================
+
+export interface deletePokemon_deletedPokemon {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: any;
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
+}
+
+export interface deletePokemon {
+  deletedPokemon: deletePokemon_deletedPokemon | null;
+}
+
+export interface deletePokemonVariables {
+  id: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: editPokemon
 // ====================================================
 

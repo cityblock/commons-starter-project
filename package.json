@@ -135,7 +135,7 @@
     "identity-obj-proxy": "3.0.0",
     "jsonwebtoken": "8.5.1",
     "knex": "0.17.3",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "morgan": "1.9.1",
     "npm": "6.9.0",
     "objection": "1.6.8",

@@ -79,7 +79,7 @@
   "dependencies": {
     "@types/base-64": "0.1.2",
     "@types/basic-auth": "1.1.2",
-    "@types/bcrypt": "2.0.0",
+    "@types/bcrypt": "3.0.0",
     "@types/body-parser": "1.17.0",
     "@types/classnames": "2.2.4",
     "@types/compression": "0.0.36",

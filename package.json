@@ -126,7 +126,7 @@
     "express": "4.16.4",
     "fetch-everywhere": "1.0.5",
     "file-loader": "3.0.1",
-    "forever": "0.15.3",
+    "forever": "2.0.0",
     "fork-ts-checker-webpack-plugin": "0.5.2",
     "graphql": "14.0.2",
     "graphql-iso-date": "3.6.1",

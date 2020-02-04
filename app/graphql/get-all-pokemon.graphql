@@ -1,0 +1,15 @@
+query getAllPokemon {
+  allPokemon {
+    id
+    pokemonNumber
+    name
+    attack
+    defense
+    pokeType
+    moves
+    imageUrl
+    createdAt
+    updatedAt
+    deletedAt
+  }
+}

@@ -1,6 +1,6 @@
 declare module 'schema' {
   interface IGraphQLResponseRoot {
-    data?: IRootQueryType | IRootMutationType;
+    data?: IRootQueryType;
     errors?: Array<IGraphQLResponseError>;
   }
 
@@ -18,54 +18,61 @@ declare module 'schema' {
   }
 
   interface IRootQueryType {
-
-    /**
-     * All puppies
-     */
-    puppies: Array<IPuppy>;
+    allPokemon: Array<IPokemon>;
   }
 
-  /**
-   * Puppy
-   */
-  interface IPuppy {
+  interface IPokemon {
     id: string;
+    pokemonNumber: number;
     name: string;
-    createdAt: string | null;
-    updatedAt: string | null;
-    deletedAt: string | null;
+    attack: number;
+    defense: number;
+    pokeType: PokeType;
+    moves: Array<string>;
+    imageUrl: string;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt: any | null;
+    items: Array<IItem>;
   }
 
-  /**
-   * An object with a Globally Unique ID
-   */
-  type uniqueId = IPuppy;
+  type uniqueId = IPokemon | IItem;
 
-  /**
-   * An object with a Globally Unique ID
-   */
   interface IUniqueId {
-
-    /**
-     * The ID of the object.
-     */
     id: string;
   }
 
-  interface IRootMutationType {
-
-    /**
-     * Create a puppy
-     */
-    puppyCreate: IPuppy;
+  const enum PokeType {
+    normal = 'normal',
+    grass = 'grass',
+    fire = 'fire',
+    water = 'water',
+    electric = 'electric',
+    psychic = 'psychic',
+    ghost = 'ghost',
+    dark = 'dark',
+    fairy = 'fairy',
+    rock = 'rock',
+    ground = 'ground',
+    steel = 'steel',
+    flying = 'flying',
+    fighting = 'fighting',
+    bug = 'bug',
+    ice = 'ice',
+    dragon = 'dragon',
+    poison = 'poison'
   }
 
-  interface IPuppyCreateOnRootMutationTypeArguments {
-    input?: IPuppyCreateInput | null;
-  }
-
-  interface IPuppyCreateInput {
+  interface IItem {
+    id: string;
     name: string;
+    pokemonId: string;
+    price: number;
+    happiness: number;
+    imageUrl: string;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt: any | null;
   }
 }
 

@@ -1,9 +1,19 @@
 import { transaction, Transaction } from 'objection';
+import { setupDb } from '../../lib/test-utils';
 import Pokemon, { IPokemonCreateInput, IPokemonEditInput } from '../pokemon';
 
 
 describe('pokemon model', () => {
+  let testDb: ReturnType<typeof setupDb>;
   let txn: Transaction;
+
+  beforeAll(async () => {
+    testDb = setupDb();
+  });
+
+  afterAll(async () => {
+    testDb.destroy();
+  });
 
   beforeEach(async () => {
     txn = await transaction.start(Pokemon.knex());

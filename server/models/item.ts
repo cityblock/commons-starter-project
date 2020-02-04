@@ -41,7 +41,7 @@ export default class Item extends Model {
   static jsonSchema: JsonSchema = {
     type: 'object',
     properties: {
-      id: { type: 'string', minLength: 1 },
+      id: { type: 'string', minLength: 1 }, // TODO format: 'uuid'
       name: { type: 'string', minLength: 1 },
       pokemonId: { type: 'string', minLength: 1 },
       price: { type: 'number' },
@@ -70,21 +70,29 @@ export default class Item extends Model {
   static async get(itemId: string, txn: Transaction): Promise<Item> {
     // returns a single item
     const itemResult = await this.query(txn)
-      .findById(itemId) as Item;
+      .findOne({ id: itemId, deletedAt: null });
+
+    if (!itemResult) {
+      return Promise.reject(`No such item: ${itemId}`);
+    }
+
     return itemResult;
   };
 
   static async create(input: IItemInput, txn: Transaction): Promise<Item> {
     // creates and returns an item
-    const itemResult = await this.query(txn)
-      .insertAndFetch(input);
-    return itemResult;
+    return this.query(txn).insertAndFetch(input);
   };
 
   static async edit(itemId: string, item: Partial<IItemInput>, txn: Transaction): Promise<Item> {
     // edits and returns an existing item
     const itemResult = await this.query(txn)
       .patchAndFetchById(itemId, item);
+
+    if (!itemResult) {
+      return Promise.reject(`No such item: ${itemId}`);
+    }
+
     return itemResult;
   };
 
@@ -93,6 +101,11 @@ export default class Item extends Model {
     const deletedAt = new Date().toISOString();
     const itemResult = await this.query(txn)
       .patchAndFetchById(itemId, { deletedAt });
+
+    if (!itemResult) {
+      return Promise.reject(`No such item: ${itemId}`);
+    }
+
     return itemResult;
   };
 

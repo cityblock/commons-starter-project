@@ -81,6 +81,7 @@ describe('item model', () => {
       // create an item
       const mockItemInput = await generateMockItemInput(txn);
       const newItem = await Item.create(mockItemInput, txn);
+      expect(newItem.deletedAt).toBeNull();
 
       // "delete" that item
       const item = await Item.delete(newItem.id, txn);

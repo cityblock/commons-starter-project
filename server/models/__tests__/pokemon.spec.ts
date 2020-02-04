@@ -1,3 +1,4 @@
+import { sortBy } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { setupDb } from '../../lib/test-utils';
 import Item from '../item';
@@ -35,9 +36,26 @@ describe('pokemon model', () => {
   });
 
   describe('getAll', () => {
-    it('should return all pokemon', async () => {
+    it('should return all pokemon, ordered by pokemonNumber ascending', async () => {
+      // get all pokemon
       const pokemon = await Pokemon.getAll(txn);
       expect(pokemon).not.toHaveLength(0);
+
+      // ensure that pokemon are sorted as expected
+      const pokemonSorted = sortBy(pokemon, 'pokemonNumber');
+      expect(pokemon).toEqual(pokemonSorted);
+
+    });
+    it('should not return deleted pokemon', async () => {
+      // get all pokemon
+      const pokemon = await Pokemon.getAll(txn);
+
+      // delete a pokemon
+      const deletedPokemon = await Pokemon.delete(pokemon[0].id, txn);
+
+      // get all pokemon again
+      const pokemonAgain = await Pokemon.getAll(txn);
+      expect(pokemonAgain).not.toContain(deletedPokemon);
     });
   });
 
@@ -84,6 +102,7 @@ describe('pokemon model', () => {
     it('should "delete" a pokemon and return it', async () => {
       // create a pokemon
       const newPokemon = await Pokemon.create(mockPokemonInput, txn);
+      expect(newPokemon.deletedAt).toBeNull();
 
       // "delete" that pokemon
       const pokemon = await Pokemon.delete(newPokemon.id, txn);

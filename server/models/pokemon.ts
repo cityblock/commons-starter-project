@@ -66,7 +66,7 @@ export default class Pokemon extends Model {
   static jsonSchema: JsonSchema = {
     type: 'object',
     properties: {
-      id: { type: 'string', minLength: 1 },
+      id: { type: 'string', minLength: 1 }, // TODO format: 'uuid'
       pokemonNumber: { type: 'number' },
       name: { type: 'string', minLength: 1 },
       attack: { type: 'number' },
@@ -96,31 +96,39 @@ export default class Pokemon extends Model {
 
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
     // returns all Pokemon, ordered by pokemonNumber ascending
-    const pokemonResult = await this.query(txn)
-      .select()
-      .orderBy('pokemonNumber');
-    return pokemonResult;
+    return this.query(txn)
+      .where({ deletedAt: null })
+      .orderBy('pokemonNumber', 'ASC');
   };
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
     // returns a single Pokemon, and associated items
     const pokemonResult = await this.query(txn)
       .eager('items')
-      .findById(pokemonId) as Pokemon;
+      .findOne({ id: pokemonId, deletedAt: null });
+
+    if (!pokemonResult) {
+      return Promise.reject(`No such pokemon: ${pokemonId}`);
+    }
+
     return pokemonResult;
   };
 
   static async create(input: IPokemonInput, txn: Transaction): Promise<Pokemon> {
     // creates and returns a Pokemon
-    const pokemonResult = await this.query(txn)
+    return this.query(txn)
       .insertAndFetch(input);
-    return pokemonResult;
   };
 
   static async edit(pokemonId: string, pokemon: Partial<IPokemonInput>, txn: Transaction): Promise<Pokemon> {
     // edits and returns an existing Pokemon
     const pokemonResult = await this.query(txn)
       .patchAndFetchById(pokemonId, pokemon);
+
+    if (!pokemonResult) {
+      return Promise.reject(`No such pokemon: ${pokemonId}`);
+    }
+
     return pokemonResult;
   };
 
@@ -129,6 +137,11 @@ export default class Pokemon extends Model {
     const deletedAt = new Date().toISOString();
     const pokemonResult = await this.query(txn)
       .patchAndFetchById(pokemonId, { deletedAt });
+
+    if (!pokemonResult) {
+      return Promise.reject(`No such pokemon: ${pokemonId}`);
+    }
+
     return pokemonResult;
   };
 

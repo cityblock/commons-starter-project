@@ -3,20 +3,12 @@ import uuid from 'uuid/v4';
 import Pokemon from './pokemon';
 
 
-export interface IItemCreateInput {
+export interface IItemInput {
   name: string;
   pokemonId: string;
   price: number;
   happiness: number;
   imageUrl: string;
-};
-
-export interface IItemEditInput {
-  name?: string;
-  pokemonId?: string;
-  price?: number;
-  happiness?: number;
-  imageUrl?: string;
 };
 
 /* tslint:disable:member-ordering */
@@ -82,23 +74,25 @@ export default class Item extends Model {
     return itemResult;
   };
 
-  static async create(input: IItemCreateInput, txn: Transaction): Promise<Item> {
+  static async create(input: IItemInput, txn: Transaction): Promise<Item> {
     // creates and returns an item
     const itemResult = await this.query(txn)
       .insertAndFetch(input);
     return itemResult;
   };
 
-  static async edit(itemId: string, item: IItemEditInput, txn: Transaction): Promise<Item> {
+  static async edit(itemId: string, item: Partial<IItemInput>, txn: Transaction): Promise<Item> {
     // edits and returns an existing item
-    const itemResult = await this.query(txn).patchAndFetchById(itemId, item);
+    const itemResult = await this.query(txn)
+      .patchAndFetchById(itemId, item);
     return itemResult;
   };
 
   static async delete(itemId: string, txn: Transaction): Promise<Item> {
     // marks an item as deleted and returns it, but does not actually delete it from the database
     const deletedAt = new Date().toISOString();
-    const itemResult = await this.query(txn).patchAndFetchById(itemId, { deletedAt });
+    const itemResult = await this.query(txn)
+      .patchAndFetchById(itemId, { deletedAt });
     return itemResult;
   };
 

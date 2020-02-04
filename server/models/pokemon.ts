@@ -23,7 +23,7 @@ type PokeType =
   | 'dragon'
   | 'poison';
 
-export interface IPokemonCreateInput {
+export interface IPokemonInput {
   pokemonNumber: number;
   name: string;
   attack: number;
@@ -31,16 +31,6 @@ export interface IPokemonCreateInput {
   pokeType: PokeType;
   moves: string[];
   imageUrl: string;
-};
-
-export interface IPokemonEditInput {
-  pokemonNumber?: number;
-  name?: string;
-  attack?: number;
-  defense?: number;
-  pokeType?: PokeType;
-  moves?: string[];
-  imageUrl?: string;
 };
 
 /* tslint:disable:member-ordering */
@@ -120,14 +110,14 @@ export default class Pokemon extends Model {
     return pokemonResult;
   };
 
-  static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {
+  static async create(input: IPokemonInput, txn: Transaction): Promise<Pokemon> {
     // creates and returns a Pokemon
     const pokemonResult = await this.query(txn)
       .insertAndFetch(input);
     return pokemonResult;
   };
 
-  static async edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction): Promise<Pokemon> {
+  static async edit(pokemonId: string, pokemon: Partial<IPokemonInput>, txn: Transaction): Promise<Pokemon> {
     // edits and returns an existing Pokemon
     const pokemonResult = await this.query(txn)
       .patchAndFetchById(pokemonId, pokemon);

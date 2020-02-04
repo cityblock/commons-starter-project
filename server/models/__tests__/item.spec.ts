@@ -1,7 +1,21 @@
 import { transaction, Transaction } from "objection";
 import { setupDb } from '../../lib/test-utils';
-import Item, { IItemCreateInput, IItemEditInput } from '../item';
+import Item, { IItemInput } from '../item';
+import Pokemon from "../pokemon";
+import { mockPokemonInput } from "./pokemon.spec";
 
+
+export async function generateMockItemInput(txn: Transaction): Promise<IItemInput> {
+  const newPokemon = await Pokemon.create(mockPokemonInput, txn);
+  const mockItemInput = {
+    name: 'Thunder Stone',
+    pokemonId: newPokemon.id,
+    price: 10,
+    happiness: 20,
+    imageUrl: 'https://www.google.com',
+  } as IItemInput;
+  return mockItemInput;
+}
 
 describe('item model', () => {
   let testDb: ReturnType<typeof setupDb>;
@@ -17,7 +31,6 @@ describe('item model', () => {
 
   beforeEach(async () => {
     txn = await transaction.start(Item.knex());
-    console.error = jest.fn();
   });
 
   afterEach(async () => {
@@ -26,37 +39,38 @@ describe('item model', () => {
 
   describe('get', () => {
     it('should return a single item', async () => {
-      const itemId = '0471cbdd-2e1f-4604-8c16-55b4ffe92a7a';
-      const item = await Item.get(itemId, txn);
-      expect(item.id).toEqual(itemId);
+      // create an item
+      const mockItemInput = await generateMockItemInput(txn);
+      const newItem = await Item.create(mockItemInput, txn);
+
+      // get that item
+      const item = await Item.get(newItem.id, txn);
+      expect(item.id).toEqual(newItem.id);
     });
   });
 
   describe('create', () => {
     it('should create and return an item', async () => {
-      const itemName = 'Thunder Stone';
-      const input = {
-        name: itemName,
-        pokemonId: '01515123-9476-414b-b328-ea627cc317f4',
-        price: 10,
-        happiness: 20,
-        imageUrl: 'https://www.google.com',
-      } as IItemCreateInput;
-      const item = await Item.create(input, txn);
-      expect(item.name).toEqual(itemName);
+      const mockItemInput = await generateMockItemInput(txn);
+      const newItem = await Item.create(mockItemInput, txn);
+      expect(newItem.name).toEqual(mockItemInput.name);
     });
   });
 
   describe('edit', () => {
     it('should edit and return an existing item', async () => {
-      const itemId = '0471cbdd-2e1f-4604-8c16-55b4ffe92a7a';
+      // create an item
+      const mockItemInput = await generateMockItemInput(txn);
+      const newItem = await Item.create(mockItemInput, txn);
+
+      // edit that item
       const newPrice = 1000000;
       const newHappiness = 14;
       const input = {
         price: newPrice,
         happiness: newHappiness,
-      } as IItemEditInput;
-      const item = await Item.edit(itemId, input, txn);
+      } as Partial<IItemInput>;
+      const item = await Item.edit(newItem.id, input, txn);
       expect(item.price).toEqual(newPrice);
       expect(item.happiness).toEqual(newHappiness);
     });
@@ -64,8 +78,12 @@ describe('item model', () => {
 
   describe('delete', () => {
     it('should "delete" an item and return it', async () => {
-      const itemId = '0471cbdd-2e1f-4604-8c16-55b4ffe92a7a';
-      const item = await Item.delete(itemId, txn);
+      // create an item
+      const mockItemInput = await generateMockItemInput(txn);
+      const newItem = await Item.create(mockItemInput, txn);
+
+      // "delete" that item
+      const item = await Item.delete(newItem.id, txn);
       expect(item.deletedAt).not.toBeNull();
     });
   });

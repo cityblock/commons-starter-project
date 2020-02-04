@@ -7,13 +7,13 @@ import { mockPokemonInput } from "./pokemon.spec";
 
 export async function generateMockItemInput(txn: Transaction): Promise<IItemInput> {
   const newPokemon = await Pokemon.create(mockPokemonInput, txn);
-  const mockItemInput = {
+  const mockItemInput: IItemInput = {
     name: 'Thunder Stone',
     pokemonId: newPokemon.id,
     price: 10,
     happiness: 20,
     imageUrl: 'https://www.google.com',
-  } as IItemInput;
+  };
   return mockItemInput;
 }
 

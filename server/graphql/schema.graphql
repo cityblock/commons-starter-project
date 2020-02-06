@@ -60,7 +60,7 @@ type Pokemon implements uniqueId {
 
 type RootQueryType {
   # Return all pokemon
-  allPokemon: [Pokemon!]!
+  pokemons: [Pokemon!]!
 }
 
 schema {

@@ -1,5 +1,5 @@
-query getAllPokemon {
-  allPokemon {
+query getPokemons {
+  pokemons {
     id
     pokemonNumber
     name

@@ -3,10 +3,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getAllPokemon
+// GraphQL query operation: getPokemons
 // ====================================================
 
-export interface getAllPokemon_allPokemon {
+export interface getPokemons_pokemons {
   id: string;
   pokemonNumber: number;
   name: string;
@@ -20,8 +20,8 @@ export interface getAllPokemon_allPokemon {
   deletedAt: any | null;
 }
 
-export interface getAllPokemon {
-  allPokemon: getAllPokemon_allPokemon[];
+export interface getPokemons {
+  pokemons: getPokemons_pokemons[];
 }
 
 /* tslint:disable */

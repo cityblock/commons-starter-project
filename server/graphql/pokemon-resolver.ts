@@ -3,10 +3,10 @@ import { IRootQueryType } from "schema";
 import Pokemon from "../models/pokemon";
 
 
-export const resolveGetAllPokemon = async (
+export const resolveGetPokemons = async (
   root: any,
   args: any,
-): Promise<IRootQueryType['allPokemon']> => {
+): Promise<IRootQueryType['pokemons']> => {
   return transaction(Pokemon.knex(), async txn => {
     return Pokemon.getAll(txn);
   });

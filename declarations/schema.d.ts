@@ -19,6 +19,11 @@ declare module 'schema' {
 
   interface IRootQueryType {
     pokemons: Array<IPokemon>;
+    pokemon: IPokemon;
+  }
+
+  interface IPokemonOnRootQueryTypeArguments {
+    pokemonId: string;
   }
 
   interface IPokemon {

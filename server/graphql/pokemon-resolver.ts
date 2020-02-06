@@ -1,13 +1,25 @@
 import { transaction } from "objection";
-import { IRootQueryType } from "schema";
+import { IPokemonOnRootQueryTypeArguments, IRootQueryType } from "schema";
 import Pokemon from "../models/pokemon";
+import { IContext } from "./shared/utils";
 
 
-export const resolveGetPokemons = async (
+export async function resolveGetPokemons(
   root: any,
   args: any,
-): Promise<IRootQueryType['pokemons']> => {
-  return transaction(Pokemon.knex(), async txn => {
+  { testTransaction }: IContext,
+): Promise<IRootQueryType['pokemons']> {
+  return transaction(testTransaction || Pokemon.knex(), async txn => {
     return Pokemon.getAll(txn);
+  });
+};
+
+export async function resolveGetPokemon(
+  root: any,
+  { pokemonId }: IPokemonOnRootQueryTypeArguments,
+  { testTransaction }: IContext,
+): Promise<IRootQueryType['pokemon']> {
+  return transaction(testTransaction || Pokemon.knex(), async txn => {
+    return Pokemon.get(pokemonId, txn);
   });
 };

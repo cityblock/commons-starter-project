@@ -1,6 +1,6 @@
 declare module 'schema' {
   interface IGraphQLResponseRoot {
-    data?: IRootQueryType;
+    data?: IRootQueryType | IRootMutationType;
     errors?: Array<IGraphQLResponseError>;
   }
 
@@ -78,6 +78,24 @@ declare module 'schema' {
     createdAt: any;
     updatedAt: any;
     deletedAt: any | null;
+  }
+
+  interface IRootMutationType {
+    createPokemon: IPokemon;
+  }
+
+  interface ICreatePokemonOnRootMutationTypeArguments {
+    input: IPokemonCreateInput;
+  }
+
+  interface IPokemonCreateInput {
+    pokemonNumber: number;
+    name: string;
+    attack: number;
+    defense: number;
+    pokeType: PokeType;
+    moves: Array<string>;
+    imageUrl: string;
   }
 }
 

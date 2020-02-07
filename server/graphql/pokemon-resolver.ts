@@ -1,5 +1,10 @@
 import { transaction } from "objection";
-import { IPokemonOnRootQueryTypeArguments, IRootQueryType } from "schema";
+import {
+  ICreatePokemonOnRootMutationTypeArguments,
+  IPokemonOnRootQueryTypeArguments,
+  IRootMutationType,
+  IRootQueryType
+} from "schema";
 import Pokemon from "../models/pokemon";
 import { IContext } from "./shared/utils";
 
@@ -21,5 +26,15 @@ export async function resolveGetPokemon(
 ): Promise<IRootQueryType['pokemon']> {
   return transaction(testTransaction || Pokemon.knex(), async txn => {
     return Pokemon.get(pokemonId, txn);
+  });
+};
+
+export async function resolveCreatePokemon(
+  root: any,
+  { input }: ICreatePokemonOnRootMutationTypeArguments,
+  { testTransaction }: IContext,
+): Promise<IRootMutationType['createPokemon']> {
+  return transaction(testTransaction || Pokemon.knex(), async txn => {
+    return Pokemon.create(input, txn);
   });
 };

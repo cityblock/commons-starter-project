@@ -3,6 +3,42 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: createPokemon
+// ====================================================
+
+export interface createPokemon_createPokemon {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: PokeType;
+  moves: string[];
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
+}
+
+export interface createPokemon {
+  createPokemon: createPokemon_createPokemon;
+}
+
+export interface createPokemonVariables {
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: PokeType;
+  moves: string[];
+  imageUrl: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: getPokemon
 // ====================================================
 

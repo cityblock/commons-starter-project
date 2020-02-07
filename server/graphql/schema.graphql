@@ -56,7 +56,20 @@ type Pokemon implements uniqueId {
   items: [Item!]!
 }
 
-# type RootMutationType {}
+input PokemonCreateInput {
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: PokeType!
+  moves: [String!]!
+  imageUrl: String!
+}
+
+type RootMutationType {
+  # Create a pokemon
+  createPokemon(input: PokemonCreateInput!): Pokemon!
+}
 
 type RootQueryType {
   # Return all pokemon
@@ -67,5 +80,5 @@ type RootQueryType {
 
 schema {
   query: RootQueryType
-  # mutation: RootMutationType
+  mutation: RootMutationType
 }

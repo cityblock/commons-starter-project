@@ -1,27 +1,8 @@
 import { JsonSchema, Model, RelationMappings, Transaction } from 'objection';
+import { PokeType } from 'schema';
 import uuid from 'uuid/v4';
 import Item from './item';
 
-
-type PokeType =
-  | 'normal'
-  | 'grass'
-  | 'fire'
-  | 'water'
-  | 'electric'
-  | 'psychic'
-  | 'ghost'
-  | 'dark'
-  | 'fairy'
-  | 'rock'
-  | 'ground'
-  | 'steel'
-  | 'flying'
-  | 'fighting'
-  | 'bug'
-  | 'ice'
-  | 'dragon'
-  | 'poison';
 
 export interface IPokemonInput {
   pokemonNumber: number;

@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import createPokemon from '../../../app/graphql/create-pokemon.graphql';
+import editPokemon from '../../../app/graphql/edit-pokemon.graphql';
 import getPokemon from '../../../app/graphql/get-pokemon.graphql'
 import getPokemons from '../../../app/graphql/get-pokemons.graphql';
 import { setupDb } from '../../lib/test-utils';
@@ -15,6 +16,7 @@ describe('pokemon resolver', () => {
   const getPokemonsQuery = print(getPokemons);
   const getPokemonQuery = print(getPokemon);
   const createPokemonMutation = print(createPokemon);
+  const editPokemonMutation = print(editPokemon);
   let testDb: ReturnType<typeof setupDb>;
   let txn: Transaction;
 
@@ -87,6 +89,33 @@ describe('pokemon resolver', () => {
 
       expect(result.errors).toBeUndefined();
       expect(result.data!.createPokemon.name).toEqual(mockPokemonInput.name);
+    });
+  });
+
+  describe('edit a pokemon', () => {
+    it('should edit and return an existing pokemon', async () => {
+      // create a pokemon
+      const newPokemon = await Pokemon.create(mockPokemonInput, txn);
+
+      // edit that pokemon
+      const newAttack = 9001;
+      const newPokeType = 'dragon';
+      const input = {
+        pokemonId: newPokemon.id,
+        attack: newAttack,
+        pokeType: newPokeType,
+      };
+      const result = await graphql(
+        schema,
+        editPokemonMutation,
+        null,
+        { testTransaction: txn },
+        input,
+      );
+
+      expect(result.errors).toBeUndefined();
+      expect(result.data!.editPokemon.attack).toEqual(newAttack);
+      expect(result.data!.editPokemon.pokeType).toEqual(newPokeType);
     });
   });
 

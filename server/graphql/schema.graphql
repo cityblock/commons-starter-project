@@ -66,9 +66,22 @@ input PokemonCreateInput {
   imageUrl: String!
 }
 
+input PokemonEditInput {
+  pokemonId: ID!
+  pokemonNumber: Int
+  name: String
+  attack: Int
+  defense: Int
+  pokeType: PokeType
+  moves: [String!]
+  imageUrl: String
+}
+
 type RootMutationType {
   # Create a pokemon
   createPokemon(input: PokemonCreateInput!): Pokemon!
+  # Edit a pokemon
+  editPokemon(input: PokemonEditInput!): Pokemon!
 }
 
 type RootQueryType {

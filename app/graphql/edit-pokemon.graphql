@@ -1,0 +1,35 @@
+mutation editPokemon(
+  $pokemonId: ID!
+  $pokemonNumber: Int
+  $name: String
+  $attack: Int
+  $defense: Int
+  $pokeType: PokeType
+  $moves: [String!]
+  $imageUrl: String
+) {
+  editPokemon(
+    input: {
+      pokemonId: $pokemonId,
+      pokemonNumber: $pokemonNumber
+      name: $name
+      attack: $attack
+      defense: $defense
+      pokeType: $pokeType
+      moves: $moves
+      imageUrl: $imageUrl
+    }
+  ) {
+    id
+    pokemonNumber
+    name
+    attack
+    defense
+    pokeType
+    moves
+    imageUrl
+    createdAt
+    updatedAt
+    deletedAt
+  }
+}

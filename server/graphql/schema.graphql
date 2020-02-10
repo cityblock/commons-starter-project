@@ -82,6 +82,8 @@ type RootMutationType {
   createPokemon(input: PokemonCreateInput!): Pokemon!
   # Edit a pokemon
   editPokemon(input: PokemonEditInput!): Pokemon!
+  # Delete a pokemon
+  deletePokemon(pokemonId: ID!): Pokemon!
 }
 
 type RootQueryType {

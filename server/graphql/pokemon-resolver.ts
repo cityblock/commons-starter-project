@@ -2,6 +2,7 @@ import { isNil, omitBy } from "lodash";
 import { transaction } from "objection";
 import {
   ICreatePokemonOnRootMutationTypeArguments,
+  IDeletePokemonOnRootMutationTypeArguments,
   IEditPokemonOnRootMutationTypeArguments,
   IPokemonEditInput,
   IPokemonOnRootQueryTypeArguments,
@@ -50,5 +51,15 @@ export async function resolveEditPokemon(
   return transaction(testTransaction || Pokemon.knex(), async txn => {
     const filtered = omitBy<IPokemonEditInput>(input, isNil) as Partial<IPokemonInput>;
     return Pokemon.edit(input.pokemonId, filtered, txn);
+  });
+};
+
+export async function resolveDeletePokemon(
+  root: any,
+  { pokemonId }: IDeletePokemonOnRootMutationTypeArguments,
+  { testTransaction }: IContext,
+): Promise<IRootMutationType['deletePokemon']> {
+  return transaction(testTransaction || Pokemon.knex(), async txn => {
+    return Pokemon.delete(pokemonId, txn);
   });
 };

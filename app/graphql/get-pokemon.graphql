@@ -1,17 +1,10 @@
 #import "./pokemon-fragment.graphql"
+#import "./item-fragment.graphql"
 query getPokemon($pokemonId: ID!) {
   pokemon(pokemonId: $pokemonId) {
     ...Pokemon
     items {
-      id
-      name
-      pokemonId
-      price
-      happiness
-      imageUrl
-      createdAt
-      updatedAt
-      deletedAt
+      ...Item
     }
   }
 }

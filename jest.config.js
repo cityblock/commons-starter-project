@@ -17,6 +17,7 @@ module.exports = {
     '<rootDir>/scripts/**/?(*.)(spec|test).ts?(x)',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  modulePaths: ['<rootDir>'],
   setupFiles: ['./browser-mocks.js', './enzyme-setup.js', './objection-setup.js'],
   setupFilesAfterEnv: ['./jest-setup.js'],
   globals: {

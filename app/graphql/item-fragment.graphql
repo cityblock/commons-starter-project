@@ -1,0 +1,11 @@
+fragment Item on Item {
+  id
+  name
+  pokemonId
+  price
+  happiness
+  imageUrl
+  createdAt
+  updatedAt
+  deletedAt
+}

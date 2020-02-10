@@ -1,15 +1,6 @@
+#import "./pokemon-fragment.graphql"
 mutation deletePokemon($pokemonId: ID!) {
   deletePokemon(pokemonId: $pokemonId) {
-    id
-    pokemonNumber
-    name
-    attack
-    defense
-    pokeType
-    moves
-    imageUrl
-    createdAt
-    updatedAt
-    deletedAt
+    ...Pokemon
   }
 }

@@ -1,3 +1,4 @@
+#import "./pokemon-fragment.graphql"
 mutation editPokemon(
   $pokemonId: ID!
   $pokemonNumber: Int
@@ -20,16 +21,6 @@ mutation editPokemon(
       imageUrl: $imageUrl
     }
   ) {
-    id
-    pokemonNumber
-    name
-    attack
-    defense
-    pokeType
-    moves
-    imageUrl
-    createdAt
-    updatedAt
-    deletedAt
+    ...Pokemon
   }
 }

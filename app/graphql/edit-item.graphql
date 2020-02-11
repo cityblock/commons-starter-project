@@ -1,0 +1,22 @@
+#import "./item-fragment.graphql"
+mutation editItem(
+  $itemId: ID!
+  $name: String
+  $pokemonId: String
+  $price: Int
+  $happiness: Int
+  $imageUrl: String
+) {
+  editItem(
+    input: {
+      itemId: $itemId
+      name: $name
+      pokemonId: $pokemonId
+      price: $price
+      happiness: $happiness
+      imageUrl: $imageUrl
+    }
+  ) {
+    ...Item
+  }
+}

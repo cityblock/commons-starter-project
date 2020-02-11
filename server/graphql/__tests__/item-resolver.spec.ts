@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import createItem from '../../../app/graphql/create-item.graphql';
+import editItem from '../../../app/graphql/edit-item.graphql';
 import getItem from '../../../app/graphql/get-item.graphql';
 import { setupDb } from '../../lib/test-utils';
 import { generateMockItemInput } from '../../models/__tests__/item.spec';
@@ -11,6 +12,7 @@ import schema from '../make-executable-schema';
 describe('item resolver', () => {
   const getItemQuery = print(getItem);
   const createItemMutation = print(createItem);
+  const editItemMutation = print(editItem);
   let testDb: ReturnType<typeof setupDb>;
   let txn: Transaction;
 
@@ -61,6 +63,33 @@ describe('item resolver', () => {
       );
       expect(result.errors).toBeUndefined();
       expect(result.data!.createItem.name).toEqual(mockItemInput.name)
+    });
+  });
+
+  describe('edit an item', () => {
+    it('should edit and return an item', async () => {
+      // create an item
+      const mockItemInput = await generateMockItemInput(txn);
+      const newItem = await Item.create(mockItemInput, txn);
+
+      // edit that item
+      const newPrice = 1000000;
+      const newHappiness = 14;
+      const input = {
+        itemId: newItem.id,
+        price: newPrice,
+        happiness: newHappiness
+      };
+      const result = await graphql(
+        schema,
+        editItemMutation,
+        null,
+        { testTransaction: txn },
+        input,
+      );
+      expect(result.errors).toBeUndefined();
+      expect(result.data!.editItem.price).toEqual(newPrice);
+      expect(result.data!.editItem.happiness).toEqual(newHappiness);
     });
   });
 

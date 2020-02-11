@@ -85,6 +85,15 @@ input ItemCreateInput {
   imageUrl: String!
 }
 
+input ItemEditInput {
+  itemId: ID!
+  name: String
+  pokemonId: String
+  price: Int
+  happiness: Int
+  imageUrl: String
+}
+
 type RootMutationType {
   # Create a pokemon
   createPokemon(input: PokemonCreateInput!): Pokemon!
@@ -94,6 +103,8 @@ type RootMutationType {
   deletePokemon(pokemonId: ID!): Pokemon!
   # Create an item
   createItem(input: ItemCreateInput!): Item!
+  # Edit an item
+  editItem(input: ItemEditInput!): Item!
 }
 
 type RootQueryType {

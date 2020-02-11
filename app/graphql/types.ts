@@ -101,6 +101,39 @@ export interface deletePokemonVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: editItem
+// ====================================================
+
+export interface editItem_editItem {
+  id: string;
+  name: string;
+  pokemonId: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+  createdAt: any;
+  updatedAt: any;
+  deletedAt: any | null;
+}
+
+export interface editItem {
+  editItem: editItem_editItem;
+}
+
+export interface editItemVariables {
+  itemId: string;
+  name?: string | null;
+  pokemonId?: string | null;
+  price?: number | null;
+  happiness?: number | null;
+  imageUrl?: string | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: editPokemon
 // ====================================================
 

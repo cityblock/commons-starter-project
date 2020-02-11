@@ -1,0 +1,20 @@
+#import "./item-fragment.graphql"
+mutation createItem(
+  $name: String!
+  $pokemonId: ID!
+  $price: Int!
+  $happiness: Int!
+  $imageUrl: String!
+) {
+  createItem(
+    input: {
+      name: $name
+      pokemonId: $pokemonId
+      price: $price
+      happiness: $happiness
+      imageUrl: $imageUrl
+    }
+  ) {
+    ...Item
+  }
+}

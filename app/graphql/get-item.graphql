@@ -1,0 +1,6 @@
+#import "./item-fragment.graphql"
+query getItem($itemId: ID!) {
+  item(itemId: $itemId) {
+    ...Item
+  }
+}

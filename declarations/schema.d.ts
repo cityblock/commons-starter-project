@@ -20,10 +20,15 @@ declare module 'schema' {
   interface IRootQueryType {
     pokemons: Array<IPokemon>;
     pokemon: IPokemon;
+    item: IItem;
   }
 
   interface IPokemonOnRootQueryTypeArguments {
     pokemonId: string;
+  }
+
+  interface IItemOnRootQueryTypeArguments {
+    itemId: string;
   }
 
   interface IPokemon {
@@ -84,6 +89,9 @@ declare module 'schema' {
     createPokemon: IPokemon;
     editPokemon: IPokemon;
     deletePokemon: IPokemon;
+    createItem: IItem;
+    editItem: IItem;
+    deleteItem: IItem;
   }
 
   interface ICreatePokemonOnRootMutationTypeArguments {
@@ -96,6 +104,18 @@ declare module 'schema' {
 
   interface IDeletePokemonOnRootMutationTypeArguments {
     pokemonId: string;
+  }
+
+  interface ICreateItemOnRootMutationTypeArguments {
+    input: IItemCreateInput;
+  }
+
+  interface IEditItemOnRootMutationTypeArguments {
+    input: IItemEditInput;
+  }
+
+  interface IDeleteItemOnRootMutationTypeArguments {
+    itemId: string;
   }
 
   interface IPokemonCreateInput {
@@ -116,6 +136,23 @@ declare module 'schema' {
     defense?: number | null;
     pokeType?: PokeType | null;
     moves?: Array<string> | null;
+    imageUrl?: string | null;
+  }
+
+  interface IItemCreateInput {
+    name: string;
+    pokemonId: string;
+    price: number;
+    happiness: number;
+    imageUrl: string;
+  }
+
+  interface IItemEditInput {
+    itemId: string;
+    name?: string | null;
+    pokemonId?: string | null;
+    price?: number | null;
+    happiness?: number | null;
     imageUrl?: string | null;
   }
 }

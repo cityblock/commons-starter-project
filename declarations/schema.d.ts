@@ -91,6 +91,7 @@ declare module 'schema' {
     deletePokemon: IPokemon;
     createItem: IItem;
     editItem: IItem;
+    deleteItem: IItem;
   }
 
   interface ICreatePokemonOnRootMutationTypeArguments {
@@ -111,6 +112,10 @@ declare module 'schema' {
 
   interface IEditItemOnRootMutationTypeArguments {
     input: IItemEditInput;
+  }
+
+  interface IDeleteItemOnRootMutationTypeArguments {
+    itemId: string;
   }
 
   interface IPokemonCreateInput {

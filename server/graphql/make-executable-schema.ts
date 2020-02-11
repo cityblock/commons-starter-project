@@ -6,6 +6,7 @@ import 'regenerator-runtime/runtime';
 import config from '../config';
 import {
   resolveCreateItem,
+  resolveDeleteItem,
   resolveEditItem,
   resolveGetItem,
 } from './item-resolver';
@@ -30,6 +31,7 @@ export const resolveFunctions = {
     deletePokemon: resolveDeletePokemon,
     createItem: resolveCreateItem,
     editItem: resolveEditItem,
+    deleteItem: resolveDeleteItem,
   },
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {

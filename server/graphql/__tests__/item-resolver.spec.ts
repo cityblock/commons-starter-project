@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import createItem from '../../../app/graphql/create-item.graphql';
+import deleteItem from '../../../app/graphql/delete-item.graphql';
 import editItem from '../../../app/graphql/edit-item.graphql';
 import getItem from '../../../app/graphql/get-item.graphql';
 import { setupDb } from '../../lib/test-utils';
@@ -13,6 +14,7 @@ describe('item resolver', () => {
   const getItemQuery = print(getItem);
   const createItemMutation = print(createItem);
   const editItemMutation = print(editItem);
+  const deleteItemMutation = print(deleteItem);
   let testDb: ReturnType<typeof setupDb>;
   let txn: Transaction;
 
@@ -90,6 +92,26 @@ describe('item resolver', () => {
       expect(result.errors).toBeUndefined();
       expect(result.data!.editItem.price).toEqual(newPrice);
       expect(result.data!.editItem.happiness).toEqual(newHappiness);
+    });
+  });
+
+  describe('delete an item', () => {
+    it('should delete and return an item', async () => {
+      // create an item
+      const mockItemInput = await generateMockItemInput(txn);
+      const newItem = await Item.create(mockItemInput, txn);
+      expect(newItem.deletedAt).toBeNull();
+
+      // "delete" that item
+      const result = await graphql(
+        schema,
+        deleteItemMutation,
+        null,
+        { testTransaction: txn },
+        { itemId: newItem.id },
+      );
+      expect(result.errors).toBeUndefined();
+      expect(result.data!.deleteItem.deletedAt).not.toBeNull();
     });
   });
 

@@ -105,6 +105,8 @@ type RootMutationType {
   createItem(input: ItemCreateInput!): Item!
   # Edit an item
   editItem(input: ItemEditInput!): Item!
+  # Delete an item
+  deleteItem(itemId: ID!): Item!
 }
 
 type RootQueryType {

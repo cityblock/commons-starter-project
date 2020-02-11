@@ -2,6 +2,7 @@ import { isNil, omitBy } from "lodash";
 import { transaction } from "objection";
 import {
   ICreateItemOnRootMutationTypeArguments,
+  IDeleteItemOnRootMutationTypeArguments,
   IEditItemOnRootMutationTypeArguments,
   IItemEditInput,
   IItemOnRootQueryTypeArguments,
@@ -39,5 +40,15 @@ export async function resolveEditItem(
   return transaction(testTransaction || Item.knex(), async txn => {
     const filtered = omitBy<IItemEditInput>(input, isNil) as Partial<IItemInput>;
     return Item.edit(input.itemId, filtered, txn);
+  });
+};
+
+export async function resolveDeleteItem(
+  root: any,
+  { itemId }: IDeleteItemOnRootMutationTypeArguments,
+  { testTransaction }: IContext,
+): Promise<IRootMutationType['deleteItem']> {
+  return transaction(testTransaction || Item.knex(), async txn => {
+    return Item.delete(itemId, txn);
   });
 };

@@ -9,7 +9,7 @@ import {
   IRootMutationType,
   IRootQueryType
 } from "schema";
-import Item, { IItemInput } from "server/models/item";
+import Item, { IItemInput } from "../models/item";
 import { IContext } from "./shared/utils";
 
 export async function resolveGetItem(

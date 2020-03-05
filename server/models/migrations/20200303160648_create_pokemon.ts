@@ -38,18 +38,5 @@ export async function up(knex: Knex): Promise<any> {
 
 
 export async function down(knex: Knex): Promise<any> {
+  return knex.schema.dropTable('pokemon');
 }
-
-/*
--id (primary key, unique, uuid, not null) ­ note we use uuid rather than integer ids
--pokemonNumber (integer, not null, unique)
--name (string, not null, unique)
--attack (integer, not null)
--defense (integer, not null)
--pokeType (enum, not null, one of: normal, grass, fire, water, electric, psychic, ghost, dark, fairy, rock, ground, steel, flying, fighting, bug, ice, dragon, poison)
--moves (json, not null, default [])
--imageUrl (string, not null)
--createdAt (timestamp, default to the current time)
--updatedAt (timestamp, default to the current time)
-deletedAt (timestamp, nullable) ­ note we mark things as deleted, but rarely ever actually delete them in our database (“soft deletion”)
-*/

@@ -1,4 +1,4 @@
-import { JsonSchema, Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
+import { Model, Transaction } from 'objection';
 
 // enum PokemonType {
 //   normal = 'normal',

@@ -1,4 +1,4 @@
-import { Model, Transaction, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import Item from './item';
 
 // enum PokemonType {

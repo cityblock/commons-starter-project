@@ -1,4 +1,5 @@
-import { Model, Transaction } from 'objection';
+import { Model, Transaction, RelationMappings } from 'objection';
+import Item from './item';
 
 // enum PokemonType {
 //   normal = 'normal',
@@ -21,12 +22,18 @@ import { Model, Transaction } from 'objection';
 //   poison = 'poison'
 // }
 
-export interface ITest {
-  id: string;
-}
 export interface IPokemonCreateFields {
-  pokemonId: string;
+  id: string;
   pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: string[];
+  imageUrl: string;
+}
+
+export interface IPokemonEditInput {
   name: string;
   attack: number;
   defense: number;
@@ -68,6 +75,26 @@ export default class Pokemon extends Model {
     return this.query(txn).orderBy('pokemonNumber');
   }
 
+  static async get(pokeminId: string, txn: Transaction) {
+    const pokemon = await this.query(txn)
+      .eager('items')
+      .findById(pokeminId);
+    if (!pokemon) return Promise.reject(`could not find pokemn with id: ${pokeminId}`);
+    else return pokemon;
+  }
+  static async edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) {
+    const updatedPokemon = await this.query(txn).patchAndFetchById(pokemonId, pokemon);
+    if (!updatedPokemon) return Promise.reject(`could not update pokemon with id: ${pokemonId}`);
+    else return updatedPokemon;
+  }
+  static async delete(pokemonId: string, txn: Transaction) {
+    const pokemon = await this.query(txn).patchAndFetchById(pokemonId, {
+      deletedAt: new Date().toISOString(),
+    });
+    if (!pokemon) return Promise.reject(`could not mark as deleted pokemon with id: ${pokemonId}`);
+    else return pokemon;
+  }
+
   id!: string;
   pokemonNumber!: number;
   name!: string;
@@ -91,5 +118,18 @@ export default class Pokemon extends Model {
 
   $beforeDelete() {
     this.deletedAt = new Date().toISOString();
+  }
+
+  static get relationMappings(): RelationMappings {
+    return {
+      items: {
+        relation: Model.HasManyRelation,
+        modelClass: Item,
+        join: {
+          from: 'pokemon.id',
+          to: 'item.pokemonId',
+        },
+      },
+    };
   }
 }

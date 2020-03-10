@@ -1,11 +1,15 @@
-import * as Knex from "knex";
-
+import * as Knex from 'knex';
 
 export async function up(knex: Knex): Promise<any> {
-  return knex.schema.createTable('item', function (t) {
-    t.uuid('id').primary().notNullable()
+  // tslint:disable-next-line: only-arrow-functions
+  return knex.schema.createTable('item', function(t) {
+    t.uuid('id')
+      .primary()
+      .notNullable();
     t.string('name').notNullable();
-    t.uuid('pokemonId').notNullable().references('pokemon.id');
+    t.uuid('pokemonId')
+      .notNullable()
+      .references('pokemon.id');
     t.integer('price').notNullable();
     t.integer('happiness').notNullable();
     t.string('imageUrl').notNullable();
@@ -15,8 +19,6 @@ export async function up(knex: Knex): Promise<any> {
   });
 }
 
-
 export async function down(knex: Knex): Promise<any> {
   return knex.schema.dropTable('item');
 }
-

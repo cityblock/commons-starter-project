@@ -9,6 +9,14 @@ export interface IItemCreateInput {
   imageUrl: string;
 }
 
+export interface IItemEditInput {
+  name?: string;
+  pokemonId?: string;
+  price?: number;
+  happiness?: number;
+  imageUrl?: string;
+}
+
 export default class Item extends Model {
   static pickJsonSchemaProperties = true;
   static tableName = 'item';
@@ -31,6 +39,26 @@ export default class Item extends Model {
 
   static async create(input: IItemCreateInput, txn: Transaction) {
     return this.query(txn).insertAndFetch(input);
+  }
+
+  static async get(itemId: string, txn: Transaction) {
+    const item = await this.query(txn).findById(itemId);
+    if (!item) return Promise.reject(`could not find item with id: ${itemId}`);
+    else return item;
+  }
+
+  static async edit(itemId: string, item: IItemEditInput, txn: Transaction) {
+    const updatedItem = await this.query(txn).patchAndFetchById(itemId, item);
+    if (!updatedItem) return Promise.reject(`could not update item with id: ${itemId}`);
+    else return updatedItem;
+  }
+
+  static async delete(itemId: string, txn: Transaction) {
+    const item = await this.query(txn).patchAndFetchById(itemId, {
+      deletedAt: new Date().toISOString(),
+    });
+    if (!item) return Promise.reject(`could not mark as deleted item with id: ${itemId}`);
+    else return item;
   }
 
   id!: string;

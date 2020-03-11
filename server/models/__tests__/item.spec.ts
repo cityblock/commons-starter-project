@@ -28,24 +28,18 @@ describe('item model', () => {
   });
   describe('create and get item', () => {
     it('should create and retrieve an item', async () => {
+      const itemFields: IItemCreateInput = {
+        id: uuid(),
+        name: 'item-create-test',
+        pokemonId: '412e4c8a-00f1-4ccf-bf7d-475404ccd42f',
+        price: 43,
+        happiness: 29,
+        imageUrl:
+          'https://pro-rankedboost.netdna-ssl.com/wp-content/uploads/2016/07/Lucky-Eggs.png',
+      };
       try {
-        const itemFields: IItemCreateInput = {
-          id: uuid(),
-          name: 'item-create-test',
-          pokemonId: '412e4c8a-00f1-4ccf-bf7d-475404ccd42f',
-          price: 43,
-          happiness: 29,
-          imageUrl:
-            'https://pro-rankedboost.netdna-ssl.com/wp-content/uploads/2016/07/Lucky-Eggs.png',
-        };
         const item = await Item.create(itemFields, txn);
-        // tslint:disable-next-line: no-console
-        console.log('new item: ', item);
         expect(item).toMatchObject(itemFields);
-        // const patientById = await Patient.get(patient.id, patient.homeMarketId, txn);
-        // expect(patientById).toMatchObject({
-        //   id: patient.id,
-        // });
       } catch (err) {
         // tslint:disable-next-line: no-console
         console.log('Failed to create a new item. error: ', err);
@@ -54,21 +48,19 @@ describe('item model', () => {
   });
   describe('get item by ID', () => {
     it('should get an item by id', async () => {
+      const itemFields: IItemCreateInput = {
+        id: uuid(),
+        name: 'item-get-test',
+        pokemonId: '412e4c8a-00f1-4ccf-bf7d-475404ccd42f',
+        price: 7,
+        happiness: 15,
+        imageUrl:
+          'https://pro-rankedboost.netdna-ssl.com/wp-content/uploads/2016/07/Lucky-Eggs.png',
+      };
       try {
-        const itemFields: IItemCreateInput = {
-          id: uuid(),
-          name: 'item-get-test',
-          pokemonId: '412e4c8a-00f1-4ccf-bf7d-475404ccd42f',
-          price: 7,
-          happiness: 15,
-          imageUrl:
-            'https://pro-rankedboost.netdna-ssl.com/wp-content/uploads/2016/07/Lucky-Eggs.png',
-        };
         const item = await Item.create(itemFields, txn);
         const pokeonIditemId = item.id;
         const getItem = await Item.get(pokeonIditemId, txn);
-        // tslint:disable-next-line: no-console
-        console.log('get item: ', getItem);
         expect(getItem).toMatchObject(itemFields);
       } catch (pokemonCreateErr) {
         // tslint:disable-next-line: no-console
@@ -97,8 +89,6 @@ describe('item model', () => {
       try {
         const item = await Item.create(itemFields, txn);
         const updatedItem = await Item.edit(item.id, itemUpdateFields, txn);
-        // tslint:disable-next-line: no-console
-        console.log('updated item: ', updatedItem);
         expect(updatedItem).toMatchObject(itemUpdateFields);
       } catch (err) {
         // tslint:disable-next-line: no-console
@@ -108,21 +98,19 @@ describe('item model', () => {
   });
   describe('mark as deleted item', () => {
     it('should mark an item as deleted and then retriev it', async () => {
+      const itemFields: IItemCreateInput = {
+        id: uuid(),
+        name: 'item-delete-test',
+        pokemonId: '412e4c8a-00f1-4ccf-bf7d-475404ccd42f',
+        price: 12,
+        happiness: 8,
+        imageUrl:
+          'https://pro-rankedboost.netdna-ssl.com/wp-content/uploads/2016/07/Lucky-Eggs.png',
+      };
       try {
-        const itemFields: IItemCreateInput = {
-          id: uuid(),
-          name: 'item-delete-test',
-          pokemonId: '412e4c8a-00f1-4ccf-bf7d-475404ccd42f',
-          price: 12,
-          happiness: 8,
-          imageUrl:
-            'https://pro-rankedboost.netdna-ssl.com/wp-content/uploads/2016/07/Lucky-Eggs.png',
-        };
         const item = await Item.create(itemFields, txn);
         const itemId = item.id;
         const markedAsDeletedItem = await Item.delete(itemId, txn);
-        // tslint:disable-next-line: no-console
-        console.log('delete test item result: ', markedAsDeletedItem);
         expect(markedAsDeletedItem.deletedAt).not.toBeFalsy();
       } catch (err) {
         // tslint:disable-next-line: no-console

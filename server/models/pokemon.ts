@@ -1,26 +1,26 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import Item from './item';
 
-// enum PokemonType {
-//   normal = 'normal',
-//   grass = 'grass',
-//   fire = 'fire',
-//   water = 'water',
-//   electric = 'electric',
-//   psychic = 'psychic',
-//   ghost = 'ghost',
-//   dark = 'dark',
-//   fairy = 'fairy',
-//   rock = 'rock',
-//   ground = 'ground',
-//   steel = 'steel',
-//   flying = 'flying',
-//   fighting = 'fighting',
-//   bug = 'bug',
-//   ice = 'ice',
-//   dragon = 'dragon',
-//   poison = 'poison'
-// }
+export enum PokemonType {
+  normal = 'normal',
+  grass = 'grass',
+  fire = 'fire',
+  water = 'water',
+  electric = 'electric',
+  psychic = 'psychic',
+  ghost = 'ghost',
+  dark = 'dark',
+  fairy = 'fairy',
+  rock = 'rock',
+  ground = 'ground',
+  steel = 'steel',
+  flying = 'flying',
+  fighting = 'fighting',
+  bug = 'bug',
+  ice = 'ice',
+  dragon = 'dragon',
+  poison = 'poison',
+}
 
 export interface IPokemonCreateFields {
   id: string;
@@ -28,7 +28,7 @@ export interface IPokemonCreateFields {
   name: string;
   attack: number;
   defense: number;
-  pokeType: string;
+  pokeType: PokemonType;
   moves: string[];
   imageUrl: string;
 }
@@ -37,7 +37,7 @@ export interface IPokemonEditInput {
   name: string;
   attack: number;
   defense: number;
-  pokeType: string;
+  pokeType: PokemonType;
   moves: string[];
   imageUrl: string;
 }
@@ -56,7 +56,29 @@ export default class Pokemon extends Model {
       name: { type: 'string' },
       attack: { type: 'number' },
       defense: { type: 'number' },
-      pokeType: { type: 'string' },
+      pokeType: {
+        type: 'string',
+        enum: [
+          'normal',
+          'grass',
+          'fire',
+          'water',
+          'electric',
+          'psychic',
+          'ghost',
+          'dark',
+          'fairy',
+          'rock',
+          'ground',
+          'steel',
+          'flying',
+          'fighting',
+          'bug',
+          'ice',
+          'dragon',
+          'poison',
+        ],
+      },
       moves: { type: 'array', items: { type: 'string' } },
       imageUrl: { type: 'string' },
       createdAt: { type: 'string' },
@@ -100,7 +122,7 @@ export default class Pokemon extends Model {
   name!: string;
   attack!: number;
   defense!: number;
-  pokeType!: string;
+  pokeType!: PokemonType;
   moves!: string[];
   imageUrl!: string;
   createdAt!: string;

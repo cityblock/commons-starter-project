@@ -1,9 +1,7 @@
-import axios from 'axios';
 import { transaction, Transaction } from 'objection';
 import { setupDb } from '../../lib/test-utils';
 import Pokemon from '../pokemon';
 import { IPokemonCreateInput, PokemonType } from '../pokemon';
-axios.defaults.adapter = require('axios/lib/adapters/http');
 
 describe('pokemon model', () => {
   let testDb: ReturnType<typeof setupDb>;
@@ -11,7 +9,6 @@ describe('pokemon model', () => {
 
   beforeAll(async () => {
     testDb = setupDb();
-    axios.get = jest.fn();
   });
 
   beforeEach(async () => {
@@ -38,7 +35,7 @@ describe('pokemon model', () => {
   describe('create and get pokemon', () => {
     it('should create and retrieve a pokemon', async () => {
       const pokemonFields: IPokemonCreateInput = {
-        pokemonNumber: 1000,
+        pokemonNumber: 1004,
         name: 'poke-dex-test',
         attack: 22,
         defense: 32,

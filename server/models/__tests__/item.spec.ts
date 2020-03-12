@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { transaction, Transaction } from 'objection';
 import { setupDb } from '../../lib/test-utils';
 import Item from '../item';

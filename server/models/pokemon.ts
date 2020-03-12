@@ -24,7 +24,7 @@ export enum PokemonType {
 }
 
 export interface IPokemonCreateInput {
-  pokemonNumber: number;
+  pokemonNumber?: number;
   name: string;
   attack: number;
   defense: number;

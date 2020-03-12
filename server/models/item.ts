@@ -1,7 +1,7 @@
 import { Model, Transaction } from 'objection';
+import { v4 as uuid } from 'uuid';
 
 export interface IItemCreateInput {
-  id: string;
   name: string;
   pokemonId: string;
   price: number;
@@ -18,7 +18,6 @@ export interface IItemEditInput {
 }
 
 export default class Item extends Model {
-  static pickJsonSchemaProperties = true;
   static tableName = 'item';
 
   static jsonSchema = {
@@ -72,6 +71,7 @@ export default class Item extends Model {
   deletedAt!: string | null;
 
   $beforeInsert() {
+    this.id = uuid();
     this.createdAt = new Date().toISOString();
     this.updatedAt = new Date().toISOString();
   }

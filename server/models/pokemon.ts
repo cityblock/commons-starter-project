@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { v4 as uuid } from 'uuid';
 import Item from './item';
 
 export enum PokemonType {
@@ -22,8 +23,7 @@ export enum PokemonType {
   poison = 'poison',
 }
 
-export interface IPokemonCreateFields {
-  id: string;
+export interface IPokemonCreateInput {
   pokemonNumber: number;
   name: string;
   attack: number;
@@ -33,18 +33,7 @@ export interface IPokemonCreateFields {
   imageUrl: string;
 }
 
-export interface IPokemonEditInput {
-  name: string;
-  attack: number;
-  defense: number;
-  pokeType: PokemonType;
-  moves: string[];
-  imageUrl: string;
-}
-
 export default class Pokemon extends Model {
-  // static modelPaths = [__dirname]
-  static pickJsonSchemaProperties = true;
   static tableName = 'pokemon';
 
   // tslint:disable-next-line: member-ordering
@@ -89,7 +78,7 @@ export default class Pokemon extends Model {
   };
 
   // tslint:disable-next-line: member-ordering
-  static async create(pokemon: IPokemonCreateFields, txn: Transaction) {
+  static async create(pokemon: IPokemonCreateInput, txn: Transaction) {
     return this.query(txn).insertAndFetch(pokemon);
   }
 
@@ -104,7 +93,7 @@ export default class Pokemon extends Model {
     if (!pokemon) return Promise.reject(`could not find pokemn with id: ${pokeminId}`);
     else return pokemon;
   }
-  static async edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) {
+  static async edit(pokemonId: string, pokemon: IPokemonCreateInput, txn: Transaction) {
     const updatedPokemon = await this.query(txn).patchAndFetchById(pokemonId, pokemon);
     if (!updatedPokemon) return Promise.reject(`could not update pokemon with id: ${pokemonId}`);
     else return updatedPokemon;
@@ -130,6 +119,7 @@ export default class Pokemon extends Model {
   deletedAt!: string | null;
 
   $beforeInsert() {
+    this.id = uuid();
     this.createdAt = new Date().toISOString();
     this.updatedAt = new Date().toISOString();
   }

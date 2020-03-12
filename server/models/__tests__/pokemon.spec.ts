@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { transaction, Transaction } from 'objection';
-import { v4 as uuid } from 'uuid';
 import { setupDb } from '../../lib/test-utils';
 import Pokemon from '../pokemon';
-import { IPokemonCreateFields, IPokemonEditInput, PokemonType } from '../pokemon';
+import { IPokemonCreateInput, PokemonType } from '../pokemon';
 axios.defaults.adapter = require('axios/lib/adapters/http');
 
 describe('pokemon model', () => {
@@ -38,8 +37,7 @@ describe('pokemon model', () => {
 
   describe('create and get pokemon', () => {
     it('should create and retrieve a pokemon', async () => {
-      const pokemonFields: IPokemonCreateFields = {
-        id: uuid(),
+      const pokemonFields: IPokemonCreateInput = {
         pokemonNumber: 1000,
         name: 'poke-dex-test',
         attack: 22,
@@ -60,8 +58,7 @@ describe('pokemon model', () => {
 
   describe('get pokemon With items', () => {
     it('should get a pokemon by id and its associated items', async () => {
-      const pokemonFields: IPokemonCreateFields = {
-        id: uuid(),
+      const pokemonFields: IPokemonCreateInput = {
         pokemonNumber: 1001,
         name: 'poke-dex-get-test',
         attack: 23,
@@ -84,8 +81,7 @@ describe('pokemon model', () => {
   });
   describe('update pkemon', () => {
     it('should update a pokemon, retriev it and verify all new content', async () => {
-      const pokemonFields: IPokemonCreateFields = {
-        id: uuid(),
+      const pokemonFields: IPokemonCreateInput = {
         pokemonNumber: 1002,
         name: 'poke-dex-udate-before-test',
         attack: 22,
@@ -94,7 +90,7 @@ describe('pokemon model', () => {
         moves: ['Tackle', 'Growl', 'Leech Seed'],
         imageUrl: 'https://cdn.bulbagarden.net/upload/c/ca/092Gastly.png',
       };
-      const pokemonUpdateFields: IPokemonEditInput = {
+      const pokemonUpdateFields: IPokemonCreateInput = {
         name: 'poke-dex-udate-after-test',
         attack: 1,
         defense: 4,
@@ -123,8 +119,7 @@ describe('pokemon model', () => {
   });
   describe('mark as deleted pokemon', () => {
     it('should mark a pokemon as deleted and then retriev it', async () => {
-      const pokemonFields: IPokemonCreateFields = {
-        id: uuid(),
+      const pokemonFields: IPokemonCreateInput = {
         pokemonNumber: 1003,
         name: 'poke-dex-delete-test',
         attack: 3,

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { transaction, Transaction } from 'objection';
-import { v4 as uuid } from 'uuid';
 import { setupDb } from '../../lib/test-utils';
 import Item from '../item';
 import { IItemCreateInput, IItemEditInput } from '../item';
@@ -11,7 +10,6 @@ describe('item model', () => {
 
   beforeAll(async () => {
     testDb = setupDb();
-    axios.get = jest.fn();
   });
 
   beforeEach(async () => {
@@ -29,7 +27,6 @@ describe('item model', () => {
   describe('create and get item', () => {
     it('should create and retrieve an item', async () => {
       const itemFields: IItemCreateInput = {
-        id: uuid(),
         name: 'item-create-test',
         pokemonId: '412e4c8a-00f1-4ccf-bf7d-475404ccd42f',
         price: 43,
@@ -49,7 +46,6 @@ describe('item model', () => {
   describe('get item by ID', () => {
     it('should get an item by id', async () => {
       const itemFields: IItemCreateInput = {
-        id: uuid(),
         name: 'item-get-test',
         pokemonId: '412e4c8a-00f1-4ccf-bf7d-475404ccd42f',
         price: 7,
@@ -71,7 +67,6 @@ describe('item model', () => {
   describe('update item', () => {
     it('should update an item, retriev it and verify all new content', async () => {
       const itemFields: IItemCreateInput = {
-        id: uuid(),
         name: 'item-update-before-test',
         pokemonId: '412e4c8a-00f1-4ccf-bf7d-475404ccd42f',
         price: 55,
@@ -99,7 +94,6 @@ describe('item model', () => {
   describe('mark as deleted item', () => {
     it('should mark an item as deleted and then retriev it', async () => {
       const itemFields: IItemCreateInput = {
-        id: uuid(),
         name: 'item-delete-test',
         pokemonId: '412e4c8a-00f1-4ccf-bf7d-475404ccd42f',
         price: 12,

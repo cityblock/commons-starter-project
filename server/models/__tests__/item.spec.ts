@@ -1,7 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import { setupDb } from '../../lib/test-utils';
 import Item from '../item';
-import { IItemCreateInput, IItemEditInput } from '../item';
+import { IItemCreateInput } from '../item';
 
 describe('item model', () => {
   let testDb: ReturnType<typeof setupDb>;
@@ -73,7 +73,7 @@ describe('item model', () => {
         imageUrl:
           'https://pro-rankedboost.netdna-ssl.com/wp-content/uploads/2016/07/Lucky-Eggs.png',
       };
-      const itemUpdateFields: IItemEditInput = {
+      const itemUpdateFields: IItemCreateInput = {
         name: 'item-update-after-test',
         price: 60,
         happiness: 66,

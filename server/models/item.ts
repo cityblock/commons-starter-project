@@ -2,14 +2,6 @@ import { Model, Transaction } from 'objection';
 import { v4 as uuid } from 'uuid';
 
 export interface IItemCreateInput {
-  name: string;
-  pokemonId: string;
-  price: number;
-  happiness: number;
-  imageUrl: string;
-}
-
-export interface IItemEditInput {
   name?: string;
   pokemonId?: string;
   price?: number;
@@ -46,7 +38,7 @@ export default class Item extends Model {
     else return item;
   }
 
-  static async edit(itemId: string, item: IItemEditInput, txn: Transaction) {
+  static async edit(itemId: string, item: IItemCreateInput, txn: Transaction) {
     const updatedItem = await this.query(txn).patchAndFetchById(itemId, item);
     if (!updatedItem) return Promise.reject(`could not update item with id: ${itemId}`);
     else return updatedItem;

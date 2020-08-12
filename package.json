@@ -151,7 +151,7 @@
     "run": "1.4.0",
     "ts-node": "8.1.0",
     "typecheck": "0.1.2",
-    "typescript": "3.3.4000",
+    "typescript": "3.9.7",
     "typescript-plugin-lodash": "0.1.0",
     "typings-for-css-modules-loader": "1.7.0",
     "uuid": "3.3.2",

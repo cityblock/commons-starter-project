@@ -1,0 +1,153 @@
+fragment poke_frag on Pokemon {
+  id
+  pokemonNumber
+  name
+  attack
+  defense
+  pokeType
+  moves
+  imageUrl
+  createdAt
+  updatedAt
+  deletedAt
+}
+
+fragment item_frag on Item {
+  id
+  name
+  pokemonId
+  price
+  happiness
+  imageUrl
+  createdAt
+  updatedAt
+  deletedAt
+}
+
+query readPokemons {
+  queryAllPokemon {
+    ...poke_frag
+  }
+}
+
+query readPokemon($id: ID!) {
+  queryOnePokemon(id: $id) {
+    ...poke_frag
+    items {
+      ...item_frag
+    }
+  }
+}
+
+query readItem($id: ID!) {
+  queryOneItem(id: $id) {
+    ...item_frag
+  }
+}
+
+# editPokemon is supposed to take two arguments: (id, input{})... but it only compiles if i flatten?
+# why can't I map these functions directly to each other, manually mapping attributes seems lame
+
+mutation editPokemon(
+  $id: ID!
+  $pokemonNumber: Int
+  $name: String
+  $attack: Int
+  $defense: Int
+  $pokeType: PokeType
+  $moves: [String]
+  $imageUrl: String
+) {
+  mutatePokemonEdit(
+    id: $id
+    input: {
+      pokemonNumber: $pokemonNumber
+      name: $name
+      attack: $attack
+      defense: $defense
+      pokeType: $pokeType
+      moves: $moves
+      imageUrl: $imageUrl
+    }
+  ) {
+    ...poke_frag
+  }
+}
+
+mutation editItem(
+  $id: ID!
+  $name: String
+  $pokemonId: ID!
+  $price: Int
+  $happiness: Int
+  $imageUrl: String
+) {
+  mutateItemEdit(
+    id: $id
+    input: {
+      name: $name
+      pokemonId: $pokemonId
+      price: $price
+      happiness: $happiness
+      imageUrl: $imageUrl
+    }
+  ) {
+    ...item_frag
+  }
+}
+
+mutation deletePokemon($id: ID!) {
+  mutatePokemonDelete(id: $id) {
+    ...poke_frag
+  }
+}
+
+mutation deleteItem($id: ID!) {
+  mutateItemDelete(id: $id) {
+    ...item_frag
+  }
+}
+
+mutation createPokemon(
+  $pokemonNumber: Int!
+  $name: String!
+  $attack: Int!
+  $defense: Int!
+  $pokeType: PokeType!
+  $moves: [String!]!
+  $imageUrl: String!
+) {
+  mutatePokemonCreate(
+    input: {
+      pokemonNumber: $pokemonNumber
+      name: $name
+      attack: $attack
+      defense: $defense
+      pokeType: $pokeType
+      moves: $moves
+      imageUrl: $imageUrl
+    }
+  ) {
+    ...poke_frag
+  }
+}
+
+mutation createItem(
+  $name: String!
+  $pokemonId: ID!
+  $price: Int!
+  $happiness: Int!
+  $imageUrl: String!
+) {
+  mutateItemCreate(
+    input: {
+      name: $name
+      pokemonId: $pokemonId
+      price: $price
+      happiness: $happiness
+      imageUrl: $imageUrl
+    }
+  ) {
+    ...item_frag
+  }
+}

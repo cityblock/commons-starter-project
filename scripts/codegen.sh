@@ -1,4 +1,4 @@
-co#!/bin/bash
+#!/bin/bash
 
 # This script generates code and TypeScript types for GraphQL queries
 # using the schema (from Commons) and the graphql query files in this project.
@@ -17,6 +17,7 @@ set -o errexit
 
 cd $(dirname $0)/.. || exit 1
 
+# Had to hardcode these in for some reason, apollo wasn't finding my files with default input logic
 apollo codegen:generate \
   --localSchemaFile="server/graphql/schema.graphql" \
   --queries="app/graphql/queries/all-queries.graphql" \

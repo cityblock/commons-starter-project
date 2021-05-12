@@ -52,7 +52,7 @@
     "nock": "10.0.6",
     "node-mocks-http": "1.7.5",
     "nodemon": "1.18.9",
-    "postcss": "7.0.16",
+    "postcss": "8.2.10",
     "postcss-loader": "3.0.0",
     "postcss-preset-env": "6.6.0",
     "postcss-reporter": "6.0.1",
